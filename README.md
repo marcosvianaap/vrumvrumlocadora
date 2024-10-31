@@ -4,7 +4,7 @@ Este é um sistema de gerenciamento para uma locadora de veículos, desenvolvido
 
 ## Estrutura do Projeto
 
-O projeto foi estruturado para oferecer uma interface amigável para a equipe de atendimento da locadora, além de garantir a segurança e integridade dos dados de clientes e veículos.
+O projeto foi estruturado para oferecer uma interface amigável para a equipe de atendimento da locadora.
 
 ### Entidades Principais
 - **Pessoa**: Dados básicos das pessoas cadastradas no sistema (Clientes e Usuários).
@@ -16,6 +16,7 @@ O projeto foi estruturado para oferecer uma interface amigável para a equipe de
 
 ## Tecnologias Utilizadas
 
-- **MySQL**: Banco de dados para armazenamento das informações.
-- **Diagrama ER**: Foi utilizado para o planejamento do banco de dados e mapeamento das entidades.
+- **SQLite**: Banco de dados para armazenamento das informações.
+- **Diagrama de classes**: Foi utilizado para auxiliar no desenvolvimento do software.
+- **Diagrama MER**: Foi utilizado para o planejamento do banco de dados e mapeamento das entidades.
 - **SQL**: Para criação das tabelas e definição das chaves primárias e estrangeiras.
