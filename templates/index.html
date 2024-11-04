@@ -22,16 +22,12 @@
 
         <!-- Corpo da estrutura -->
         <main>
-            <div class="login-box">
-                <img src="../static/imagens/IconeUsuário.png">
-                <form action="#" method="post">
-                    <input type="text" placeholder="Usuário" name="username" required>
-                    <input type="password" placeholder="Senha" name="password" required>
-                    <button type="submit">Entrar</button>
-                    <a href="#">Esqueci minha senha</a>
-                </form>
-            </div>
-
+            <h1 style="margin-top:20%">Tela inicial do sistema da Vrumm Vrumm</h1>
+            {% if 'usuario' in session %}
+              <h2>Você esta logado no sistema como: {{ session['usuario'] }}</h2>
+              {% else %}
+              <h2>Você não está logado no sistema</h2>
+              {% endif %}
         </main>
 
         <!-- Rodapé da estrutura -->
