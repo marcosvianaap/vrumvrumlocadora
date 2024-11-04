@@ -5,22 +5,32 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../static/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../static/Style.css">
-        <link rel="icon" type="" href=""> <!--Inserir icone -->
+        <link rel="stylesheet" href="../static/styles/index.css">
+        <link rel="icon" type="logotipo" href="../static/imagens/Logotipo-SemFundo.png"> <!--Inserir icone -->
 
-        <title></title> <!--Inserir titulo -->
+        <title>Login</title> <!--Inserir titulo -->
     </head>
 
     <body>
 
         <!-- Cabeça da estrutura -->
         <header>
-
+            <div class="logo">
+                <img src="../static/imagens/Logotipo-SemFundo.png" alt="Logo">
+            </div>
         </header>
 
         <!-- Corpo da estrutura -->
         <main>
-            
+            <div class="login-box">
+                <img src="../static/imagens/IconeUsuário.png">
+                <form action="#" method="post">
+                    <input type="text" placeholder="Usuário" name="username" required>
+                    <input type="password" placeholder="Senha" name="password" required>
+                    <button type="submit">Entrar</button>
+                    <a href="#">Esqueci minha senha</a>
+                </form>
+            </div>
 
         </main>
 
@@ -30,7 +40,7 @@
         </footer>
 
         <script src="../static/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script> <!-- Referência para o Bootstrap JS -->
-        <script src="../static/scripts.js"></script> <!-- Referência para arquivos JS personalizados -->
+        <script src="../static/scripts/index.js"></script> <!-- Referência para arquivos JS personalizados -->
     </body>
 
 </html>
