@@ -10,9 +10,29 @@ Pesquisar Funcionários
 {% block conteudo %}
 
 
-<main>
-    <div>
-        
+<main class="pesquisar-funcionario">
+
+    <div id="botaoCriarFuncionario" class="botao">
+        <a href="#">
+            <button>Criar</button>
+        </a>
+    </div>
+    
+    <div class="blocoFuncionario">
+        <div id="divBusca">
+            <input maxlength="14" pattern="\d{11}|\d{14}" inputmode="numeric" type="text" id="numBusca" placeholder="CPF/CNPJ"/>
+            <img src="{{ url_for('static', filename='img/search.svg') }}" id="btnBusca" alt="Buscar" onclick="PesquisarFuncionario()" style="cursor: pointer; width: 25px;"/>
+        </div>
+
+        <div class="blocoFuncionario">
+            
+            <div id="dadosFuncionario">
+            </div>
+
+            <div id="botaoEditarFuncionario" class="botao">
+                <button>Editar</button>
+            </div>
+        </div>
     </div>
 
 </main>

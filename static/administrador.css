@@ -6,13 +6,11 @@
     --color5: #7583f6;
     --color6: #494949;
     --color7: #ffff;
-
 }
 
 .navbar{
     display: flex!;
     justify-content:space-around !important;
-    padding: 20px;
     height: 150px;
     background-color: var(--color7) !important;
 }
@@ -21,8 +19,15 @@
     justify-content: flex-end !important;
 }
 
+.navbar-collapse{
+    background-color: var(--color7) !important;
+    padding: 20px;
+}
 body{
     background-color: var(--color3);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 a.nav-link{
@@ -49,10 +54,126 @@ li.nav-item{
     padding-left: 20px;
 }
 
+.active a{
+    color: var(--color1);
+}
+
 a.logotipo{
     height: 80%;
 }
 
 img{
     height: 100%;
+}
+
+main.admin-home{
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.icones{
+    display: flex;
+    gap:80px
+}
+
+.icone{
+    padding: 20px;
+    border-radius: 36px;
+    transition: transform 0.3s ease;
+    width: 260px;
+    height: auto;
+}
+
+.icone:hover{
+    transform: scale(1.1);
+}
+
+@media (max-width:690px){
+    .icones{
+        flex-direction: column;
+    }
+}
+
+
+@media (min-width:992px){
+    #navbarNav{
+        flex:0;
+    }
+}
+
+.pesquisar-funcionario{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+#divBusca{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px; 
+}
+
+#numBusca {
+    background-color: var(--color3);
+    border: none; /* Remove a borda */
+    outline: none; /* Remove a borda de foco */
+    padding: 10px; /* Espaçamento interno */
+    font-size: 20px; /* Tamanho da fonte */
+    width: 130px; /* Largura do campo, ajuste conforme necessário */
+    text-align: center;
+    color: var(--color4);
+
+    transition: border-bottom 0.3s; /* Suaviza a transição da borda inferior */
+    border-radius: 0; /* Remove bordas arredondadas */
+}
+
+#btnBusca {
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    margin-left: 10px;
+}
+
+#numBusca:focus {
+    border-bottom: 1px solid black; /* Borda inferior cinza ao focar no campo */
+}
+
+.botao button{
+    background-color: var(--color7);
+    border: none;
+    width: 100px;
+    height: 40px;
+    border-radius: 36px;
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+    transition: transform 0.3s ease;
+}
+.botao{
+    margin: 15px;
+}
+
+.botao button:hover{
+    transform: scale(1.1);
+}
+
+#blocoFuncionario{
+    margin-top: 50px;
+}
+
+#blocoFuncionario{
+
+}
+#botaoEditarFuncionario{
+    text-align: end;
+}
+
+#dadosFuncionario{
+    border-radius: 36px; 
+    width: 450px; 
+    height: 300px; 
+    background-color: var(--color7);
 }
