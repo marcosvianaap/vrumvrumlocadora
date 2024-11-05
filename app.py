@@ -15,5 +15,9 @@ def administrador():
 def pesquisar_funcionario():
     return render_template("pesquisar_funcionario.html")
 
+@app.route("/administrador/funcionarios/criarFuncionario")
+def criar_funcionario():
+    return render_template("criar_funcionario.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

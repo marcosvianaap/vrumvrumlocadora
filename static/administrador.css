@@ -177,3 +177,27 @@ main.admin-home{
     height: 300px; 
     background-color: var(--color7);
 }
+
+#divCriaFuncionario{
+    display: grid;
+    place-items: center;
+    height: 50vh;
+}
+
+#formCriaFuncionario{
+    
+}
+
+#blocoCriaFuncionario{
+    border-radius: 36px; 
+    width: 600px;
+    height: auto;
+    background-color: var(--color7);
+    margin: 20px;
+    padding: 20px;
+}
+
+#confirmaCriaFuncionario, #cancelaCriaFuncionario{
+    text-align: center;
+    height: 30px;
+}
