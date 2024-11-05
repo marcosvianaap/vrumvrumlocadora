@@ -86,6 +86,28 @@ def connect_to_db():
     conn.commit()
     return conn
 
-conn = connect_to_db()
-conn.close()
+def autenticarUsuario(formulario):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT Usuario.Senha
+        FROM Pessoa
+        JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
+        WHERE Pessoa.CPF = ?
+    ''', (formulario['usuario'],))
+    senha = cursor.fetchone()
+    conn.close()
+
+    #usuario nao existe
+    if not senha:
+        return False
+
+    #usuario autenticados
+    if senha[0] == formulario['senha']:
+        return True
+    #if bcrypt.check_password_hash(senha[0], formulario["senha"]):
+    #    return True    
+
+    return False
 

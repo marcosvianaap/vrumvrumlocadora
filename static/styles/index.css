@@ -1,0 +1,94 @@
+/*Autores: Gabrielli Danker
+Ultima edição: 04/11/2024 */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Garante que o header fique acima de outros elementos */
+}
+
+.logo img {
+    height: 80px; /* Ajuste a altura conforme necessário */
+    width: auto;
+}
+
+.logo {
+    margin-left: 100px;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    background-color: #96c7d8;
+    min-height: 100vh; /* Garante que o conteúdo ocupe a altura total da tela */
+    padding-top: 80px; /* Espaço para que o conteúdo não fique atrás do header */
+}
+
+/* Estilos da caixa de login */
+.login-box {
+    margin-top: 110px;
+    background-color: #fff;
+    padding: 30px;
+    width: 300px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Título */
+.login-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilos dos inputs */
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Botão de login */
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background-color:#2f98bc;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Efeito hover no botão */
+.login-box button:hover {
+    background-color: #2f98bc;
+}
+
+/* Link de esqueci a senha */
+.login-box a {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #2f98bc;
+    text-decoration: none;
+}
+
+.login-box a:hover {
+    text-decoration: underline;
+}
