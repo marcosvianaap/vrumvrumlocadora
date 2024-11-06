@@ -17,7 +17,7 @@ Pesquisar Funcionários
             <button>Criar</button>
         </a>
     </div>
-    
+
     <div class="blocoFuncionario">
         <div id="divBusca">
             <input maxlength="14" pattern="\d{11}|\d{14}" inputmode="numeric" type="text" id="numBusca" placeholder="CPF/CNPJ"/>
@@ -25,8 +25,17 @@ Pesquisar Funcionários
         </div>
 
         <div class="blocoFuncionario">
-            
+
             <div id="dadosFuncionario">
+                {% if resultados %}
+                <ul>
+                    {% for item in resultados %}
+                    <li>{{ item.nome }} - {{ item.descricao }} - R$ {{ item.preco }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Nenhum resultado encontrado.</p>
+                {% endif %}
             </div>
 
             <div id="botaoEditarFuncionario" class="botao">

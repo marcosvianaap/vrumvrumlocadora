@@ -174,8 +174,11 @@ main.admin-home{
 #dadosFuncionario{
     border-radius: 36px; 
     width: 450px; 
-    height: 300px; 
+    height: auto; 
     background-color: var(--color7);
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
 }
 
 #divCriaFuncionario{
