@@ -9,7 +9,7 @@ def home():
 
 @app.route("/administrador")
 def administrador():
-    return render_template("home_administrador.html")
+    return render_template("administrador.html")
 
 @app.route("/administrador/funcionarios")
 def pesquisar_funcionario():
