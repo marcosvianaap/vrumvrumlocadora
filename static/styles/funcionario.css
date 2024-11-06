@@ -87,7 +87,7 @@
 
 
 #blocoEditarDados,#blocoFuncionario, #blocoVazio{
-    display: block;
+    display: none;
 }
 #confirmaCriaFuncionario, #cancelaCriaFuncionario{
     text-align: center;
