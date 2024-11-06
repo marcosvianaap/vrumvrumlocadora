@@ -12,51 +12,75 @@ Teste
 
 <main>
   <div id="divCriaFuncionario">
-    <form id="formCriaFuncionario">
+    <form id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
           <label for="nome" class="col-sm-2 col-form-label">Nome</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" aria-describedby="">
+            <input type="text" class="form-control" id="nome" required minlength="3">
+            <div class="invalid-feedback">
+              Por favor, um nome.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cpf" aria-describedby="">
+            <input type="text" class="form-control" id="cpf" pattern="\d{11}" required>
+            <div class="invalid-feedback">
+              Por favor, insira um CPF válido, apenas números.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="telefone" aria-describedby="">
+            <input type="text" class="form-control" id="telefone" pattern="\d{8,9}" required>
+            <div class="invalid-feedback">
+              Por favor, insira um número de telefone válido.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="email" class="col-sm-2 col-form-label">E-mail</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="email" aria-describedby="">
+            <input type="email" class="form-control" id="email"
+              pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+              required>
+            <div class="invalid-feedback">
+              Por favor, insira um email válido.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
           <div class="col-sm-10">
-            <input type="date" class="form-control" id="dataNascimento" aria-describedby="">
+            <input type="date" class="form-control" id="dataNascimento" required>
+            <div class="invalid-feedback">
+              Por favor, informe uma data de nascimento válido.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="endereco" aria-describedby="">
+            <input type="text" class="form-control" id="endereco" required>
+            <div class="invalid-feedback">
+              Por favor, informe um endereço válido.
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="senha" class="col-sm-2 col-form-label">Senha</label>
           <div class="col-sm-10">
-            <input type="password" class="form-control" id="senha" aria-describedby="">
+            <input type="password" class="form-control" id="senha" required minlength="6">
+            <div class="invalid-feedback">
+              Por favor, insira uma senha de no mínimo 6 dígitos.
+            </div>
           </div>
         </div>
       </div>
+      <div id="responseMessage" class="alert d-none" role="alert"></div>
       <div id="confirmaCriaFuncionario" class="botao">
         <button type="submit">Confirmar</button>
       </div>

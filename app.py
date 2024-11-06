@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import Blueprint, render_template
 
 app = Flask(__name__)
@@ -17,7 +17,8 @@ def pesquisar_funcionario():
 
 @app.route("/administrador/funcionarios/criarFuncionario")
 def criar_funcionario():
-    return render_template("criar_funcionario.html")
+    script_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
+    return render_template("criar_funcionario.html", script_url=script_url)
 
 if __name__ == "__main__":
     app.run(debug=True)
