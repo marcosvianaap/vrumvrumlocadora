@@ -171,6 +171,11 @@ main.admin-home{
     text-align: end;
 }
 
+#botaoCriarFuncionario{
+    position: relative;
+    left: 33%;
+}
+
 #dadosFuncionario{
     border-radius: 36px; 
     width: 450px; 
