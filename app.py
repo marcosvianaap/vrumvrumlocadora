@@ -1,8 +1,10 @@
 #Autores: Gabrielli Danker, José Mateus, Lucas Sena, Marcos Viana, Monique Ellen
 #Ultima edição: 04/11/2024
 
-from flask import Flask, render_template, session,request,redirect,url_for
 #from flask_bcrypt import Bcrypt
+
+from flask import Flask, render_template, session,request,redirect,url_for
+from flask import Blueprint, render_template
 import instance.banco as bd
 
 #configurando o framework
@@ -11,18 +13,24 @@ app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 #bcrypt = Bcrypt(app)
 
-
-
-
-#rotas para a pagina de inicio
+#rotas para entrar e sair do sistema
 @app.route('/')
 def index():
     return render_template("index.html")
 
+@app.route("/administrador")
+def administrador():
+    return render_template("administrador.html")
 
+@app.route("/administrador/funcionarios")
+def pesquisar_funcionario():
+    return render_template("pesquisar_funcionario.html")
 
+@app.route("/administrador/funcionarios/criarFuncionario")
+def criar_funcionario():
+    script_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
+    return render_template("criar_funcionario.html", script_url=script_url)
 
-#rotas para entrar e sair do sistema
 @app.route('/tela_login')
 def tela_login():
     if 'statusLogin' in session:
@@ -49,8 +57,6 @@ def processoSair():
     if 'usuario' in session:
         del session['usuario']
     return redirect(url_for('index'))
-
-
 
 
 if __name__ == '__main__':

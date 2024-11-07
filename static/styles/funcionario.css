@@ -1,0 +1,101 @@
+
+
+.pesquisar-funcionario{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+#divBusca{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px; 
+}
+
+#numBusca {
+    background-color: var(--color3);
+    border: none; /* Remove a borda */
+    outline: none; /* Remove a borda de foco */
+    padding: 10px; /* Espaçamento interno */
+    font-size: 20px; /* Tamanho da fonte */
+    width: 130px; /* Largura do campo, ajuste conforme necessário */
+    text-align: center;
+    color: var(--color4);
+
+    transition: border-bottom 0.3s; /* Suaviza a transição da borda inferior */
+    border-radius: 0; /* Remove bordas arredondadas */
+}
+
+#btnBusca {
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    margin-left: 10px;
+}
+
+#numBusca:focus {
+    border-bottom: 1px solid black; /* Borda inferior cinza ao focar no campo */
+}
+
+.botao button{
+    background-color: var(--color7);
+    border: none;
+    width: 100px;
+    height: 40px;
+    border-radius: 36px;
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+    transition: transform 0.3s ease;
+}
+.botao{
+    margin: 15px;
+}
+
+.botao button:hover{
+    transform: scale(1.1);
+}
+
+#botaoEditarFuncionario, #botaoConfirmarEdicao{
+    text-align: end;
+}
+
+#botaoCriarFuncionario{
+    position: relative;
+    left: 33%;
+}
+
+.dadosFuncionario, #blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
+    border-radius: 36px; 
+    width: 600px; 
+    height: auto; 
+    background-color: var(--color7);
+    margin: 20px;
+    padding: 20px;
+}
+
+#blocoVazio{
+    text-align: center;
+}
+
+#divCriaFuncionario{
+    display: grid;
+    place-items: center;
+    height: 50vh;
+}
+
+
+#blocoEditarDados,#blocoFuncionario, #blocoVazio{
+    display: none;
+}
+#confirmaCriaFuncionario, #cancelaCriaFuncionario{
+    text-align: center;
+    height: 30px;
+}
+
+@media (max-width:620px){
+    .dadosFuncionario, #blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
+        width: auto;
+    }
+}

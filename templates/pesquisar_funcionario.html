@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Pesquisar Funcionários
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="pesquisar-funcionario">
+
+    <div id="botaoCriarFuncionario" class="botao">
+        <a href="{{ url_for('criar_funcionario') }}">
+            <button>Criar</button>
+        </a>
+    </div>
+
+    <div id="blocoPesquisa">
+        
+        <div id="divBusca">
+            <input maxlength="14" pattern="\d{11}|\d{14}" inputmode="numeric" type="text" id="numBusca" placeholder="CPF/CNPJ"/>
+            <img src="{{ url_for('static', filename='img/search.svg') }}" id="btnBusca" alt="Buscar" onclick="PesquisarFuncionario()" style="cursor: pointer; width: 25px;"/>
+        </div>
+
+        <div id="blocoFuncionario">
+
+            {% if funcionario %}
+
+            <div class="dadosFuncionario">
+                <p>Nome: {{ funcionario.nome }}</p>
+                <p>CPF: {{ funcionario.cpf }}</p>
+                <p>Telefone: {{ funcionario.telefone }}</p>
+                <p>E-mail: {{ funcionario.email }}</p>
+                <p>Data de Nascimento: {{ funcionario.data_nascimento }}</p>
+                <p>Endereço: {{ funcionario.endereco }}</p>
+                <p>Status: {{ funcionario.status}}</p>
+            </div>   
+            
+            {% else %}
+
+            <div id="blocoVazio">
+                <p>Nenhum resultado encontrado.</p>
+            </div>
+    
+            {% endif %}
+
+            <div id="botaoEditarFuncionario" class="botao">
+                <button>Editar</button>
+            </div>
+
+        </div>
+
+        <div id="blocoEditarDados">
+            <form id="editarFuncionario">
+
+                <div class="blocoEdicao">
+                    <div class="row mb-3" >
+                        <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nome" aria-describedby="">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="cpf" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="telefone" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="email" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="dataNascimento" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="endereco" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="senha" class="col-sm-2 col-form-label">Senha</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="senha" aria-describedby="">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="senha" class="col-sm-2 col-form-label">Status</em></label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="status" name="status">
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="botaoConfirmarEdicao" class="botao">
+                    <button>Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Home
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="admin-home">
+    <div class="icones">
+        <a href="{{ url_for('pesquisar_funcionario') }}">
+            <img class="icone" src="{{ url_for('static', filename='img/funcionario.png') }}" alt="Logo">
+        </a>
+
+        <a href="#">
+            <img class="icone" src="{{ url_for('static', filename='img/veiculo.png') }}" alt="Logo">
+        </a>
+
+    </div>
+</main>
+
+{% endblock %}
