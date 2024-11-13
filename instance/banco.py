@@ -1,3 +1,4 @@
+import re
 import sqlite3
 import os
 
@@ -111,3 +112,34 @@ def autenticarUsuario(formulario):
 
     return False
 
+
+def buscarUsuarioPorCPF(cpf):
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco, Usuario.Status
+        FROM Pessoa
+        JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
+        WHERE Pessoa.CPF = ?
+    ''', (cpf,))
+    
+    usuario = cursor.fetchone()
+
+    print(f"Resultado da consulta: {usuario}") 
+    
+    conn.close()
+    
+    if usuario:
+        return {
+            'id': usuario[0],
+            'nome': usuario[1],
+            'cpf': usuario[2],
+            'telefone': usuario[3],
+            'email': usuario[4],
+            'data_nascimento': usuario[5],
+            'endereco': usuario[6],
+            'status': usuario[7]
+        }
+    
+    return None

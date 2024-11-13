@@ -3,7 +3,7 @@
 
 #from flask_bcrypt import Bcrypt
 
-from flask import Flask, render_template, session,request,redirect,url_for
+from flask import Flask, jsonify, render_template, session,request,redirect,url_for
 from flask import Blueprint, render_template
 import instance.banco as bd
 
@@ -22,9 +22,18 @@ def index():
 def administrador():
     return render_template("administrador.html")
 
-@app.route("/administrador/funcionarios")
+
+@app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 def pesquisar_funcionario():
-    return render_template("pesquisar_funcionario.html")
+    funcionario = None
+    cpf= None #verificar se foi digitado algum cpf
+
+    if request.method == 'POST':
+        cpf = request.form['cpf'] 
+        funcionario = bd.buscarUsuarioPorCPF(cpf)
+
+    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf)
+
 
 @app.route("/administrador/funcionarios/criarFuncionario")
 def criar_funcionario():
@@ -57,7 +66,6 @@ def processoSair():
     if 'usuario' in session:
         del session['usuario']
     return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)

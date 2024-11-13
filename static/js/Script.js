@@ -8,9 +8,9 @@ botaoEditar.addEventListener("click", function () {
     blocoEditarDados.style.display = "block";
 });
 
-const botaoConfirmarEdicao = document.getElementById("botaoConfirmarEdicao");
+const botaoCancelarEdicao = document.getElementById("botaoCancelarEdicao")
 
-botaoConfirmarEdicao.addEventListener("click", function (event) {
+botaoCancelarEdicao.addEventListener("click", function (event) {
 
     event.preventDefault();
 
