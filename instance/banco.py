@@ -117,18 +117,22 @@ def buscarUsuarioPorCPF(cpf):
     conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
     
-    cursor.execute('''
-        SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco, Usuario.Status
-        FROM Pessoa
-        JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
-        WHERE Pessoa.CPF = ?
-    ''', (cpf,))
-    
-    usuario = cursor.fetchone()
+    try:
+        cursor.execute('''
+            SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco, Usuario.Status
+            FROM Pessoa
+            JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
+            WHERE Pessoa.CPF = ?
+        ''', (cpf,))
+        
+        usuario = cursor.fetchone()
 
-    print(f"Resultado da consulta: {usuario}") 
-    
-    conn.close()
+        print(f"Resultado da consulta: {usuario}")
+    except Exception as e:
+        print(f"Erro: {e}")
+        
+    finally:
+        conn.close()
     
     if usuario:
         return {
@@ -143,3 +147,20 @@ def buscarUsuarioPorCPF(cpf):
         }
     
     return None
+
+def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha):
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cargo = 'funcionario'
+    status = 'ativo'
+    usuarioIdP = ''
+    try:
+        cursor.execute('INSERT INTO Pessoa (cpf, endereco, Data_Nascimento, email, telefone, nome) VALUES (?, ?, ?, ?, ?, ?)', (cpf, endereco, Data_Nascimento, email, telefone, nome))
+        usuarioIdP = cursor.lastrowid
+        cursor.execute('INSERT INTO Usuario (senha, cargo, status, pessoa_id) VALUES (?, ?, ?, ?)', (senha, cargo, status, usuarioIdP))
+        conn.commit()
+        print("Usuário adicionado com sucesso!")
+    except Exception as e:
+        print(f"Erro: {e}")
+    finally:
+        conn.close()

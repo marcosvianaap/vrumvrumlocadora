@@ -35,9 +35,23 @@ def pesquisar_funcionario():
     return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf)
 
 
-@app.route("/administrador/funcionarios/criarFuncionario")
+@app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])
 def criar_funcionario():
     script_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
+
+    cpf = None
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        cpf = request.form['cpf']
+        telefone = request.form['telefone']
+        email = request.form['email']
+        Data_Nascimento = request.form['dataNascimento']
+        endereco = request.form['endereco']
+        senha = request.form['senha']
+        print(nome)
+        bd.adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha)
+
     return render_template("criar_funcionario.html", script_url=script_url)
 
 @app.route('/tela_login')

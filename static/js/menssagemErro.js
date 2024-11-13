@@ -1,11 +1,11 @@
 // Script de Validação e Exibição de Mensagens
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('formCriaFuncionario');
     const responseMessage = document.getElementById('responseMessage');
 
     form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+        
 
         if (form.checkValidity()) {
             // Exemplo de sucesso - pode ser substituído com resposta do backend
@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
             responseMessage.classList.add('alert-success');
             responseMessage.textContent = 'Cadastro feito com sucesso!';
         } else {
+            event.preventDefault();
+            event.stopPropagation();
             form.classList.add('was-validated');
             responseMessage.classList.remove('d-none', 'alert-success');
             responseMessage.classList.add('alert-danger');
