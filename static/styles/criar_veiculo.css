@@ -1,0 +1,54 @@
+.container {   
+    width: 100vh;
+    position: relative;
+      
+}
+.flex-container{
+    flex-direction: column;
+}
+
+.card { 
+    align-items: center;
+    margin: 7% 75px 20px 75px;
+    padding: 20px 0px 20px 0px;
+    border-radius: 36px;
+    background-color: (--color3);
+    position: relative;
+
+}
+
+.btn-criar-veic{
+    background-color: var(--color7);
+    width: 124px;
+    height: 40px;
+    margin: 0 0 2% 40%;
+    border-radius: 36px;
+    border: 0;
+    transition: transform 0.3s ease;
+    position: relative;
+    font-size: 20px;
+    color: var(--color6);
+    font-weight: bold;
+    padding: 0;
+    display: inline-block;
+}
+.btn-criar-veic:hover{
+    transform: scale(1.1);
+    background-color: var(--color7);
+    color: var(--color6);
+}
+
+
+
+#dados{
+    margin: 0%;
+    position: relative;
+    right: 12ch;
+    font-size: 20px;
+    color: var(--color6);
+    font-weight: bold;
+    text-decoration: none;
+    p {
+        margin: 0%;
+    }
+}

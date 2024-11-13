@@ -1,19 +1,12 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-Gerenciar Veiculos
+Criar Veiculos
 {% endblock %}
 
 
 {% block conteudo %}
 <main class="container">
-   <!-- Botão para cadastrar novo veiculo-->
-   <span>
-    <a href="{{ url_for('criar_veiculos') }}">
-      <button class="btn-criar" type="button">Criar</button>
-     </a>
- </span>
-
     <!-- Card de dados com botão de edição abaixo -->
     <section class="flex-container">
         <div class="card">
@@ -32,7 +25,8 @@ Gerenciar Veiculos
                 <p>Status: </p>
             </div>
         </div>
-        <button class="btn" type="button">Editar</button>
-    </section>
+        <button class="btn-criar-veic" type="button">Confirmar</button>
+        <button class="btn-criar-veic" type="button">Cancelar</button>
+     </section>
 </main>
 {% endblock %}

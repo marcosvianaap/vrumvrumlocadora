@@ -26,9 +26,16 @@ def administrador():
 def pesquisar_funcionario():
     return render_template("pesquisar_funcionario.html")
 
+
+# Rota de gerenciamento de veiculos
 @app.route("/administrador/veiculos")
 def gerenciar_veiculos():
     return render_template("geren_veic.html")
+
+#Rota para cadastrar um novo veiculo
+@app.route("/administrador/veiculos/cadastro")
+def criar_veiculos():
+    return render_template("criar_veiculo.html")
 
 @app.route("/administrador/funcionarios/criarFuncionario")
 def criar_funcionario():
