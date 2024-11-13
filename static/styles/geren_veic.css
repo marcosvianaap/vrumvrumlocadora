@@ -1,0 +1,39 @@
+.container {   
+    width: 100vh;
+    position: relative;
+      
+}
+
+.card {
+  
+    align-items: center;
+    margin: 20px 75px 20px 75px;
+    padding: 0px 0px 27% 0px;
+    border-radius: 36px;
+    background-color: (--color3);
+    position: relative;
+
+}
+
+.btn{
+    background-color: var(--color7);
+    width: 100px;
+    height: 40px;
+    border-radius: 36px;
+    text-align: center;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+    position: relative;
+    margin-left: 70%;
+    
+}
+#dados{
+    margin: 0%;
+    position: relative;
+
+    P{
+        margin: 0%;
+        left: 0%;
+
+    }
+}

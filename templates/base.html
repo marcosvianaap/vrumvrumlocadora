@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.3-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/geren_veic.css') }}">
+
     {% block links %}
     {%endblock%}
 </head>
@@ -38,8 +40,13 @@
                         <a class="nav-link" href="{{ url_for('pesquisar_funcionario') }}">Funcionários <span
                                 class="sr-only"></span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Veículos</a>
+
+                     <!-- Caminho para a tela de gerenciamento de veiculos > A partir do botão no head -->
+                    <li
+                       
+                        class="nav-item {% if request.path.startswith('/administrador/veiculos') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('gerenciar_veiculos') }}">Veículos<span
+                            class="sr-only"></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sair</a>

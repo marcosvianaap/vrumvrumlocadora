@@ -26,10 +26,15 @@ def administrador():
 def pesquisar_funcionario():
     return render_template("pesquisar_funcionario.html")
 
+@app.route("/administrador/veiculos")
+def gerenciar_veiculos():
+    return render_template("geren_veic.html")
+
 @app.route("/administrador/funcionarios/criarFuncionario")
 def criar_funcionario():
     script_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
     return render_template("criar_funcionario.html", script_url=script_url)
+
 
 @app.route('/tela_login')
 def tela_login():
