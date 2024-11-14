@@ -11,6 +11,17 @@ Teste
 
 
 <main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+  {% endwith %}
   <div id="divCriaFuncionario">
     <form method="POST" action="{{ url_for('criar_funcionario') }}" id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
@@ -80,7 +91,7 @@ Teste
           </div>
         </div>
       </div>
-      <div id="responseMessage" class="alert d-none" role="alert"></div>
+      <!-- <div id="responseMessage" class="alert d-none" role="alert"></div> -->
       
       <div id="confirmaCriaFuncionario" class="botao">
         <button type="submit">Confirmar</button>

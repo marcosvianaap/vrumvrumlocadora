@@ -1,5 +1,4 @@
-// Script de Validação e Exibição de Mensagens
-
+// Script de Validação e Exibição de Mensagens do formulário de criação de func.
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('formCriaFuncionario');
     const responseMessage = document.getElementById('responseMessage');
@@ -8,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
         
 
         if (form.checkValidity()) {
-            // Exemplo de sucesso - pode ser substituído com resposta do backend
             responseMessage.classList.remove('d-none', 'alert-danger');
             responseMessage.classList.add('alert-success');
             responseMessage.textContent = 'Cadastro feito com sucesso!';
@@ -24,19 +22,17 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Validação dos campos do formulários e exibição de mensagens.
+// Validação dos campos do formulários e exibição de mensagens do formulário de edição de func.
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('editarFuncionario');
     const responseMessage = document.getElementById('responseMessage2');
 
     form.addEventListener('submit', function (event) {
-        
 
         if (form.checkValidity()) {
-            // Exemplo de sucesso - pode ser substituído com resposta do backend
             responseMessage.classList.remove('d-none', 'alert-danger');
             responseMessage.classList.add('alert-success');
-            responseMessage.textContent = 'Cadastro feito com sucesso!';
+            responseMessage.textContent = 'Atualização feita com sucesso!';
             
         } else {
             event.preventDefault();

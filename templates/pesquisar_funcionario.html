@@ -18,6 +18,7 @@ Pesquisar Funcionários
         </a>
     </div>
 
+    
     <div id="blocoPesquisa">
         
         <form action="{{ url_for('pesquisar_funcionario') }}" method="POST">
@@ -54,6 +55,18 @@ Pesquisar Funcionários
             </div>
     
             {% endif %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div id="responseMessage2">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
 
         </div>
 
@@ -135,9 +148,9 @@ Pesquisar Funcionários
                     <div class="row mb-3">
                         <label for="status" class="col-sm-2 col-form-label">Status</em></label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="status2" name="status">
-                                <option value="ativo"{% if funcionario.status == "Ativo" %}selected{% endif %}>Ativo</option>
-                                <option value="inativo" {% if funcionario.status == "Inativo" %}selected{% endif %} >Inativo</option>
+                            <select class="form-control" id="status2" name="status">    
+                                <option value="ativo"{% if funcionario.status == "ativo" %}selected{% endif %}>Ativo</option>
+                                <option value="inativo" {% if funcionario.status == "inativo" %}selected{% endif %} >Inativo</option>
                             </select>
                         </div>
                     </div>
@@ -146,7 +159,7 @@ Pesquisar Funcionários
                     <button type="submit" name="form2">Confirmar</button>
                 </div>
                 <div id="botaoCancelarEdicao" class="botao">
-                    <button type="button">Cancelar</button>
+                    <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
                 </div>
             </form>
             <div id="responseMessage2" class="alert d-none" role="alert"></div>
