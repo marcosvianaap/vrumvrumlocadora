@@ -46,6 +46,7 @@ def connect_to_db():
             Placa               TEXT NOT NULL,
             RENAVAM             TEXT NOT NULL,
             Modelo              TEXT NOT NULL,
+            Marca               TEXT NOT NULL,
             Ano_Fabricacao      DATE NOT NULL,
             Cor                 TEXT NOT NULL,
             Tipo_Combustivel    TEXT NOT NULL,
