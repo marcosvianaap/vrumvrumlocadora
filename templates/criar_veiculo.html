@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Criar Veiculos
+{% endblock %}
+
+
+{% block conteudo %}
+<main class="container">
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-body">
+                <form action="/administrador/veiculos/backend_criar_veiculo" method="POST" id="formulario">
+                    <div class="row mb-3 align-items-center">
+                        <label for="placa" class="col-sm-5 col-form-label">Modelo:</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="modelo" name="modelo" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-center">
+                        <label for="placa" class="col-sm-4 col-form-label">Cor:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cor" name="cor" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-center">
+                        <label for="placa" class="col-sm-4 col-form-label">Marca:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="marca" name="marca" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-3 align-items-center">
+                        <label for="placa" class="col-sm-6 col-form-label">Placa do veículo:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="placa" name="placa" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="renavam" name="renavam" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="anoFabricacao" class="col-sm-6 col-form-label">Ano de fabricação:</label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" id="anoFabricacao" name="anoFabricacao" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="anoAquisicao" class="col-sm-6 col-form-label">Ano de aquisição:</label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" id="anoAquisicao" name="anoAquisicao" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="valorAlocacao" name="valorAlocacao" required>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="tipoCombustivel" class="col-sm-6 col-form-label">Tipo de combustível:</label>
+                        <div class="col-sm-6">
+                            <select class="form-select" id="tipoCombustivel" name="tipoCombustivel" required>
+                                <option selected disabled>Selecione...</option>
+                                <option value="gasolina">Gasolina</option>
+                                <option value="etanol">Etanol</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="flex">Flex</option>
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2 align-items-center">
+                        <label for="status" class="col-sm-4 col-form-label">Status:</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" id="status" name="status">
+                                <option selected disabled required>Selecione...</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <button class="btn-criar-veic" type="submit">Confirmar</button>
+        <button class="btn-criar-veic" type="button" onclick="window.location.href = '/administrador/veiculos'">Cancelar</button>
+    </form>
+    </div>
+</main>
+{% endblock %}

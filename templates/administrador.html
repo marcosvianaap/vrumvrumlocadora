@@ -15,8 +15,9 @@ Home
         <a href="{{ url_for('pesquisar_funcionario') }}"> 
             <img class="icone" src="{{ url_for('static', filename='img/funcionario.png') }}" alt="Logo">
         </a>
-        <!-- incluir rota para o gerenciamento de veículos -->
-        <a href="#">
+      
+        <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
+        <a href="{{ url_for('gerenciar_veiculos') }}">
             <img class="icone" src="{{ url_for('static', filename='img/veiculo.png') }}" alt="Logo">
         </a>
 
