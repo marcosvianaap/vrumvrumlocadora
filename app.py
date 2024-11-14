@@ -59,7 +59,6 @@ def gerenciar_veiculos():
         for index,j in enumerate(i):
             veiculo[colunas[index]] = j
         veiculos.append(veiculo)
-    print(veiculos)
     conn.close()
 
     return render_template("geren_veic.html",veiculos=veiculos)
