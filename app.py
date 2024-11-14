@@ -28,7 +28,7 @@ def pesquisar_funcionario():
 
     if request.method == 'POST':
        
-        if "form1" in request.form:
+        if "form1" in request.form: #Formulário para busca de funcionarios por CPF
 
             cpf1 = request.form['cpf']
             session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
@@ -36,11 +36,17 @@ def pesquisar_funcionario():
 
             return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf1)
 
-        elif "form2" in request.form:
+        elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
             cpf1 = session['cpfBusca'] #CPF usado na busca
             nome = request.form['nome']
             cpf2 = request.form['cpf'] #CPF que irá substituir no banco
+
+            if not(cpf1==cpf2) and bd.verificaCpf(cpf2): #Verificação de CPF único
+                flash('CPF já existente!', 'warning')
+                funcionario = bd.buscarUsuarioPorCPF(cpf1)
+                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
+
             telefone = request.form['telefone']
             email = request.form['email']
             Data_Nascimento = request.form['data_nascimento']
@@ -74,6 +80,11 @@ def criar_funcionario():
     if request.method == 'POST':
         nome = request.form['nome']
         cpf = request.form['cpf']
+
+        if bd.verificaCpf(cpf): #Verificação de CPF único
+            flash('CPF já existente!', 'warning')
+            return render_template("criar_funcionario.html", script_url=script_url)
+
         telefone = request.form['telefone']
         email = request.form['email']
         Data_Nascimento = request.form['dataNascimento']

@@ -192,3 +192,14 @@ def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, 
         print(f"Erro: {e}")
     finally:
         conn.close()
+
+def verificaCpf(cpf):
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf,))
+    row = cursor.fetchone()
+    if row:
+        return True
+
+    return False
