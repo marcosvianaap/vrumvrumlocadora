@@ -23,7 +23,7 @@ Pesquisar Funcionários
         <form action="{{ url_for('pesquisar_funcionario') }}" method="POST">
             <div id="divBusca">
                 <input maxlength="11" pattern="\d{11}" inputmode="numeric" type="text" id="numBusca" name="cpf" placeholder="CPF"/>
-                <button type="submit"  id="btnBusca">
+                <button type="submit"  id="btnBusca" name="form1">
                     <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
                 </button>
             </div>
@@ -58,7 +58,7 @@ Pesquisar Funcionários
         </div>
 
         <div id="blocoEditarDados">
-            <form id="editarFuncionario" novalidate>
+            <form action="{{ url_for('pesquisar_funcionario') }}" method="POST" id="editarFuncionario" novalidate>
                 <div id="blocoEdicao">
                     <div class="row mb-3" >
                         <label for="nome" class="col-sm-2 col-form-label">Nome</label>
@@ -143,7 +143,7 @@ Pesquisar Funcionários
                     </div>
                 </div>
                 <div id="botaoConfirmarEdicao" class="botao">
-                    <button type="submit">Confirmar</button>
+                    <button type="submit" name="form2">Confirmar</button>
                 </div>
                 <div id="botaoCancelarEdicao" class="botao">
                     <button type="button">Cancelar</button>

@@ -26,14 +26,31 @@ def administrador():
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 def pesquisar_funcionario():
     funcionario = None
-    cpf= None #verificar se foi digitado algum cpf
+    cpf1= None #verificar se foi digitado algum cpf
 
     if request.method == 'POST':
-        cpf = request.form['cpf'] 
-        funcionario = bd.buscarUsuarioPorCPF(cpf)
 
-    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf)
+        if "form1" in request.form:
 
+            cpf1 = request.form['cpf']
+            session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
+            funcionario = bd.buscarUsuarioPorCPF(cpf1)
+
+        elif "form2" in request.form:
+
+            cpf1 = session['cpfBusca'] #CPF usado na busca
+            nome = request.form['nome']
+            cpf2 = request.form['cpf'] #CPF que irá substituir no banco
+            telefone = request.form['telefone']
+            email = request.form['email']
+            Data_Nascimento = request.form['data_nascimento']
+            endereco = request.form['endereco']
+            senha = request.form['senha']
+            status = request.form['status']
+            bd.atualizaFuncionario(cpf2, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf1)
+            
+
+    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
 
 @app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])
 def criar_funcionario():
@@ -49,7 +66,6 @@ def criar_funcionario():
         Data_Nascimento = request.form['dataNascimento']
         endereco = request.form['endereco']
         senha = request.form['senha']
-        print(nome)
         bd.adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha)
 
     return render_template("criar_funcionario.html", script_url=script_url)

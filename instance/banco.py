@@ -161,6 +161,27 @@ def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, 
         conn.commit()
         print("Usuário adicionado com sucesso!")
     except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
+def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf2):
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cargo = 'funcionario'
+
+    cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf2,))
+    row = cursor.fetchone()
+    if row:
+        row_id = row[0]
+
+    try:
+        cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE cpf = ?', (cpf1, endereco, Data_Nascimento, email, telefone, nome, cpf2))
+        cursor.execute('UPDATE Usuario SET senha = ?, cargo = ?, status = ? WHERE pessoa_id = ?', (senha, cargo, status, row_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
         print(f"Erro: {e}")
     finally:
         conn.close()
