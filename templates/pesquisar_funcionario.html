@@ -18,109 +18,151 @@ Pesquisar Funcionários
         </a>
     </div>
 
+    
     <div id="blocoPesquisa">
         
-        <div id="divBusca">
-            <input maxlength="14" pattern="\d{11}|\d{14}" inputmode="numeric" type="text" id="numBusca" placeholder="CPF/CNPJ"/>
-            <img src="{{ url_for('static', filename='img/search.svg') }}" id="btnBusca" alt="Buscar" onclick="PesquisarFuncionario()" style="cursor: pointer; width: 25px;"/>
-        </div>
+        <form action="{{ url_for('pesquisar_funcionario') }}" method="POST">
+            <div id="divBusca">
+                <input maxlength="11" pattern="\d{11}" inputmode="numeric" type="text" id="numBusca" name="cpf" placeholder="CPF"/>
+                <button type="submit"  id="btnBusca" name="form1">
+                    <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
+                </button>
+            </div>
+        </form>
 
         <div id="blocoFuncionario">
 
             {% if funcionario %}
 
-            <div class="dadosFuncionario">
-                <p>Nome: {{ funcionario.nome }}</p>
-                <p>CPF: {{ funcionario.cpf }}</p>
-                <p>Telefone: {{ funcionario.telefone }}</p>
-                <p>E-mail: {{ funcionario.email }}</p>
-                <p>Data de Nascimento: {{ funcionario.data_nascimento }}</p>
-                <p>Endereço: {{ funcionario.endereco }}</p>
-                <p>Status: {{ funcionario.status}}</p>
+            <div class="dadosFuncionario"  class="{% if funcionario %}mostrar{% else %}esconder{% endif %}">
+                <p><strong>Nome:</strong> {{ funcionario.nome }}</p>
+                <p><strong>CPF:</strong> {{ funcionario.cpf }}</p>
+                <p><strong>Telefone:</strong> {{ funcionario.telefone }}</p>
+                <p><strong>E-mail:</strong> {{ funcionario.email }}</p>
+                <p><strong>Data de Nascimento:</strong> {{ funcionario.data_nascimento }}</p>
+                <p><strong>Endereço:</strong> {{ funcionario.endereco }}</p>
+                <p><strong>Status:</strong> {{ funcionario.status}}</p>
             </div>   
-            
-            {% else %}
-
-            <div id="blocoVazio">
-                <p>Nenhum resultado encontrado.</p>
-            </div>
-    
-            {% endif %}
 
             <div id="botaoEditarFuncionario" class="botao">
                 <button>Editar</button>
             </div>
+            
+            {% else %}
+
+            <div id="blocoVazio" class="{% if cpf %}mostrar{% else %}esconder{% endif %}">
+                <p>Nenhum resultado encontrado para CPF: <strong>{{cpf}}</strong></p>
+            </div>
+    
+            {% endif %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div id="responseMessage2">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
 
         </div>
 
         <div id="blocoEditarDados">
-            <form id="editarFuncionario">
-
-                <div class="blocoEdicao">
+            <form action="{{ url_for('pesquisar_funcionario') }}" method="POST" id="editarFuncionario" novalidate>
+                <div id="blocoEdicao">
                     <div class="row mb-3" >
                         <label for="nome" class="col-sm-2 col-form-label">Nome</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nome" aria-describedby="">
+                            <input type="text" class="form-control" id="nome2" name="nome" value="{{funcionario.nome}}" required minlength="3">
+                            <div class="invalid-feedback">
+                            Por favor, um nome.
+                            </div>
                         </div>
                     </div>
                     
                     <div class="row mb-3">
                         <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="cpf" aria-describedby="">
+                            <input type="text" class="form-control" id="cpf2" pattern="\d{11}" name="cpf" value="{{funcionario.cpf}}"  required>
+                            <div class="invalid-feedback">
+                            Por favor, insira um CPF válido, apenas números.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="telefone" aria-describedby="">
+                            <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{funcionario.telefone}}"  required>
+                            <div class="invalid-feedback">
+                            Por favor, insira um número de telefone válido.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">E-mail</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="email" aria-describedby="">
+                            <input type="email" class="form-control" id="email2"
+                            pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+                            name="email" value="{{funcionario.email}}"  required>
+                            <div class="invalid-feedback">
+                            Por favor, insira um email válido.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="dataNascimento" aria-describedby="">
+                            <input type="date" class="form-control" id="dataNascimento2" name="data_nascimento" value="{{funcionario.data_nascimento}}"  required>
+                            <div class="invalid-feedback">
+                              Por favor, informe uma data de nascimento válido.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="endereco" aria-describedby="">
+                            <input type="text" class="form-control" id="endereco2" name="endereco" value="{{funcionario.endereco}}"  required>
+                            <div class="invalid-feedback">
+                            Por favor, informe um endereço válido.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="senha" class="col-sm-2 col-form-label">Senha</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="senha" aria-describedby="">
+                            <input type="password" class="form-control" id="senha2" name="senha" minlength="6">
+                            <div class="invalid-feedback">
+                            Por favor, insira uma senha de no mínimo 6 dígitos.
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <label for="senha" class="col-sm-2 col-form-label">Status</em></label>
+                        <label for="status" class="col-sm-2 col-form-label">Status</em></label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="status" name="status">
-                                <option value="ativo">Ativo</option>
-                                <option value="inativo">Inativo</option>
+                            <select class="form-control" id="status2" name="status">    
+                                <option value="ativo"{% if funcionario.status == "ativo" %}selected{% endif %}>Ativo</option>
+                                <option value="inativo" {% if funcionario.status == "inativo" %}selected{% endif %} >Inativo</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                
                 <div id="botaoConfirmarEdicao" class="botao">
-                    <button>Confirmar</button>
+                    <button type="submit" name="form2">Confirmar</button>
+                </div>
+                <div id="botaoCancelarEdicao" class="botao">
+                    <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
                 </div>
             </form>
+            <div id="responseMessage2" class="alert d-none" role="alert"></div>
         </div>
     </div>
 
