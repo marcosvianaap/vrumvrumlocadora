@@ -7,6 +7,17 @@ Criar Veiculos
 
 {% block conteudo %}
 <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
     <div class="container mt-3">
         <div class="card">
             <div class="card-body">
@@ -85,9 +96,10 @@ Criar Veiculos
                         <label for="status" class="col-sm-4 col-form-label">Status:</label>
                         <div class="col-sm-8">
                             <select class="form-select" id="status" name="status">
-                                <option selected disabled required>Selecione...</option>
-                                <option value="ativo" {% if veiculo.Status == 'ativo' %}selected{% endif %}>Ativo</option>
-                                <option value="inativo" {% if veiculo.Tipo_Combustivel == 'inativo' %}selected{% endif %}>Inativo</option>
+                                <option disabled required>Selecione...</option>
+                                <option value="disponível"  {% if veiculo.Status == 'disponível' %}selected{% endif %}>Disponível</option>
+                                <option value="Indisponível"  {% if veiculo.Status == 'indisponível' %}selected{% endif %}>Indisponível</option>
+                                <option value="desativado"  {% if veiculo.Status == 'desativado' %}selected{% endif %}>Desativado</option>
                             </select>
                         </div>
                     </div>

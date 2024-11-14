@@ -1,6 +1,7 @@
 import re
 import sqlite3
 import os
+from werkzeug.security import check_password_hash
 
 #coisas relacionadas com a estrutura do BD
 def connect_to_db():
@@ -105,11 +106,8 @@ def autenticarUsuario(formulario):
     if not senha:
         return False
 
-    #usuario autenticados
-    if senha[0] == formulario['senha']:
-        return True
-    #if bcrypt.check_password_hash(senha[0], formulario["senha"]):
-    #    return True    
+    if check_password_hash(senha[0], formulario["senha"]):
+        return True    
 
     return False
 
