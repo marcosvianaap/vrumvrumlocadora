@@ -23,6 +23,7 @@ def administrador():
 #rota para a página para pesquisar funcionários
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 def pesquisar_funcionario():
+    funcionarios = None
     funcionario = None
     cpf1= None #verificar se foi digitado algum cpf
 
@@ -31,21 +32,26 @@ def pesquisar_funcionario():
         if "form1" in request.form: #Formulário para busca de funcionarios por CPF
 
             cpf1 = request.form['cpf']
-            session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
-            funcionario = bd.buscarUsuarioPorCPF(cpf1)
-
-            return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf1)
+            # session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
+            
+            funcionarios = bd.filtro_funcionarios(cpf1)
+            print(funcionarios)
+            
+            return render_template('pesquisar_funcionario.html',funcionario= funcionario, cpf=cpf1, funcionarios=funcionarios)
 
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
-            cpf1 = session['cpfBusca'] #CPF usado na busca
+            # cpf1 = session['cpfBusca'] #CPF usado na busca
             nome = request.form['nome']
             cpf2 = request.form['cpf'] #CPF que irá substituir no banco
+            id = request.form['id']
 
-            if not(cpf1==cpf2) and bd.verificaCpf(cpf2): #Verificação de CPF único
+            cpf_original = bd.obterCPF(id)
+            
+            if not(cpf_original==cpf2) and bd.verificaCpf(cpf2): #Verificação de CPF único
                 flash('CPF já existente!', 'warning')
-                funcionario = bd.buscarUsuarioPorCPF(cpf1)
-                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
+                funcionario = bd.buscarUsuarioPorCPF(cpf2)
+                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1,  funcionarios=funcionarios)
 
             telefone = request.form['telefone']
             email = request.form['email']
@@ -62,12 +68,12 @@ def pesquisar_funcionario():
                 bd.atualizaFuncionario(cpf2, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf1)
                 flash('Funcionário atualizado com sucesso!', 'success')
 
-                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
+                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1,  funcionarios=funcionarios)
             
             except Exception as e:
                 return f"Ocorreu um erro ao atualizar os dados: {e}", 500
         
-    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
+    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1, funcionarios=funcionarios)
 
 
 #rota para criar um novo funcionário no banco de dados
