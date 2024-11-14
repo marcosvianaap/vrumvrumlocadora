@@ -5,7 +5,7 @@ import os
 #coisas relacionadas com a estrutura do BD
 def connect_to_db():
 
-    conn = sqlite3.connect('banco.db')
+    conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Pessoa (
@@ -114,7 +114,7 @@ def autenticarUsuario(formulario):
 
 
 def buscarUsuarioPorCPF(cpf):
-    conn = sqlite3.connect('instance/banco.db')
+    conn = connect_to_db()
     cursor = conn.cursor()
     
     try:
@@ -148,7 +148,7 @@ def buscarUsuarioPorCPF(cpf):
     return None
 
 def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha):
-    conn = sqlite3.connect('instance/banco.db')
+    conn = connect_to_db()
     cursor = conn.cursor()
     cargo = 'funcionario'
     status = 'ativo'
@@ -166,7 +166,7 @@ def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, 
         conn.close()
 
 def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf2):
-    conn = sqlite3.connect('instance/banco.db')
+    conn = connect_to_db()
     cursor = conn.cursor()
     cargo = 'funcionario'
 
@@ -194,7 +194,7 @@ def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, 
         conn.close()
 
 def verificaCpf(cpf):
-    conn = sqlite3.connect('instance/banco.db')
+    conn = connect_to_db()
     cursor = conn.cursor()
 
     cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf,))
