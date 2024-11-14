@@ -9,30 +9,94 @@ Gerenciar Veiculos
 <main class="container">
    <!-- Botão para cadastrar novo veiculo-->
    <span>
-    <a href="{{ url_for('criar_veiculos') }}">
+    <a href="{{ url_for('frontend_criar_veiculos') }}">
       <button class="btn-criar" type="button">Criar</button>
      </a>
  </span>
 
     <!-- Card de dados com botão de edição abaixo -->
-    <section class="flex-container">
+    <div class="container mt-3">
+
+        {% for veiculo in veiculos %}
         <div class="card">
-            <div id="dados">
-                <span id="cabecalho">
-                    <p>Modelo: </p>
-                    <p>Cor: </p>
-                    <p>Marca: </p>
-                </span>
-                <p>Placa do veículo: </p>
-                <p>RENAVAM: </p>
-                <p>Ano de fabricação: </p>
-                <p>Ano de aquisição: </p>
-                <p>Valor da alocação: </p>
-                <p>Tipo de combustível: </p>
-                <p>Status: </p>
+            <div class="card-body">
+                <div class="row mb-3 align-items-center">
+                    <label for="placa" class="col-sm-5 col-form-label">Modelo:</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="modelo" name="modelo" value="{{veiculo.Modelo}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <label for="placa" class="col-sm-4 col-form-label">Cor:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="cor" name="cor" value="{{veiculo.Cor}}" readonly>
+                    </div>
+                </div>
+                
+                <div class="row mb-3 align-items-center">
+                    <label for="placa" class="col-sm-4 col-form-label">Marca:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="marca" name="marca" value="{{veiculo.Marca}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <label for="placa" class="col-sm-6 col-form-label">Placa do veículo:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="placa" name="placa" value="{{veiculo.Placa}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="renavam" name="renavam" value="{{veiculo.RENAVAM}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="anoFabricacao" class="col-sm-6 col-form-label">Ano de fabricação:</label>
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control" id="anoFabricacao" name="anoFabricacao" value="{{veiculo.Ano_Fabricacao}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="anoAquisicao" class="col-sm-6 col-form-label">Ano de aquisição:</label>
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control" id="anoAquisicao" name="anoAquisicao" value="{{veiculo.Ano_Aquisicao}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Tipo de combustível:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="tipoCombustivel" name="tipoCombustivel" value="{{veiculo.Tipo_Combustivel}}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-2 align-items-center">
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Status:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="Status" name="Status" value="{{veiculo.Status}}" readonly>
+                    </div>
+                </div>
             </div>
         </div>
-        <button class="btn" type="button">Editar</button>
-    </section>
+        <form action="/administrador/veiculos/frontend_editar_veiculo" method="POST">
+            <input type="hidden" value="{{veiculo.id}}" name="veiculo">
+            <button class="btn" type="submit">Editar</button>
+        </form>
+        
+        {% endfor %}
+    </div>
 </main>
 {% endblock %}
