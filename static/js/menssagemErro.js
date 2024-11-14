@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
             
         } else {
             event.preventDefault();
-            event.stopPropagation();
             form.classList.add('was-validated');
             responseMessage.classList.remove('d-none', 'alert-success');
             responseMessage.classList.add('alert-danger');

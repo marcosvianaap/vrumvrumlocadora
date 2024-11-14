@@ -34,6 +34,8 @@ def pesquisar_funcionario():
             session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
             funcionario = bd.buscarUsuarioPorCPF(cpf1)
 
+            return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf=cpf1)
+
         elif "form2" in request.form:
 
             cpf1 = session['cpfBusca'] #CPF usado na busca
@@ -58,6 +60,8 @@ def pesquisar_funcionario():
             
             except Exception as e:
                 return f"Ocorreu um erro ao atualizar os dados: {e}", 500
+        
+    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1)
 
 
 #rota para criar um novo funcionário no banco de dados

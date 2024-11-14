@@ -177,55 +177,18 @@ def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, 
 
     try:
         cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE cpf = ?', (cpf1, endereco, Data_Nascimento, email, telefone, nome, cpf2))
-        cursor.execute('UPDATE Usuario SET senha = ?, cargo = ?, status = ? WHERE pessoa_id = ?', (senha, cargo, status, row_id))
+        
+        if senha:
+
+            cursor.execute('UPDATE Usuario SET senha = ?, cargo = ?, status = ? WHERE pessoa_id = ?', (senha, cargo, status, row_id))
+
+        else:
+            cursor.execute('UPDATE Usuario SET cargo = ?, status = ? WHERE pessoa_id = ?', (cargo, status, row_id))
+
         conn.commit()
+
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
     finally:
         conn.close()
-
-def atualizarPessoa(cpf, dados_atualizados):
-    conn = sqlite3.connect('instance/banco.db')
-    cursor = conn.cursor()
-
-    # Atualizando os dados da pessoa
-    cursor.execute('''
-        UPDATE Pessoa
-        SET Nome = ?, CPF = ?, Telefone = ?, Email = ?, Data_Nascimento = ?, Endereco = ?
-        WHERE CPF = ?
-    ''', (dados_atualizados['nome'], dados_atualizados['cpf'], dados_atualizados['telefone'], 
-          dados_atualizados['email'], dados_atualizados['data_nascimento'], dados_atualizados['endereco'], cpf))
-
-    conn.commit()
-    conn.close()
-
-
-def atualizarUsuario(cpf, dados_atualizados):
-    conn = sqlite3.connect('instance/banco.db')
-    cursor = conn.cursor()
-
-    # Obtendo o ID da pessoa com base no CPF
-    cursor.execute("SELECT id FROM Pessoa WHERE CPF = ?", (cpf,))
-    pessoa_id = cursor.fetchone()
-
-    if pessoa_id:
-        pessoa_id = pessoa_id[0]
-
-        # Verificar se a senha foi fornecida, se sim, atualizar o campo
-        if 'senha' in dados_atualizados:
-            cursor.execute('''
-                UPDATE Usuario
-                SET Senha = ?, Cargo = ?, Status = ?
-                WHERE pessoa_id = ?
-            ''', (dados_atualizados['senha'], dados_atualizados['cargo'], dados_atualizados['status'], pessoa_id))
-        else:
-            # Se a senha não foi fornecida, apenas atualize os outros campos
-            cursor.execute('''
-                UPDATE Usuario
-                SET Cargo = ?, Status = ?
-                WHERE pessoa_id = ?
-            ''', (dados_atualizados['cargo'], dados_atualizados['status'], pessoa_id))
-
-        conn.commit()
-    conn.close()
