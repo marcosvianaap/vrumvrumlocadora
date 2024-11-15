@@ -205,15 +205,23 @@ def verificaCpf(cpf):
 
     return False
 
-def filtro_funcionarios(cpf):
+def filtro_funcionarios(informação):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
-                   FROM Pessoa 
-                   JOIN Usuario ON Pessoa.id = Usuario.pessoa_id 
-                   WHERE Pessoa.CPF LIKE ?''', ('%' + cpf + '%',))
+    if informação.isnumeric() :
 
+        cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
+                    FROM Pessoa 
+                    JOIN Usuario ON Pessoa.id = Usuario.pessoa_id 
+                    WHERE Pessoa.CPF LIKE ?''', ('%' + informação + '%',))
+
+    else:
+
+        cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
+                    FROM Pessoa 
+                    JOIN Usuario ON Pessoa.id = Usuario.pessoa_id 
+                    WHERE Pessoa.Nome LIKE ?''', ('%' + informação + '%',))
     
     funcionariosRaw = cursor.fetchall()
     funcionarios = []

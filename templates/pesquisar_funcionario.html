@@ -20,7 +20,7 @@ Pesquisar Funcionários
 
     <form action="{{ url_for('pesquisar_funcionario') }}" method="POST">
         <div id="divBusca">
-            <input inputmode="numeric" type="text" id="numBusca" name="cpf" placeholder="CPF"/>
+            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="CPF/Nome"/>
             <button type="submit"  id="btnBusca" name="form1">
                 <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
             </button>

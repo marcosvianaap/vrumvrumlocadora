@@ -25,33 +25,37 @@ def administrador():
 def pesquisar_funcionario():
     funcionarios = None
     funcionario = None
-    cpf1= None #verificar se foi digitado algum cpf
+    informacao= None #verificar se foi digitado algum cpf ou nome
 
     if request.method == 'POST':
        
-        if "form1" in request.form: #Formulário para busca de funcionarios por CPF
+        if "form1" in request.form: #Formulário para busca de funcionarios por CPF ou Nome
 
-            cpf1 = request.form['cpf']
+            informacao = request.form['informacao']
             # session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
             
-            funcionarios = bd.filtro_funcionarios(cpf1)
-            print(funcionarios)
+            funcionarios = bd.filtro_funcionarios(informacao)
+            if not(funcionarios): #Se retornar vazio, avisa ao usuário que não foi encontrado nenhum funcionário com determinado CPF/Nome
+                flash('Funcionário não encontrado', 'warning')
+                return render_template('pesquisar_funcionario.html')
             
-            return render_template('pesquisar_funcionario.html',funcionario= funcionario, cpf=cpf1, funcionarios=funcionarios)
+            return render_template('pesquisar_funcionario.html',funcionario= funcionario, informacao=informacao, funcionarios=funcionarios)
 
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
             # cpf1 = session['cpfBusca'] #CPF usado na busca
             nome = request.form['nome']
-            cpf2 = request.form['cpf'] #CPF que irá substituir no banco
+            novo_cpf = request.form['cpf'] #CPF que irá substituir no banco
             id = request.form['id']
 
             cpf_original = bd.obterCPF(id)
+            if cpf_original:
+                cpf_original = cpf_original[0]
             
-            if not(cpf_original==cpf2) and bd.verificaCpf(cpf2): #Verificação de CPF único
+            if not(cpf_original==novo_cpf) and bd.verificaCpf(novo_cpf): #Verificação de CPF único
                 flash('CPF já existente!', 'warning')
-                funcionario = bd.buscarUsuarioPorCPF(cpf2)
-                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1,  funcionarios=funcionarios)
+                funcionario = bd.buscarUsuarioPorCPF(novo_cpf)
+                return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao,  funcionarios=funcionarios)
 
             telefone = request.form['telefone']
             email = request.form['email']
@@ -65,15 +69,15 @@ def pesquisar_funcionario():
             status = request.form['status']
 
             try:
-                bd.atualizaFuncionario(cpf2, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf1)
+                bd.atualizaFuncionario(novo_cpf, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf_original)
                 flash('Funcionário atualizado com sucesso!', 'success')
 
-                return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1,  funcionarios=funcionarios)
+                return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao,  funcionarios=funcionarios)
             
             except Exception as e:
                 return f"Ocorreu um erro ao atualizar os dados: {e}", 500
         
-    return render_template('pesquisar_funcionario.html', funcionario=funcionario, cpf1=cpf1, funcionarios=funcionarios)
+    return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao, funcionarios=funcionarios)
 
 
 #rota para criar um novo funcionário no banco de dados
