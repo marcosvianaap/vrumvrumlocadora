@@ -22,24 +22,24 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Validação dos campos do formulários e exibição de mensagens do formulário de edição de func.
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('editarFuncionario');
-    const responseMessage = document.getElementById('responseMessage2');
+    const forms = document.querySelectorAll('.editarFuncionario');
 
-    form.addEventListener('submit', function (event) {
+    forms.forEach(function (form) {
+        const responseMessage = form.querySelector('.responseMessage2'); 
 
-        if (form.checkValidity()) {
-            responseMessage.classList.remove('d-none', 'alert-danger');
-            responseMessage.classList.add('alert-success');
-            responseMessage.textContent = 'Atualização feita com sucesso!';
-            
-        } else {
-            event.preventDefault();
-            form.classList.add('was-validated');
-            responseMessage.classList.remove('d-none', 'alert-success');
-            responseMessage.classList.add('alert-danger');
-            responseMessage.textContent = 'Erro ao cadastrar. Verifique os campos.';
-        }
+        form.addEventListener('submit', function (event) {
+            if (form.checkValidity()) {
+                responseMessage.classList.remove('d-none', 'alert-danger');
+                responseMessage.classList.add('alert-success');
+                responseMessage.textContent = 'Atualização feita com sucesso!';
+            } else {
+                event.preventDefault(); 
+                form.classList.add('was-validated');
+                responseMessage.classList.remove('d-none', 'alert-success');
+                responseMessage.classList.add('alert-danger');
+                responseMessage.textContent = 'Erro ao cadastrar. Verifique os campos.';
+            }
+        });
     });
 });

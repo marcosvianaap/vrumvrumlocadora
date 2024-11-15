@@ -41,13 +41,11 @@ Pesquisar Funcionários
     
     {% if funcionarios %}
         {% for i in funcionarios%}
-            <div id="blocoPesquisa">
+            <div class="blocoPesquisa">
 
-                <div id="blocoFuncionario">
+                <div class="blocoFuncionario">
 
-                    {% if funcionarios %}
-
-                    <div class="dadosFuncionario"  class="{% if funcionario %}mostrar{% else %}esconder{% endif %}">
+                    <div class="dadosFuncionario">
                         <p><strong>Nome:</strong> {{ i.Nome }}</p>
                         <p><strong>CPF:</strong> {{ i.CPF }}</p>
                         <p><strong>Telefone:</strong> {{ i.Telefone }}</p>
@@ -57,23 +55,16 @@ Pesquisar Funcionários
                         <p><strong>Status:</strong> {{ i.Status}}</p>
                     </div>   
 
-                    <div id="botaoEditarFuncionario" class="botao">
+                    <div class="botaoEditarFuncionario botao">
                         <button>Editar</button>
                     </div>
-                    
-                    {% else %}
 
-                    <div id="blocoVazio" class="{% if cpf %}mostrar{% else %}esconder{% endif %}">
-                        <p>Nenhum resultado encontrado para CPF: <strong>{{cpf}}</strong></p>
-                    </div>
-            
-                    {% endif %}
 
                 </div>
 
-                <div id="blocoEditarDados">
-                    <form action="{{ url_for('pesquisar_funcionario') }}" method="POST" id="editarFuncionario" novalidate>
-                        <div id="blocoEdicao">
+                <div class="blocoEditarDados">
+                    <form action="{{ url_for('pesquisar_funcionario') }}" method="POST" class="editarFuncionario" novalidate>
+                        <div class="blocoEdicao">
 
                             <div>
                                 <input name="id" type="hidden" value="{{i.id}}"></input>
@@ -160,19 +151,26 @@ Pesquisar Funcionários
                                 </div>
                             </div>
                         </div>
-                        <div id="botaoConfirmarEdicao" class="botao">
+                        <div class="botaoConfirmarEdicao botao">
                             <button type="submit" name="form2">Confirmar</button>
                         </div>
-                        <div id="botaoCancelarEdicao" class="botao">
+                        <div class="botaoCancelarEdicao botao">
                             <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
                         </div>
                     </form>
-                    <div id="responseMessage2" class="alert d-none" role="alert"></div>
+                    <div class="responseMessage2" class="alert d-none" role="alert"></div>
                 </div>
             </div>
         {% endfor %}
 
+    {% else %}
+
+        <div class="blocoVazio {% if informacao %}mostrar{% else %}esconder{% endif %}">
+            <p>Nenhum resultado encontrado para CPF: <strong>{{cpf}}</strong></p>
+        </div>
+    
     {% endif %}
+
 </main>
 
 {% endblock %}

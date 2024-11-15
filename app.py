@@ -32,9 +32,9 @@ def pesquisar_funcionario():
         if "form1" in request.form: #Formulário para busca de funcionarios por CPF ou Nome
 
             informacao = request.form['informacao']
-            # session['cpfBusca'] = cpf1 #Guarda o CPF em sessão para ser utilizado na busca
             
             funcionarios = bd.filtro_funcionarios(informacao)
+
             if not(funcionarios): #Se retornar vazio, avisa ao usuário que não foi encontrado nenhum funcionário com determinado CPF/Nome
                 flash('Funcionário não encontrado', 'warning')
                 return render_template('pesquisar_funcionario.html')
@@ -43,10 +43,10 @@ def pesquisar_funcionario():
 
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
-            # cpf1 = session['cpfBusca'] #CPF usado na busca
             nome = request.form['nome']
             novo_cpf = request.form['cpf'] #CPF que irá substituir no banco
             id = request.form['id']
+            funcionario = None
 
             cpf_original = bd.obterCPF(id)
             if cpf_original:
@@ -54,7 +54,7 @@ def pesquisar_funcionario():
             
             if not(cpf_original==novo_cpf) and bd.verificaCpf(novo_cpf): #Verificação de CPF único
                 flash('CPF já existente!', 'warning')
-                funcionario = bd.buscarUsuarioPorCPF(novo_cpf)
+                funcionario = bd.filtro_funcionarios(cpf_original)
                 return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao,  funcionarios=funcionarios)
 
             telefone = request.form['telefone']
@@ -72,6 +72,7 @@ def pesquisar_funcionario():
                 bd.atualizaFuncionario(novo_cpf, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf_original)
                 flash('Funcionário atualizado com sucesso!', 'success')
 
+                funcionarios = bd.filtro_funcionarios(novo_cpf)
                 return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao,  funcionarios=funcionarios)
             
             except Exception as e:
