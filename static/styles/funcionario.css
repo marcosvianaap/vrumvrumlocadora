@@ -57,7 +57,7 @@
     transform: scale(1.1);
 }
 
-#botaoEditarFuncionario, #botaoConfirmarEdicao, #botaoCancelarEdicao{
+.botaoEditarFuncionario, .botaoConfirmarEdicao, .botaoCancelarEdicao{
     text-align: end;
 }
 
@@ -66,7 +66,7 @@
     left: 33%;
 }
 
-.dadosFuncionario, #blocoVazio, #blocoCriaFuncionario, #blocoEdicao{
+.dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
     border-radius: 36px; 
     width: 600px; 
     height: auto; 
@@ -75,7 +75,7 @@
     padding: 20px;
 }
 
-#blocoVazio{
+.blocoVazio{
     text-align: center;
 }
 
@@ -86,7 +86,7 @@
 }
 
 
-#blocoEditarDados{
+.blocoEditarDados{
     display: none;
 }
 
@@ -104,7 +104,7 @@
 }
 
 @media (max-width:620px){
-    .dadosFuncionario, #blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
+    .dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
         width: auto;
     }
 }

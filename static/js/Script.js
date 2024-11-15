@@ -1,19 +1,27 @@
-const botaoEditar = document.getElementById("botaoEditarFuncionario");
-const blocoDadosFuncionario = document.getElementById("blocoFuncionario");
-const blocoEditarDados = document.getElementById("blocoEditarDados");
+const botoesEditar = document.querySelectorAll(".botaoEditarFuncionario");
 
-botaoEditar.addEventListener("click", function () {
+botoesEditar.forEach(function (botaoEditar) {
+    botaoEditar.addEventListener("click", function () {
 
-    blocoDadosFuncionario.style.display = "none";
-    blocoEditarDados.style.display = "block";
+        const blocoPesquisa = botaoEditar.closest(".blocoPesquisa");
+        const blocoFuncionario = blocoPesquisa.querySelector(".blocoFuncionario");
+        const blocoEditar = blocoPesquisa.querySelector(".blocoEditarDados");
+
+        blocoFuncionario.style.display = "none";
+        blocoEditar.style.display = "block";
+    });
 });
 
-const botaoCancelarEdicao = document.getElementById("botaoCancelarEdicao")
+const botoesCancelar = document.querySelectorAll(".botaoCancelarEdicao");
 
-botaoCancelarEdicao.addEventListener("click", function (event) {
+botoesCancelar.forEach(function (botaoCancelar) {
+    botaoCancelar.addEventListener("click", function (event) {
+        event.preventDefault();
+        const blocoPesquisa = botaoCancelar.closest(".blocoPesquisa");
+        const blocoFuncionario = blocoPesquisa.querySelector(".blocoFuncionario");
+        const blocoEditar = blocoPesquisa.querySelector(".blocoEditarDados");
 
-    event.preventDefault();
-
-    blocoDadosFuncionario.style.display = "block";
-    blocoEditarDados.style.display = "none";
+        blocoFuncionario.style.display = "block";
+        blocoEditar.style.display = "none";
+    });
 });
