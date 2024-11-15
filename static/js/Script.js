@@ -25,3 +25,18 @@ botoesCancelar.forEach(function (botaoCancelar) {
         blocoEditar.style.display = "none";
     });
 });
+
+function mostrarOcultarSenha() {
+    const campoSenha = document.getElementById("senha");
+    if (campoSenha.type === "password") {
+      campoSenha.type = "text";
+    } else {
+      campoSenha.type = "password";
+    }
+    const olho = document.getElementById("olho");
+    const olho1 = olho.getAttribute("data-olho1")
+    const olho2 = olho.getAttribute("data-olho2")
+
+    olho.src = olho.src.includes("eye.png") ? olho2 : olho1;
+
+  }

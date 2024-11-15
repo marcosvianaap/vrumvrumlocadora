@@ -84,7 +84,8 @@ def pesquisar_funcionario():
 #rota para criar um novo funcionário no banco de dados
 @app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])
 def criar_funcionario():
-    script_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
+    script1_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
+    script2_url = url_for('static', filename='js/Script.js')
 
     cpf = None
 
@@ -94,7 +95,7 @@ def criar_funcionario():
 
         if bd.verificaCpf(cpf): #Verificação de CPF único
             flash('CPF já existente!', 'warning')
-            return render_template("criar_funcionario.html", script_url=script_url)
+            return render_template("criar_funcionario.html", script1_url=script1_url, script2_url=script2_url)
 
         telefone = request.form['telefone']
         email = request.form['email']
@@ -107,7 +108,7 @@ def criar_funcionario():
 
         flash('Funcionário criado com sucesso!', 'success')
 
-    return render_template("criar_funcionario.html", script_url=script_url)
+    return render_template("criar_funcionario.html", script1_url=script1_url, script2_url=script2_url)
 
 
 
