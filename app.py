@@ -1,6 +1,10 @@
 #Autores: Gabrielli Danker, José Mateus, Lucas Sena, Marcos Viana, Monique Ellen
 #Ultima edição: 14/11/2024
 
+#USUARIO E SENHA
+#usuario: 11313993905
+#senha: 11313993905
+
 from werkzeug.security import generate_password_hash
 from flask import Flask, flash, render_template, session,request,redirect,url_for
 from flask import render_template
@@ -10,10 +14,6 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
-
-@app.route('/')
-def index():
-    return render_template("index.html")
 
 #rota para a página principal do administrador
 @app.route("/administrador")
@@ -108,8 +108,13 @@ def gerenciar_veiculos():
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
+    
+    modeloVeiculo = request.args.get('modelo')
+    if modeloVeiculo == None:
+        cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo")
+    else:
+        cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo WHERE Modelo = ?",(modeloVeiculo,))
 
-    cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo")
     veiculosRaw = cursor.fetchall()
     veiculos = []
     colunas = ["id","Ano_Aquisicao","Placa","RENAVAM","Modelo","Marca","Ano_Fabricacao","Cor","Tipo_Combustivel","Valor_Locacao_Dia","Status"]
@@ -119,6 +124,8 @@ def gerenciar_veiculos():
             veiculo[colunas[index]] = j
         veiculos.append(veiculo)
     conn.close()
+
+    flash('Veiculo criado com sucesso!', 'success')
 
     return render_template("geren_veic.html",veiculos=veiculos)
 
@@ -144,15 +151,29 @@ def backend_criar_veiculo():
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
+
+    #verificar se existe um renavam ou placa ja no banco de dados
+    cursor.execute("SELECT id FROM Veiculo WHERE Placa = ? OR RENAVAM = ?",(placa,renavam))
+    veiculo = cursor.fetchone()
+    if veiculo:
+        flash('Erro ao criar veiculo! Já existe um veiculo com essa placa ou RENAVAM', 'danger')
+        return redirect(url_for("frontend_criar_veiculos")) 
+
     cursor.execute("INSERT INTO Veiculo (Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status) VALUES (?,?,?,?,?,?,?,?,?,?)",(anoAquisicao,placa,renavam,modelo,marca,anoFabricacao,cor,tipoCombustivel,valorAlocacao,status))
     conn.commit()
 
     return redirect(url_for("gerenciar_veiculos")) 
 
 #Rota para a tela de editar um veiculo
-@app.route("/administrador/veiculos/frontend_editar_veiculo",methods=['POST'])
+@app.route("/administrador/veiculos/frontend_editar_veiculo",methods=['POST','GET'])
 def frontend_editar_veiculo():
-    veiculo = request.form["veiculo"]
+
+    veiculo = None
+    if request.method == 'POST':
+        veiculo = request.form["veiculo"]
+    elif request.method == 'GET' and 'ultimaEdicao' in session:
+        veiculo = session['ultimaEdicao']
+        del session['ultimaEdicao']
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
@@ -171,6 +192,7 @@ def frontend_editar_veiculo():
 def backend_editar_veiculo():
 
     veiculo = request.form["veiculo"]
+
     modelo = request.form["modelo"]
     cor = request.form["cor"]
     marca = request.form["marca"]
@@ -184,26 +206,39 @@ def backend_editar_veiculo():
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM Veiculo WHERE Placa = ? OR RENAVAM = ?",(placa,renavam))
+    veiculoExistente = cursor.fetchone()
+    print(f'ID: {veiculoExistente[0]}\nVEICULO: {veiculo}')
+
+    if veiculoExistente != None:
+        
+        if int(veiculo) != int(veiculoExistente[0]):
+            session['ultimaEdicao'] = veiculo
+            flash('Erro ao editar veiculo! Já existe um veiculo com essa placa ou RENAVAM', 'danger')
+            return redirect(url_for("frontend_editar_veiculo")) 
+
     cursor.execute("""
                    UPDATE Veiculo 
                    SET Ano_Aquisicao = ?, Placa = ?, RENAVAM = ?, Modelo = ?, Marca = ?, Ano_Fabricacao = ?, Cor = ?, Tipo_Combustivel = ?, Valor_Locacao_Dia = ?, Status = ? 
                    WHERE id = ? 
                    """,(anoAquisicao,placa,renavam,modelo,marca,anoFabricacao,cor,tipoCombustivel,valorAlocacao,status,veiculo))
     conn.commit()
+    conn.close()
 
+    flash('Veiculo editado com sucesso!', 'success')
     return redirect(url_for("gerenciar_veiculos")) 
 
 
 
-@app.route('/tela_login')
-def tela_login():
+@app.route('/')
+def index():
     if 'statusLogin' in session:
-        acesso_negado = session["statusLogin"]['acessoNegado']
-        mensagem = session["statusLogin"]["mensagemErro"]
-        usuario = session["statusLogin"]["nomeUsuario"]
-        return render_template("tela_login.html",acesso_negado=acesso_negado,mensagem=mensagem,usuario=usuario)
+        del session['statusLogin']
+        flash('Credenciais de acesso invalidas', 'danger')
+        return render_template("index.html")
     else:
-        return render_template("tela_login.html")
+        return render_template("index.html")
 
       
 @app.route("/entrar",methods=['POST'])
@@ -212,10 +247,10 @@ def processoEntrar():
         if 'usuario' in session:
             del session['usuario']
         session["statusLogin"] = {"acessoNegado":True,"nomeUsuario":request.form["usuario"],"mensagemErro":"Credenciais de acesso inválidas. Tente novamente"}
-        return redirect(url_for("tela_login"))
+        return redirect(url_for("index"))
     else:
         session['usuario'] = request.form['usuario']
-        return redirect(url_for("index"))
+        return redirect(url_for("administrador"))
 
 #rota para sair do sistema
 @app.route("/sair")
