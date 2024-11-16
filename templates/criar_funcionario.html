@@ -26,8 +26,8 @@ Teste
     <form method="POST" action="{{ url_for('criar_funcionario') }}" id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
-          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="nome" class="col-sm-2 col-form-label">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
             <div class="invalid-feedback">
               Por favor, insira um nome.
@@ -35,8 +35,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
             <input type="text" class="form-control" id="cpf" name="cpf" pattern="\d{11}" required>
             <div class="invalid-feedback">
               Por favor, insira um CPF válido, apenas números.
@@ -44,8 +44,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
             <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
             <div class="invalid-feedback">
               Por favor, insira um número de telefone válido.
@@ -53,8 +53,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="email" class="col-sm-2 col-form-label">E-mail</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="email" class="col-sm-2 col-form-label">E-mail</label>
             <input type="email" class="form-control" id="email" name="email"
               pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
               required>
@@ -64,8 +64,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
             <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
             <div class="invalid-feedback">
               Por favor, informe uma data de nascimento válido.
@@ -73,8 +73,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
             <input type="text" class="form-control" id="endereco" name="endereco" required>
             <div class="invalid-feedback">
               Por favor, informe um endereço válido.
@@ -82,9 +82,15 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <label for="senha" class="col-sm-2 col-form-label">Senha</label>
-          <div class="col-sm-10">
+          <div class="input-group col-sm-10">
+            <label for="senha" class="col-sm-2 col-form-label">Senha</label>
             <input type="password" class="form-control" id="senha" name="senha" required minlength="6">
+            <button type="button" class="input-group-text" onclick="mostrarOcultarSenha()" id="botaoVerSenha">
+              <img id="olho" src="{{ url_for('static', filename='img/eye.png') }}" 
+              style="cursor: pointer; width: 25px;"
+              data-olho1="{{ url_for('static', filename='img/eye.png') }}"
+              data-olho2="{{ url_for('static', filename='img/eye-close-up.png') }}"/>
+            </button>
             <div class="invalid-feedback">
               Por favor, insira uma senha de no mínimo 6 dígitos.
             </div>
