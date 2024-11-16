@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Home
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="admin-home">
+    <div class="icones">
+
+        <a href="{{ url_for('') }}"> 
+            <img class="icone" src="{{ url_for('static', filename='img/clientes.png') }}" alt="Logo">
+        </a>
+      
+        <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
+        <a href="{{ url_for('') }}">
+            <img class="icone" src="{{ url_for('static', filename='img/pesquisar.png') }}" alt="Logo">
+        </a>
+
+         <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
+         <a href="{{ url_for('') }}">
+            <img class="icone" src="{{ url_for('static', filename='img/locacoes.png') }}" alt="Logo">
+        </a>
+
+    </div>
+</main>
+
+{% endblock %}

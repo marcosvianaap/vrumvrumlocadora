@@ -20,6 +20,12 @@ app.secret_key = 'chaveSecretaParaCriptografia'
 def administrador():
     return render_template("administrador.html")
 
+#rota para a página principal do administrador
+@app.route("/clientes")
+def geren_cliente():
+    return render_template("geren_cliente.html")
+
+
 #rota para a página para pesquisar funcionários
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 def pesquisar_funcionario():
