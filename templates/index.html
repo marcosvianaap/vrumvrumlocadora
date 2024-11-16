@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-    <!-- ALTERAR PARA A PÁGINA DE LOGIN -->
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +8,8 @@
         <link rel="stylesheet" href="../static/styles/index.css">
         <link rel="icon" type="logotipo" href="../static/imagens/Logotipo-SemFundo.png"> 
 
-        <title>Login</title> 
+        <title>Login</title>
+
     </head>
 
     <body>
@@ -22,19 +21,42 @@
         </header>
 
         <main>
-            <h1 style="margin-top:20%">Tela inicial do sistema da Vrumm Vrumm</h1>
-            {% if 'usuario' in session %}
-              <h2>Você esta logado no sistema como: {{ session['usuario'] }}</h2>
-              {% else %}
-              <h2>Você não está logado no sistema</h2>
-              {% endif %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div id="responseMessage">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="login-box">
+                <img src="../static/imagens/IconeUsuário.png">
+                <form action="/entrar" method="post">
+
+                    {% if usuario %}
+                        <input type="text" placeholder="Usuário" name="usuario" value="{{usuario}}" required>
+                    {% else %}
+                        <input type="text" placeholder="Usuário" name="usuario" required>
+                    {% endif %}
+                    
+                    <input type="password" placeholder="Senha" name="senha" required>
+                    <button type="submit">Entrar</button>
+                    <a href="#">Esqueci minha senha</a>
+                </form>
+            </div>
+
         </main>
 
         <footer>
 
         </footer>
 
-        <script src="../static/js/Script.js"></script> 
+        <script src="../static/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script> 
         <script src="../static/scripts/index.js"></script> 
     </body>
 

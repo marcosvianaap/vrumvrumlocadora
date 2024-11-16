@@ -7,12 +7,34 @@ Gerenciar Veiculos
 
 {% block conteudo %}
 <main class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="responseMessage">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
    <!-- Botão para cadastrar novo veiculo-->
    <span>
-    <a href="{{ url_for('frontend_criar_veiculos') }}">
-      <button class="btn-criar" type="button">Criar</button>
-     </a>
- </span>
+        <a href="{{ url_for('frontend_criar_veiculos') }}">
+            <button class="btn-criar" type="button">Criar</button>
+        </a>
+    </span>
+
+    <form action="{{ url_for('gerenciar_veiculos') }}" method="GET">
+        <div id="divBusca">
+            <input type="text" id="numBusca" name="modelo" placeholder="Modelo"/>
+            <button type="submit"  id="btnBusca">
+                <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
+            </button>
+        </div>
+    </form>
 
     <!-- Card de dados com botão de edição abaixo -->
     <div class="container mt-3">
@@ -72,7 +94,7 @@ Gerenciar Veiculos
                 <div class="row mb-2 align-items-center">
                     <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
                     <div class="col-sm-6">
-                        <input type="number" class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" readonly>
+                        <input type="text" class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" readonly>
                     </div>
                 </div>
 
