@@ -30,7 +30,7 @@ def geren_cliente():
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 def pesquisar_funcionario():
     funcionarios = None
-    funcionario = None
+    funcionario= None
     informacao= None #verificar se foi digitado algum cpf ou nome
 
     if request.method == 'POST':
@@ -143,8 +143,6 @@ def gerenciar_veiculos():
         veiculos.append(veiculo)
     conn.close()
 
-    flash('Veiculo criado com sucesso!', 'success')
-
     return render_template("geren_veic.html",veiculos=veiculos)
 
 #Rota para a tela de cadastro de veiculos
@@ -179,6 +177,10 @@ def backend_criar_veiculo():
 
     cursor.execute("INSERT INTO Veiculo (Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status) VALUES (?,?,?,?,?,?,?,?,?,?)",(anoAquisicao,placa,renavam,modelo,marca,anoFabricacao,cor,tipoCombustivel,valorAlocacao,status))
     conn.commit()
+
+    if request.method == 'POST':
+
+        flash('Veiculo criado com sucesso!', 'success')
 
     return redirect(url_for("gerenciar_veiculos")) 
 

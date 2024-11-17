@@ -1,5 +1,5 @@
 .container {   
-    width: 100vh;
+    width: 100vw;
     position: relative;
       
 }
@@ -18,7 +18,6 @@
     margin: 7% 0 0 100%;
     font-size: 20px;
     color: var(--color6);
-    font-weight: bold;
     text-decoration: none;
     transition: transform 0.3s ease;
 }
@@ -47,7 +46,6 @@
     margin-left: 70%;
     font-size: 20px;
     color: var(--color6);
-    font-weight: bold;
     text-decoration: none; 
 }
 .btn:hover{
