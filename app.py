@@ -110,6 +110,19 @@ def criar_funcionario():
 
     return render_template("criar_funcionario.html", script1_url=script1_url, script2_url=script2_url)
 
+# ROTAS PARA HISTÓRICO DE VEICULOS ----------------------------
+
+@app.route("/funcionario/historico_devolução")
+def historico_devolucao():
+    return render_template("historico_devolução.html")
+
+@app.route("/funcionario/historico_locação")
+def historico_locacao():
+    return render_template("historico_locação.html")
+
+@app.route("/funcionario/teste")
+def teste():
+    return render_template("base_cliente.html")
 
 
 # ROTAS PARA GERENCIAMENTO DE VEICULOS ----------------------------

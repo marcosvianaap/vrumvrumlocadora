@@ -1,0 +1,92 @@
+/* Estilos do header fixo no topo */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Garante que o header fique acima de outros elementos */
+}
+
+.logo img {
+    height: 80px; /* Ajuste a altura conforme necessário */
+    width: auto;
+}
+
+.logo {
+    margin-left: 100px;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    background-color: #96c7d8;
+    min-height: 100vh; /* Garante que o conteúdo ocupe a altura total da tela */
+    padding-top: 100px; /* Espaço ajustado para não ficar atrás do header */
+}
+
+/* Estilos para a caixa de histórico de devolução */
+.devolução {
+    margin-top: 70px;
+    background-color: #fff;
+    padding: 30px;
+    width: 50%; /* Ajusta a largura para 50% da tela */
+    max-width: 900px; /* Limita a largura máxima */
+    min-width: 400px; /* Garante que o formulário não fique muito estreito */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre as linhas de campos */
+}
+
+/* Estilo para as linhas de label e input */
+.devolução .linha {
+    display: flex;
+    flex-direction: row; /* Coloca os campos de forma horizontal */
+    align-items: center; /* Alinha verticalmente os elementos */
+    margin-bottom: 15px; /* Espaço entre as linhas */
+}
+
+/* Estilo das labels */
+.devolução label {
+    flex: 1;
+    text-align: left; /* Alinha o texto da label à esquerda */
+    margin-right: 10px; /* Espaço entre a label e o input */
+    min-width: 150px; /* Define um tamanho mínimo para as labels */
+}
+
+/* Estilo dos inputs */
+.devolução input {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
+}
+
+/* Responsividade para telas menores */
+@media screen and (max-width: 768px) {
+    .devolução {
+        width: 90%; /* Em telas menores, o formulário ocupa 90% da largura */
+    }
+
+    /* Em telas pequenas, os campos de input e label ficam empilhados */
+    .devolução .linha {
+        flex-direction: column; /* Coloca label e input um em cima do outro */
+        align-items: flex-start; /* Alinha os campos à esquerda */
+    }
+
+    .devolução label {
+        margin-right: 0;
+    }
+
+    .devolução input {
+        width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
+    }
+}

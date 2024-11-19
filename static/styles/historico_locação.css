@@ -1,0 +1,96 @@
+/* Estilos do header fixo no topo */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Garante que o header fique acima de outros elementos */
+}
+
+.logo img {
+    height: 80px; /* Ajuste a altura conforme necessário */
+    width: auto;
+}
+
+.logo {
+    margin-left: 30px; /* Ajusta o alinhamento do logo */
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    background-color: #96c7d8;
+    min-height: 100vh; /* Garante que o conteúdo ocupe a altura total da tela */
+    padding-top: 50px; /* Ajustado o espaço para reduzir a distância do conteúdo em relação ao header */
+    padding-left: 30px; /* Garante que o conteúdo tenha margem à esquerda */
+}
+
+/* Estilos para a caixa de histórico de locação */
+.alocação {
+    margin-top: 20px; /* Menor distância entre a caixa e o topo */
+    background-color: #fff;
+    padding: 30px;
+    width: 100%; /* Ajusta a largura do formulário */
+    max-width: 900px; /* Largura máxima */
+    min-width: 400px; /* Largura mínima */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre as linhas de campos */
+}
+
+/* Estilo para as linhas de label e input */
+.alocação .linha {
+    display: flex;
+    flex-direction: row; /* Alinha os campos na horizontal */
+    align-items: center; /* Alinha verticalmente os elementos */
+    margin-bottom: 15px; /* Espaço entre as linhas */
+    width: 100%; /* Garante que as linhas ocupem toda a largura disponível */
+}
+
+/* Estilo das labels */
+.alocação label {
+    text-align: left; /* Alinha o texto da label à esquerda */
+    margin-right: 10px; /* Espaço entre a label e o input */
+    min-width: 150px; /* Define um tamanho mínimo para as labels */
+    width: auto; /* Deixa a largura das labels automática */
+}
+
+/* Estilo dos inputs */
+.alocação input,
+.alocação select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Garante que os inputs e select ocupem toda a largura disponível */
+}
+
+/* Responsividade para telas menores */
+@media screen and (max-width: 768px) {
+    .alocação {
+        width: 90%; /* Em telas menores, o formulário ocupa 90% da largura */
+    }
+
+    /* Em telas pequenas, os campos de input e label ficam empilhados */
+    .alocação .linha {
+        flex-direction: column; /* Coloca label e input um em cima do outro */
+        align-items: flex-start; /* Alinha os campos à esquerda */
+    }
+
+    .alocação label {
+        margin-right: 0;
+    }
+
+    .alocação input,
+    .alocação select {
+        width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
+    }
+}
