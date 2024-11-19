@@ -9,113 +9,33 @@ Historico Devolução
 
 {% block conteudo %}
 
-    <main class="historico">
+    <main class="historico" style="padding-top: 150px;padding-bottom:20px">
+
+        {% for devolucao in devolucoes %}
         <div class="devolução">
             <div class="linha">
-                <label for="dataDevolucao">Data de Devolução:</label>
-                <input type="date" id="dataDevolucao" name="dataDevolucao">
-            </div>
-            <div class="linha">
-                <label for="horaDevolucao">Hora de Devolução:</label>
-                <input type="time" id="horaDevolucao" name="horaDevolucao">
+                <label for="DataHoraDevolucao">Data/Hora de Devolução:</label>
+                <input type="text" id="DataHoraDevolucao" name="DataHoraDevolucao" value='{{devolucao.Data_Hora_Devolucao}}' readonly>
             </div>
             <div class="linha">
                 <label for="multa">Multas:</label>
-                <input type="text" id="multa" name="multa">
+                <input type="text" id="multa" name="multa" value='{{devolucao.Multa}}' readonly>
             </div>
             <div class="linha">
                 <label for="localDevolucao">Local de Devolução:</label>
-                <input type="text" id="localDevolucao" name="localDevolucao">
+                <input type="text" id="localDevolucao" name="localDevolucao" value='{{devolucao.Local_devolucao}}' readonly>
             </div>
             <div class="linha">
                 <label for="valorTotal">Valor Total:</label>
-                <input type="number" id="valorTotal" name="valorTotal">
+                <input type="text" id="valorTotal" name="valorTotal" value='{{devolucao.Valor_Total}}' readonly>
             </div>
             <div class="linha">
                 <label for="condicoes">Condições:</label>
-                <input type="text" id="condicoes" name="condicoes">
+                <input type="text" id="condicoes" name="condicoes" value='{{devolucao.Condicoes_Veiculo}}' readonly>
             </div>
         </div>
 
-        <div class="devolução">
-            <div class="linha">
-                <label for="dataDevolucao">Data de Devolução:</label>
-                <input type="date" id="dataDevolucao" name="dataDevolucao">
-            </div>
-            <div class="linha">
-                <label for="horaDevolucao">Hora de Devolução:</label>
-                <input type="time" id="horaDevolucao" name="horaDevolucao">
-            </div>
-            <div class="linha">
-                <label for="multa">Multas:</label>
-                <input type="text" id="multa" name="multa">
-            </div>
-            <div class="linha">
-                <label for="localDevolucao">Local de Devolução:</label>
-                <input type="text" id="localDevolucao" name="localDevolucao">
-            </div>
-            <div class="linha">
-                <label for="valorTotal">Valor Total:</label>
-                <input type="number" id="valorTotal" name="valorTotal">
-            </div>
-            <div class="linha">
-                <label for="condicoes">Condições:</label>
-                <input type="text" id="condicoes" name="condicoes">
-            </div>
-        </div>
+        {% endfor %}
 
-        <div class="devolução">
-            <div class="linha">
-                <label for="dataDevolucao">Data de Devolução:</label>
-                <input type="date" id="dataDevolucao" name="dataDevolucao">
-            </div>
-            <div class="linha">
-                <label for="horaDevolucao">Hora de Devolução:</label>
-                <input type="time" id="horaDevolucao" name="horaDevolucao">
-            </div>
-            <div class="linha">
-                <label for="multa">Multas:</label>
-                <input type="text" id="multa" name="multa">
-            </div>
-            <div class="linha">
-                <label for="localDevolucao">Local de Devolução:</label>
-                <input type="text" id="localDevolucao" name="localDevolucao">
-            </div>
-            <div class="linha">
-                <label for="valorTotal">Valor Total:</label>
-                <input type="number" id="valorTotal" name="valorTotal">
-            </div>
-            <div class="linha">
-                <label for="condicoes">Condições:</label>
-                <input type="text" id="condicoes" name="condicoes">
-            </div>
-        </div>
-
-        <div class="devolução">
-            <div class="linha">
-                <label for="dataDevolucao">Data de Devolução:</label>
-                <input type="date" id="dataDevolucao" name="dataDevolucao">
-            </div>
-            <div class="linha">
-                <label for="horaDevolucao">Hora de Devolução:</label>
-                <input type="time" id="horaDevolucao" name="horaDevolucao">
-            </div>
-            <div class="linha">
-                <label for="multa">Multas:</label>
-                <input type="text" id="multa" name="multa">
-            </div>
-            <div class="linha">
-                <label for="localDevolucao">Local de Devolução:</label>
-                <input type="text" id="localDevolucao" name="localDevolucao">
-            </div>
-            <div class="linha">
-                <label for="valorTotal">Valor Total:</label>
-                <input type="number" id="valorTotal" name="valorTotal">
-            </div>
-            <div class="linha">
-                <label for="condicoes">Condições:</label>
-                <input type="text" id="condicoes" name="condicoes">
-            </div>
-        </div>
     </main>
 {% endblock %}

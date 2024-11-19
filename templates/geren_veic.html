@@ -112,11 +112,28 @@ Gerenciar Veiculos
                     </div>
                 </div>
             </div>
+            
         </div>
-        <form action="/administrador/veiculos/frontend_editar_veiculo" method="POST">
-            <input type="hidden" value="{{veiculo.id}}" name="veiculo">
-            <button class="btn" type="submit">Editar</button>
-        </form>
+
+        <div class="d-flex mt-2 align-items-center">
+            <form action="/administrador/veiculos/frontend_editar_veiculo" method="POST" class="me-2">
+                <input type="hidden" value="{{veiculo.id}}" name="veiculo">
+                <button class="btn" type="submit" style="min-width: 150px">Editar</button>
+            </form>
+            <form action="/funcionario/historico_locação" method="POST" class="me-2">
+                <input type="hidden" value="{{veiculo.id}}" name="veiculo">
+                <button class="btn" type="submit" style="min-width: 150px">
+                    Locações
+                </button>
+            </form>
+            <form action="/funcionario/historico_devolução" method="POST" class="me-2">
+                <input type="hidden" value="{{veiculo.id}}" name="veiculo">
+                <button class="btn" type="submit" style="min-width: 150px">
+                    Devoluções
+                </button>
+            </form>
+        </div>
+        
         
         {% endfor %}
     </div>
