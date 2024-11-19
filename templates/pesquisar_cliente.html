@@ -1,0 +1,165 @@
+{% extends 'base_cliente.html' %}
+
+{% block titulo %}
+Pesquisar Funcionários
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="pesquisar-funcionario">
+
+    <div id="botaoCriarFuncionario" class="botao">
+        <a href="{{ url_for('criar_cliente') }}">
+            <button>Criar</button>
+        </a>
+    </div>
+
+    <form action="{{ url_for('pesquisar_clientes') }}" method="POST">
+        <div id="divBusca">
+            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="Nome/CPF"/>
+            <button type="submit"  id="btnBusca" name="form1">
+                <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
+            </button>
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="responseMessage2">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    {% if funcionarios %}
+        {% for i in funcionarios%}
+            <div class="blocoPesquisa">
+
+                <div class="blocoFuncionario">
+
+                    <div class="dadosFuncionario">
+                        <p><strong>Nome:</strong> {{ cliente.Nome }}</p>
+                        <p><strong>CPF:</strong> {{ cliente.CPF }}</p>
+                        <p><strong>Telefone:</strong> {{ cliente.Telefone }}</p>
+                        <p><strong>Data de Nascimento:</strong> {{ cliente.Data_Nascimento }}</p>
+                        <p><strong>Endereço:</strong> {{ cliente.Endereco }}</p>
+                        <p><strong>CNH:</strong> {{ cliente.CNH }}</p>
+                        <p><strong>Tipo CNH:</strong> {{ cliente.Tipo_CNH }}</p>
+                    </div>   
+
+                    <div class="botaoEditarFuncionario botao">
+                        <button>Editar</button>
+                    </div>
+
+
+                </div>
+
+                <div class="blocoEditarDados">
+                    <form action="{{ url_for('pesquisar_clientes') }}" method="POST" class="editarFuncionario" novalidate>
+                        <div class="blocoEdicao">
+
+                            <div>
+                                <input name="id" type="hidden" value="{{i.id}}"></input>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+                                    <input type="text" class="form-control" id="nome2" name="nome" value="{{ cliente.Nome }}" required minlength="3">
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um nome válido.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
+                                    <input type="text" class="form-control" id="cpf2" pattern="\d{11}" name="cpf" value="{{ cliente.CPF }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um CPF válido, apenas números.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+                                    <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{ cliente.Telefone }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um número de telefone válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+                                    <input type="date" class="form-control" id="dataNascimento2" name="data_nascimento" value="{{ cliente.Data_Nascimento }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma data de nascimento válida.
+                                    </div>
+                                </div>
+                            </div>
+                
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+                                    <input type="text" class="form-control" id="endereco2" name="endereco" value="{{ cliente.Endereco }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um endereço válido.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+                                    <input type="text" class="form-control" id="cnh" name="cnh" value="{{ cliente.CNH }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma CNH válida.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo CNH</label>
+                                    <select class="form-control" id="tipoCnh" name="tipo_cnh" required>
+                                        <option value="A" {% if cliente.Tipo_CNH == "A" %}selected{% endif %}>A</option>
+                                        <option value="B" {% if cliente.Tipo_CNH == "B" %}selected{% endif %}>B</option>
+                                        <option value="B" {% if cliente.Tipo_CNH == "A/B" %}selected{% endif %}>A/B</option>
+                                        <option value="C" {% if cliente.Tipo_CNH == "C" %}selected{% endif %}>C</option>
+                                        <option value="D" {% if cliente.Tipo_CNH == "D" %}selected{% endif %}>D</option>
+                                        <option value="E" {% if cliente.Tipo_CNH == "E" %}selected{% endif %}>E</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um tipo de CNH válido.
+                                    </div>
+                                </div>
+                            </div>
+                          
+                        <div class="botaoConfirmarEdicao botao">
+                            <button type="submit" name="form2">Confirmar</button>
+                        </div>
+                        <div class="botaoCancelarEdicao botao">
+                            <a href="{{ url_for('pesquisar_clientes') }}"><button type="button">Cancelar</button></a>
+                        </div>
+                    </form>
+                    <div class="responseMessage2" class="alert d-none" role="alert"></div>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% endif %}
+
+</main>
+
+{% endblock %}

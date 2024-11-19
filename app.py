@@ -14,17 +14,29 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
-
-#rota para a página principal do administrador
+# Rota para a página principal do administrador
 @app.route("/administrador")
 def administrador():
     return render_template("administrador.html")
 
-#rota para a página principal do administrador
-@app.route("/clientes")
-def geren_cliente():
-    return render_template("geren_cliente.html")
+#------------------------------------------------------------------
+"""GERENCIAMENTO DE CLIENTE"""
 
+#Rota principal para a página de gerenciamento de clientes
+@app.route("/cadastro")
+def geren_clientes():
+    return render_template("cliente.html")
+
+#rota principal para a página de gerenciamento de clientes
+@app.route("/cadastro/cliente", methods=['GET', 'POST'])
+def pesquisar_clientes():
+    return render_template("pesquisar_cliente.html")
+
+@app.route("/cadastro/cliente/criarCliente", methods=['GET', 'POST'])
+def criar_cliente():
+    return render_template("criar_cliente.html")
+
+#-------------------------------------------------------------------
 
 #rota para a página para pesquisar funcionários
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])

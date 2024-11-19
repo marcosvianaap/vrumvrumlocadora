@@ -1,0 +1,111 @@
+{% extends 'base_cliente.html' %}
+
+{% block titulo %}
+Cadastrar
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+  {% endwith %}
+  <div id="divCriaFuncionario">
+    <form method="POST" action="{{ url_for('criar_cliente') }}" id="formCriaFuncionario" novalidate>
+      <div id="blocoCriaFuncionario">
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
+            <div class="invalid-feedback">
+              Por favor, insira um nome.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+            <input type="text" class="form-control" id="cpf" name="cpf" pattern="\d{11}" required>
+            <div class="invalid-feedback">
+              Por favor, insira um CPF válido, apenas números.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
+            <div class="invalid-feedback">
+              Por favor, insira um número de telefone válido.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+            <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
+            <div class="invalid-feedback">
+              Por favor, informe uma data de nascimento válido.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" required>
+            <div class="invalid-feedback">
+              Por favor, informe um endereço válido.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+            <div class="input-group col-sm-10">
+              <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+              <input type="text" class="form-control" id="cnh" name="cnh" required>
+              <div class="invalid-feedback">
+                Por favor, informe o número da CNH.
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="input-group col-sm-10">
+              <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo de CNH</label>
+              <select class="form-select" id="tipoCnh" name="tipoCnh" required>
+                <option value="" selected disabled>Selecione o tipo</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="A/B">A/B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+              </select>
+              <div class="invalid-feedback">
+                Por favor, selecione o tipo de CNH.
+              </div>
+            </div>
+          </div>
+        </div>
+      <div id="confirmaCriaFuncionario" class="botao">
+        <button type="submit">Confirmar</button>
+      </div>
+      <div id="cancelaCriaFuncionario" class="botao">
+        <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
+      </div>
+    </form>
+  </div>
+
+</main>
+
+{% endblock %}

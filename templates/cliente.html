@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base_cliente.html' %}
 
 {% block titulo %}
-Home
+clientes
 {% endblock %}
 
 {% block links %}
@@ -13,17 +13,18 @@ Home
 <main class="admin-home">
     <div class="icones">
 
-        <a href="{{ url_for('') }}"> 
+        <!-- Caminho para a gerenciamento de clientes > A partir do card -->
+        <a href="{{ url_for('pesquisar_clientes') }}"> 
             <img class="icone" src="{{ url_for('static', filename='img/clientes.png') }}" alt="Logo">
         </a>
       
-        <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
-        <a href="{{ url_for('') }}">
+        <!-- Caminho para a tela de pesquisar > A partir do card -->
+        <a href="#">
             <img class="icone" src="{{ url_for('static', filename='img/pesquisar.png') }}" alt="Logo">
         </a>
 
-         <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
-         <a href="{{ url_for('') }}">
+         <!-- Caminho para a tela de gerenciamento de locações > A partir do card -->
+         <a href="#">
             <img class="icone" src="{{ url_for('static', filename='img/locacoes.png') }}" alt="Logo">
         </a>
 
