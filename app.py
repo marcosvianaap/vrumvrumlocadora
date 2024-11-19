@@ -23,17 +23,107 @@ def administrador():
 """GERENCIAMENTO DE CLIENTE"""
 
 #Rota principal para a página de gerenciamento de clientes
-@app.route("/cadastro")
-def geren_clientes():
-    return render_template("cliente.html")
+@app.route("/funcionarios")
+def funcionarios():
+    return render_template("funcionarios.html")
 
 #rota principal para a página de gerenciamento de clientes
-@app.route("/cadastro/cliente", methods=['GET', 'POST'])
+@app.route("/clientes", methods=['GET', 'POST'])
 def pesquisar_clientes():
-    return render_template("pesquisar_cliente.html")
 
-@app.route("/cadastro/cliente/criarCliente", methods=['GET', 'POST'])
+    clientes = None
+    informacao= None #verificar se foi digitado algum cpf ou nome ou cnpj
+
+    if request.method == 'POST':
+       
+        if "form1" in request.form: #Formulário para busca de funcionarios por CPF ou Nome ou CNPJ
+
+            informacao = request.form['informacao']
+            
+            clientes = bd.filtro_clientes(informacao)
+
+            if not(clientes): #Se retornar vazio, avisa ao usuário que não foi encontrado nenhum funcionário com determinado CPF/Nome
+                flash('Cliente não encontrado', 'warning')
+                return render_template('pesquisar_clientes.html')
+            
+            return render_template('pesquisar_clientes.html',clientes= clientes, informacao=informacao)
+
+        elif "form2" in request.form: #Formulário para alteração de informações do funcionário
+
+            nome = request.form['nome']
+            cpf = None
+            cnpj = None
+            cpf_cnpj_novo = request.form['cpf_cnpj'] #CPF que irá substituir no banco
+
+            if len(cpf_cnpj_novo) ==11:
+                cpf = cpf_cnpj_novo
+            else:
+                cnpj = cpf_cnpj_novo
+
+            id = request.form['id']
+
+            cpf_cnpj_original = bd.obterCPF_CNPJ(id)
+
+            if cpf_cnpj_original:
+                cpf_cnpj_original = cpf_cnpj_original[0]
+            
+            if not(cpf_cnpj_novo==cpf_cnpj_original) and bd.verificaCpf_Cnpj(cpf_cnpj_novo): #Verificação de CPF único
+                flash('CPF/CNPJ já existente!', 'warning')
+                clientes = bd.filtro_clientes(cpf_cnpj_original)
+                return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
+
+            telefone = request.form['telefone']
+            email = request.form['email']
+            Data_Nascimento = request.form['data_nascimento']
+            endereco = request.form['endereco']
+            cnh = request.form['cnh']
+            tipo_cnh= request.form['tipo_cnh']
+
+            try:
+                bd.atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, cnh, tipo_cnh, cpf_cnpj_original)
+                flash('Cliente atualizado com sucesso!', 'success')
+
+                clientes = bd.filtro_clientes(cpf_cnpj_novo)
+                return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
+            
+            except Exception as e:
+                return f"Ocorreu um erro ao atualizar os dados: {e}", 500
+        
+    return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
+
+@app.route("/clientes/cadastrar", methods=['GET', 'POST'])
 def criar_cliente():
+
+    cpf = None
+    cnpj = None
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        cpf_cnpj = request.form['cpf_cnpj']
+
+        if len(cpf_cnpj)==11:
+            cpf = cpf_cnpj
+            cnpj=''
+        else:
+            cpf=''
+            cnpj=cpf_cnpj
+
+        if bd.verificaCpf_Cnpj(cpf_cnpj): #Verificação de CPF único
+            flash('CPF/CNPJ já existente!', 'warning')
+            return render_template("criar_cliente.html")
+
+        telefone = request.form['telefone']
+        email = request.form['email']
+        Data_Nascimento = request.form['dataNascimento']
+        endereco = request.form['endereco']
+        cnh = request.form['cnh']
+        tipo_cnh= request.form['tipo_cnh']
+
+
+        bd.adicionarCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, cnh, tipo_cnh)
+
+        flash('Cliente criado com sucesso!', 'success')
+
     return render_template("criar_cliente.html")
 
 #-------------------------------------------------------------------
