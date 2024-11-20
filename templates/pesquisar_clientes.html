@@ -1,7 +1,7 @@
 {% extends 'base_funcionarios.html' %}
 
 {% block titulo %}
-Pesquisar Funcionários
+Pesquisar Cliente
 {% endblock %}
 
 {% block links %}
@@ -117,7 +117,7 @@ Pesquisar Funcionários
                                     <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
                                     <input type="date" class="form-control" id="dataNascimento2" name="data_nascimento" value="{{ i.Data_Nascimento }}" required>
                                     <div class="invalid-feedback">
-                                        Por favor, insira uma data de nascimento válida.
+                                        Por favor, insira uma data de nascimento válida. O cliente deve ter pelo menos 18 anos.
                                     </div>
                                 </div>
                             </div>
@@ -172,6 +172,31 @@ Pesquisar Funcionários
         {% endfor %}
 
     {% endif %}
+            
+    <script>
+        // Script para validação da data de nascimento (Editar cliente)
+        document.querySelectorAll('.editarFuncionario').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                const dataNascimentoInput = form.querySelector('input[name="data_nascimento"]');
+                const dataNascimento = new Date(dataNascimentoInput.value);
+                const dataAtual = new Date();
+    
+                let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
+                const mes = dataAtual.getMonth() - dataNascimento.getMonth();
+    
+                if (mes < 0 || (mes === 0 && dataAtual.getDate() < dataNascimento.getDate())) {
+                    idade--;
+                }
+    
+                if (idade < 18) {
+                    dataNascimentoInput.classList.add('is-invalid');
+                    event.preventDefault();
+                } else {
+                    dataNascimentoInput.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
 
 </main>
 

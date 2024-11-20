@@ -57,7 +57,7 @@ Cadastrar
             <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
             <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
             <div class="invalid-feedback">
-              Por favor, informe uma data de nascimento válido.
+              Por favor, insira uma data de nascimento válida. O cliente deve ter pelo menos 18 anos.
             </div>
           </div>
         </div>
@@ -118,6 +118,32 @@ Cadastrar
       </div>
     </form>
   </div>
+
+  <script>
+    // Validação de idade mínima
+    document.getElementById('formCriaCliente').addEventListener('submit', function(event) {
+      const dataNascimento = document.getElementById('dataNascimento').value;
+      const dataAtual = new Date();
+      const dataNascimentoDate = new Date(dataNascimento);
+
+      // Cálculo da idade
+      let idade = dataAtual.getFullYear() - dataNascimentoDate.getFullYear();
+      const mes = dataAtual.getMonth() - dataNascimentoDate.getMonth();
+
+      if (mes < 0 || (mes === 0 && dataAtual.getDate() < dataNascimentoDate.getDate())) {
+        idade--;
+      }
+
+      // Validação de idade mínima
+      if (idade < 18) {
+        const input = document.getElementById('dataNascimento');
+        input.classList.add('is-invalid');
+        event.preventDefault();
+      } else {
+        document.getElementById('dataNascimento').classList.remove('is-invalid');
+      }
+    });
+  </script>
 
 </main>
 
