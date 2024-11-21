@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base_funcionarios.html' %}
 
 {% block titulo %}
-Pesquisar Funcionários
+Pesquisar Cliente
 {% endblock %}
 
 {% block links %}
@@ -13,14 +13,14 @@ Pesquisar Funcionários
 <main class="pesquisar-funcionario">
 
     <div id="botaoCriarFuncionario" class="botao">
-        <a href="{{ url_for('criar_funcionario') }}">
+        <a href="{{ url_for('criar_cliente') }}">
             <button>Criar</button>
         </a>
     </div>
 
-    <form action="{{ url_for('pesquisar_funcionario') }}" method="POST">
+    <form action="{{ url_for('pesquisar_clientes') }}" method="POST">
         <div id="divBusca">
-            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="CPF/Nome"/>
+            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="Nome/CPF/CNPJ"/ style="width: 200px;">
             <button type="submit"  id="btnBusca" name="form1">
                 <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
             </button>
@@ -39,20 +39,21 @@ Pesquisar Funcionários
         {% endif %}
     {% endwith %}
     
-    {% if funcionarios %}
-        {% for i in funcionarios%}
+    {% if clientes %}
+        {% for i in clientes%}
             <div class="blocoPesquisa">
 
                 <div class="blocoFuncionario">
 
                     <div class="dadosFuncionario">
                         <p><strong>Nome:</strong> {{ i.Nome }}</p>
-                        <p><strong>CPF:</strong> {{ i.CPF }}</p>
+                        <p><strong>CPF/CNPJ:</strong> {{ i.CPF if i.CPF else i.CNPJ }}</p>
                         <p><strong>Telefone:</strong> {{ i.Telefone }}</p>
                         <p><strong>E-mail:</strong> {{ i.Email }}</p>
                         <p><strong>Data de Nascimento:</strong> {{ i.Data_Nascimento }}</p>
                         <p><strong>Endereço:</strong> {{ i.Endereco }}</p>
-                        <p><strong>Status:</strong> {{ i.Status}}</p>
+                        <p><strong>CNH:</strong> {{ i.Numero_CNH }}</p>
+                        <p><strong>Tipo CNH:</strong> {{ i.Tipo_CNH }}</p>
                     </div>   
 
                     <div class="botaoEditarFuncionario botao">
@@ -63,28 +64,28 @@ Pesquisar Funcionários
                 </div>
 
                 <div class="blocoEditarDados">
-                    <form action="{{ url_for('pesquisar_funcionario') }}" method="POST" class="editarFuncionario" novalidate>
+                    <form action="{{ url_for('pesquisar_clientes') }}" method="POST" class="editarFuncionario" novalidate>
                         <div class="blocoEdicao">
 
                             <div>
                                 <input name="id" type="hidden" value="{{i.id}}"></input>
                             </div>
-                            <div class="row mb-3" >
+                            <div class="row mb-3">
                                 <div class="input-group col-sm-10">
                                     <label for="nome" class="col-sm-2 col-form-label">Nome</label>
-                                    <input type="text" class="form-control" id="nome2" name="nome" value="{{i.Nome}}" required minlength="3">
+                                    <input type="text" class="form-control" id="nome2" name="nome" value="{{ i.Nome }}" required minlength="3">
                                     <div class="invalid-feedback">
-                                    Por favor, um nome.
+                                        Por favor, insira um nome válido.
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="row mb-3">
                                 <div class="input-group col-sm-10">
-                                    <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
-                                    <input type="text" class="form-control" id="cpf2" pattern="\d{11}" name="cpf" value="{{i.CPF}}"  required>
+                                    <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+                                    <input type="text" class="form-control" id="cpf_cnpj" pattern="(\d{11}|\d{14})" name="cpf_cnpj" value="{{ i.CPF  if i.CPF else i.CNPJ}}" required>
                                     <div class="invalid-feedback">
-                                    Por favor, insira um CPF válido, apenas números.
+                                        Por favor, insira um CPF ou CNPJ válido, apenas números.
                                     </div>
                                 </div>
                             </div>
@@ -92,9 +93,9 @@ Pesquisar Funcionários
                             <div class="row mb-3">
                                 <div class="input-group col-sm-10">
                                     <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
-                                    <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{i.Telefone}}"  required>
+                                    <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{ i.Telefone }}" required>
                                     <div class="invalid-feedback">
-                                    Por favor, insira um número de telefone válido.
+                                        Por favor, insira um número de telefone válido.
                                     </div>
                                 </div>
                             </div>
@@ -114,46 +115,47 @@ Pesquisar Funcionários
                             <div class="row mb-3">
                                 <div class="input-group col-sm-10">
                                     <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
-                                    <input type="date" class="form-control" id="dataNascimento2" name="data_nascimento" value="{{i.Data_Nascimento}}"  required>
+                                    <input type="date" class="form-control" id="dataNascimento2" name="data_nascimento" value="{{ i.Data_Nascimento }}" required>
                                     <div class="invalid-feedback">
-                                    Por favor, informe uma data de nascimento válido.
+                                        Por favor, insira uma data de nascimento válida. O cliente deve ter pelo menos 18 anos.
                                     </div>
                                 </div>
                             </div>
+                
 
                             <div class="row mb-3">
                                 <div class="input-group col-sm-10">
                                     <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
-                                    <input type="text" class="form-control" id="endereco2" name="endereco" value="{{i.Endereco}}"  required>
+                                    <input type="text" class="form-control" id="endereco2" name="endereco" value="{{ i.Endereco }}" required>
                                     <div class="invalid-feedback">
-                                    Por favor, informe um endereço válido.
+                                        Por favor, insira um endereço válido.
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row mb-3 senha-container">
-                                <div class="input-group col-sm-10">
-                                    <label for="senha2" class="col-sm-2 col-form-label">Senha</label>
-                                    <input type="password" class="form-control senha" id="senha2" name="senha" minlength="6">
-                                    <button type="button" class="input-group-text botao-ver-senha">
-                                        <img class="olho" src="{{ url_for('static', filename='img/eye.png') }}" 
-                                             style="cursor: pointer; width: 25px;"
-                                             data-olho1="{{ url_for('static', filename='img/eye.png') }}"
-                                             data-olho2="{{ url_for('static', filename='img/eye-close-up.png') }}">
-                                      </button>
-                                    <div class="invalid-feedback">
-                                    Por favor, insira uma senha de no mínimo 6 dígitos.
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="row mb-3">
                                 <div class="input-group col-sm-10">
-                                    <label for="status" class="col-sm-2 col-form-label">Status</em></label>
-                                    <select class="form-control" id="status2" name="status">    
-                                        <option value="ativo"{% if i.Status == "ativo" %}selected{% endif %}>Ativo</option>
-                                        <option value="inativo" {% if i.Status == "inativo" %}selected{% endif %} >Inativo</option>
+                                    <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+                                    <input type="text" class="form-control" id="cnh" name="cnh" value="{{ i.Numero_CNH }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma CNH válida.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo CNH</label>
+                                    <select class="form-control" id="tipoCnh" name="tipo_cnh" required>
+                                        <option value="A" {% if i.Tipo_CNH == "A" %}selected{% endif %}>A</option>
+                                        <option value="B" {% if i.Tipo_CNH == "B" %}selected{% endif %}>B</option>
+                                        <option value="B" {% if i.Tipo_CNH == "A/B" %}selected{% endif %}>A/B</option>
+                                        <option value="C" {% if i.Tipo_CNH == "C" %}selected{% endif %}>C</option>
+                                        <option value="D" {% if i.Tipo_CNH == "D" %}selected{% endif %}>D</option>
+                                        <option value="E" {% if i.Tipo_CNH == "E" %}selected{% endif %}>E</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um tipo de CNH válido.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +163,7 @@ Pesquisar Funcionários
                             <button type="submit" name="form2">Confirmar</button>
                         </div>
                         <div class="botaoCancelarEdicao botao">
-                            <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
+                            <a href="{{ url_for('pesquisar_clientes') }}"><button type="button">Cancelar</button></a>
                         </div>
                     </form>
                     <div class="responseMessage2" class="alert d-none" role="alert"></div>
@@ -170,6 +172,31 @@ Pesquisar Funcionários
         {% endfor %}
 
     {% endif %}
+            
+    <script>
+        // Script para validação da data de nascimento (Editar cliente)
+        document.querySelectorAll('.editarFuncionario').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                const dataNascimentoInput = form.querySelector('input[name="data_nascimento"]');
+                const dataNascimento = new Date(dataNascimentoInput.value);
+                const dataAtual = new Date();
+    
+                let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
+                const mes = dataAtual.getMonth() - dataNascimento.getMonth();
+    
+                if (mes < 0 || (mes === 0 && dataAtual.getDate() < dataNascimento.getDate())) {
+                    idade--;
+                }
+    
+                if (idade < 18) {
+                    dataNascimentoInput.classList.add('is-invalid');
+                    event.preventDefault();
+                } else {
+                    dataNascimentoInput.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
 
 </main>
 

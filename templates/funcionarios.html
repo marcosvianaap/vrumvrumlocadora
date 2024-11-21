@@ -1,0 +1,34 @@
+{% extends 'base_funcionarios.html' %}
+
+{% block titulo %}
+clientes
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="admin-home">
+    <div class="icones">
+
+        <!-- Caminho para a gerenciamento de clientes > A partir do card -->
+        <a href="{{ url_for('pesquisar_clientes') }}"> 
+            <img class="icone" src="{{ url_for('static', filename='img/clientes.png') }}" alt="Ícone de gerenciamento de clientes">
+        </a>
+      
+        <!-- Caminho para a tela de pesquisar > A partir do card -->
+        <a href="#">
+            <img class="icone" src="{{ url_for('static', filename='img/pesquisar.png') }}" alt="Ícone de pesquisa">
+        </a>
+
+         <!-- Caminho para a tela de gerenciamento de locações > A partir do card -->
+         <a href="#">
+            <img class="icone" src="{{ url_for('static', filename='img/locacao.png') }}" alt="Ícone de gerenciamento devoluções">
+        </a>
+
+    </div>
+</main>
+
+{% endblock %}

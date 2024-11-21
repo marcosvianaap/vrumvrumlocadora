@@ -1,0 +1,150 @@
+{% extends 'base_funcionarios.html' %}
+
+{% block titulo %}
+Cadastrar
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+  {% endwith %}
+  <div id="divCriaFuncionario">
+    <form method="POST" action="{{ url_for('criar_cliente') }}" id="formCriaCliente" novalidate>
+      <div id="blocoCriaFuncionario">
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
+            <div class="invalid-feedback">
+              Por favor, insira um nome.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+            <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" pattern="(\d{11}|\d{14})" required>
+            <div class="invalid-feedback">
+              Por favor, insira um CPF ou CNPJ válido, apenas números.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
+            <div class="invalid-feedback">
+              Por favor, insira um número de telefone válido.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+            <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
+            <div class="invalid-feedback">
+              Por favor, insira uma data de nascimento válida. O cliente deve ter pelo menos 18 anos.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email"
+              pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+              required>
+            <div class="invalid-feedback">
+              Por favor, insira um email válido.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="input-group col-sm-10">
+            <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" required>
+            <div class="invalid-feedback">
+              Por favor, informe um endereço válido.
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+            <div class="input-group col-sm-10">
+              <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+              <input type="text" class="form-control" id="cnh" name="cnh" pattern="\d{11}" required>
+              <div class="invalid-feedback">
+                Por favor, informe o número da CNH.
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="input-group col-sm-10">
+              <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo de CNH</label>
+              <select class="form-select" id="tipoCnh" name="tipo_cnh" required>
+                <option value="" selected disabled>Selecione o tipo</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="A/B">A/B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+              </select>
+              <div class="invalid-feedback">
+                Por favor, selecione o tipo de CNH.
+              </div>
+            </div>
+          </div>
+        </div>
+      <div id="confirmaCriaCliente" class="botao" style="text-align: center;">
+        <button type="submit">Confirmar</button>
+      </div>
+      <div id="cancelaCriaCliente" class="botao" style="text-align: center;">
+        <a href="{{ url_for('pesquisar_clientes') }}"><button type="button">Cancelar</button></a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Validação de idade mínima
+    document.getElementById('formCriaCliente').addEventListener('submit', function(event) {
+      const dataNascimento = document.getElementById('dataNascimento').value;
+      const dataAtual = new Date();
+      const dataNascimentoDate = new Date(dataNascimento);
+
+      // Cálculo da idade
+      let idade = dataAtual.getFullYear() - dataNascimentoDate.getFullYear();
+      const mes = dataAtual.getMonth() - dataNascimentoDate.getMonth();
+
+      if (mes < 0 || (mes === 0 && dataAtual.getDate() < dataNascimentoDate.getDate())) {
+        idade--;
+      }
+
+      // Validação de idade mínima
+      if (idade < 18) {
+        const input = document.getElementById('dataNascimento');
+        input.classList.add('is-invalid');
+        event.preventDefault();
+      } else {
+        document.getElementById('dataNascimento').classList.remove('is-invalid');
+      }
+    });
+  </script>
+
+</main>
+
+{% endblock %}

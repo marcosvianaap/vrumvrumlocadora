@@ -166,6 +166,22 @@ def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, 
     finally:
         conn.close()
 
+def adicionarCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, numero_cnh, tipo_cnh):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    usuarioIdP = ''
+    try:
+        cursor.execute('INSERT INTO Pessoa (cpf, endereco, Data_Nascimento, email, telefone, nome) VALUES (?, ?, ?, ?, ?, ?)', (cpf, endereco, Data_Nascimento, email, telefone, nome))
+        usuarioIdP = cursor.lastrowid
+        cursor.execute('INSERT INTO Cliente (CNPJ, Numero_CNH, Tipo_CNH, pessoa_id) VALUES (?, ?, ?, ?)', (cnpj, numero_cnh, tipo_cnh, usuarioIdP))
+        conn.commit()
+        print("Cliente adicionado com sucesso!")
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
 def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, senha, status, cpf2):
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -194,11 +210,56 @@ def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, 
     finally:
         conn.close()
 
+def atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone,nome, numero_cnh, tipo_cnh, cpf_cnpj_original):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    if len(cpf_cnpj_original)==11:
+
+        cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf_cnpj_original,))
+        row = cursor.fetchone()
+        if row:
+            row_id = row[0]
+        cnpj=''
+    else:
+        cursor.execute("SELECT pessoa_id FROM Cliente WHERE CNPJ = ?", (cpf_cnpj_original,))
+        row = cursor.fetchone()
+        if row:
+            row_id = row[0]
+        cpf=''
+
+    try:
+        cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE id = ?', (cpf, endereco, Data_Nascimento, email, telefone, nome, row_id))
+        cursor.execute('UPDATE Cliente SET CNPJ = ?, Tipo_CNH = ?, Numero_CNH = ? WHERE pessoa_id = ?', (cnpj,tipo_cnh, numero_cnh, row_id))
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
 def verificaCpf(cpf):
     conn = connect_to_db()
     cursor = conn.cursor()
 
     cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf,))
+    row = cursor.fetchone()
+    if row:
+        return True
+
+    return False
+
+def verificaCpf_Cnpj(informacao):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (informacao,))
+    row = cursor.fetchone()
+    if row:
+        return True
+    
+    cursor.execute("SELECT pessoa_id FROM Cliente WHERE CNPJ = ?", (informacao,))
     row = cursor.fetchone()
     if row:
         return True
@@ -235,6 +296,43 @@ def filtro_funcionarios(informação):
     
     return funcionarios
 
+def filtro_clientes(informação):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    if informação.isnumeric() :
+
+        cursor.execute('''
+                    SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
+                    FROM Pessoa
+                    JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
+                    WHERE Pessoa.CPF LIKE ? OR Cliente.CNPJ LIKE ?
+                ''', ('%' + informação + '%', '%' + informação + '%'))
+
+    else:
+
+        cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
+                    FROM Pessoa 
+                    JOIN Cliente ON Pessoa.id = Cliente.pessoa_id 
+                    WHERE Pessoa.Nome LIKE ?''', ('%' + informação + '%',))
+    
+    
+    clientesRaw = cursor.fetchall()
+
+    print(clientesRaw)
+    clientes = []
+    colunas = ["id", "CPF", "Endereco", "Data_Nascimento", "Email", "Telefone", "Nome", "Numero_CNH", "Tipo_CNH", "CNPJ"]
+    for i in clientesRaw:
+        cliente = {}
+        for index,j in enumerate(i):
+            cliente[colunas[index]] = j
+        clientes.append(cliente)
+    conn.close()
+
+    print(clientes)
+    
+    return clientes
+
 def obterCPF(id):
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -242,3 +340,15 @@ def obterCPF(id):
     cpf_original = cursor.execute("SELECT CPF FROM Pessoa WHERE id = ?", (id,)).fetchone()
     conn.close()
     return cpf_original
+
+def obterCPF_CNPJ(id):
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    
+    resultado = cursor.execute("SELECT CPF FROM Pessoa WHERE id = ?", (id,)).fetchone()
+    if resultado[0]=='':
+        resultado = cursor.execute("SELECT Cliente.CNPJ FROM Cliente WHERE Cliente.pessoa_id = ?", (id,)).fetchone()
+
+    conn.close()
+    return resultado
