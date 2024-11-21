@@ -1,15 +1,3 @@
-/* Estilos do header fixo no topo */
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    align-items: center;
-    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10; /* Garante que o header fique acima de outros elementos */
-}
 
 .logo img {
     height: 80px; /* Ajuste a altura conforme necessário */
@@ -20,17 +8,7 @@ header {
     margin-left: 30px; /* Ajusta o alinhamento do logo */
 }
 
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
-    align-items: center; /* Centraliza o conteúdo horizontalmente */
-    background-color: #96c7d8;
-    min-height: 100vh; /* Garante que o conteúdo ocupe a altura total da tela */
-    padding-top: 50px; /* Ajustado o espaço para reduzir a distância do conteúdo em relação ao header */
-    padding-left: 30px; /* Garante que o conteúdo tenha margem à esquerda */
-}
+
 
 /* Estilos para a caixa de histórico de locação */
 .alocação {
@@ -93,4 +71,13 @@ body {
     .alocação select {
         width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
     }
+}
+
+.historico{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+    
 }

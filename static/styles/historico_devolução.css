@@ -1,15 +1,5 @@
 /* Estilos do header fixo no topo */
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10; /* Garante que o header fique acima de outros elementos */
-}
+
 
 .logo img {
     height: 80px; /* Ajuste a altura conforme necessário */
@@ -20,15 +10,7 @@ header {
     margin-left: 100px;
 }
 
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centraliza o conteúdo horizontalmente */
-    background-color: #96c7d8;
-    min-height: 100vh; /* Garante que o conteúdo ocupe a altura total da tela */
-    padding-top: 100px; /* Espaço ajustado para não ficar atrás do header */
-}
+
 
 /* Estilos para a caixa de histórico de devolução */
 .devolução {
