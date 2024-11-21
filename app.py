@@ -112,6 +112,61 @@ def criar_funcionario():
 
 
 
+
+# ROTAS PARA HISTÓRICO DE VEICULOS ----------------------------
+@app.route("/funcionario/historico_devolução",methods=['POST'])
+def historico_devolucao():
+    
+    veiculo = request.form['veiculo']
+
+
+    conn = bd.connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao FROM Devolucao d WHERE d.id_locacao IN (SELECT l.id FROM Locacao l WHERE l.id_veiculo = ?);",(veiculo,))
+    devolucoesRaw = cursor.fetchall()
+    devolucoes = []
+    colunas = ['id', 'Data_Hora_Devolucao', 'Multa', 'Local_devolucao', 'Valor_Total', 'Condicoes_Veiculo', 'id_locacao']
+    for i in devolucoesRaw:
+        devolucao = {}
+        for index,j in enumerate(i):
+            devolucao[colunas[index]] = j
+        devolucoes.append(devolucao)
+    conn.close()
+
+    print('devolucoes:',devolucoes)
+    
+    return render_template("historico_devolução.html",devolucoes=devolucoes)
+
+@app.route("/funcionario/historico_locação",methods=['POST'])
+def historico_locacao():
+
+    veiculo = request.form['veiculo']
+
+    conn = bd.connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, Local_Devolucao, Multa, Data_Hora_Locacao, Data_Hora_Prevista_Devolucao, Valor, id_cliente, id_veiculo, Condicoes_Veiculo,Desconto,Status FROM Locacao WHERE id_veiculo = ?",(veiculo))
+    locacoesRaw = cursor.fetchall()
+    locacoes = []
+    colunas = ['id', 'Local_Devolucao', 'Multa', 'Data_Hora_Locacao', 'Data_Hora_Prevista_Devolucao', 'Valor', 'id_cliente', 'id_veiculo', 'Condicoes_Veiculo', 'Desconto', 'Status']
+    for i in locacoesRaw:
+        locacao = {}
+        for index,j in enumerate(i):
+            locacao[colunas[index]] = j
+        locacoes.append(locacao)
+    conn.close()
+
+    print('LOCACOES:',locacoes)
+
+    return render_template("historico_locação.html",locacoes=locacoes)
+
+@app.route("/funcionario/teste")
+def teste():
+    return render_template("base_cliente.html")
+
+
+
+
+
 # ROTAS PARA GERENCIAMENTO DE VEICULOS ----------------------------
 
 #rota para a tela de listagem de veiculos

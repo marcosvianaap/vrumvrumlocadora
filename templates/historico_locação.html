@@ -1,0 +1,49 @@
+{% extends 'base_cliente.html' %}
+
+{% block titulo %}
+Historico Locação
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+<main class="historico">
+
+    {% for locacao in locacoes %}
+    <div class="alocação">
+        <div class="linha">
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" name="cliente" style='margin-right:10%' value='{{locacao.id_cliente}}' readonly>
+            <label for="veiculo">Veículo:</label>
+            <input type="text" id="veiculo" name="veiculo" value="{{locacao.id_veiculo}}">
+        </div>
+        <div class="linha">
+            <label for="dataAluguel">Data/Hora do Aluguel:</label>
+            <input type="text" id="DataHoraAluguel" name="dataAluguel" value='{{locacao.Data_Hora_Locacao}}' readonly>
+        </div>
+        <div class="linha">
+            <label for="dataPrevistaDevolução">Data/Hora Prevista da Devolução:</label>
+            <input type="text" id="DataHoraPrevistaDevolução" name="dataPrevistaDevolução" value='{{locacao.Data_Hora_Prevista_Devolucao}}' readonly>
+        </div>
+        <div class="linha">
+            <label for="desconto">Desconto:</label>
+            <input type="text" id="desconto" name="desconto" value='{{locacao.Desconto}}' style='margin-right:10%' readonly>
+            <label for="multa">Multas:</label>
+            <input type="text" id="multa" name="multa" value='{{locacao.Multa}}' readonly>
+        </div>
+        <div class="linha">
+            <label for="valor">Valor:</label>
+            <input type="text" id="valor" name="valor" value='{{locacao.Valor}}' readonly>
+        </div>
+        <div class="linha">
+            <label for="status" class="col-sm-4 col-form-label">Status:</label>
+            <input type="text" id="status" name="status" value='{{locacao.Status}}' readonly>
+        </div>
+    </div>
+    {% endfor %}
+
+</main>
+
+{% endblock %}

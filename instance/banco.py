@@ -62,11 +62,13 @@ def connect_to_db():
             id                  INTEGER PRIMARY KEY AUTOINCREMENT,
             Local_Devolucao     TEXT NOT NULL,
             Data_Hora_Locacao   DATETIME NOT NULL,
+            Data_Hora_Prevista_Devolucao DATETIME NOT NULL,
             Valor               REAL NOT NULL,
             id_cliente          INTEGER NOT NULL,
             id_veiculo          INTEGER NOT NULL,
             Condicoes_Veiculo   TEXT NOT NULL,
             Desconto            REAL NOT NULL,
+            Multa               REAL NOT NULL,
             Status              TEXT NOT NULL,
             FOREIGN KEY (id_cliente) REFERENCES Pessoa(id),
             FOREIGN KEY (id_veiculo) REFERENCES Veiculo(id)

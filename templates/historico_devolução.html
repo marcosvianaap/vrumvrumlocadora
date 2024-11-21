@@ -1,0 +1,41 @@
+{% extends 'base_cliente.html' %}
+
+{% block titulo %}
+Historico Devolução
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+    <main class="historico" style="padding-top: 150px;padding-bottom:20px">
+
+        {% for devolucao in devolucoes %}
+        <div class="devolução">
+            <div class="linha">
+                <label for="DataHoraDevolucao">Data/Hora de Devolução:</label>
+                <input type="text" id="DataHoraDevolucao" name="DataHoraDevolucao" value='{{devolucao.Data_Hora_Devolucao}}' readonly>
+            </div>
+            <div class="linha">
+                <label for="multa">Multas:</label>
+                <input type="text" id="multa" name="multa" value='{{devolucao.Multa}}' readonly>
+            </div>
+            <div class="linha">
+                <label for="localDevolucao">Local de Devolução:</label>
+                <input type="text" id="localDevolucao" name="localDevolucao" value='{{devolucao.Local_devolucao}}' readonly>
+            </div>
+            <div class="linha">
+                <label for="valorTotal">Valor Total:</label>
+                <input type="text" id="valorTotal" name="valorTotal" value='{{devolucao.Valor_Total}}' readonly>
+            </div>
+            <div class="linha">
+                <label for="condicoes">Condições:</label>
+                <input type="text" id="condicoes" name="condicoes" value='{{devolucao.Condicoes_Veiculo}}' readonly>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </main>
+{% endblock %}
