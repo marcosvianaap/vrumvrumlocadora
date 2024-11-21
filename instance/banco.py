@@ -1,7 +1,12 @@
 import re
 import sqlite3
 import os
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash,generate_password_hash
+
+#ACESSO ADMIN
+#usuario: admin
+#senha: senha123
+
 
 #coisas relacionadas com a estrutura do BD
 def connect_to_db():
@@ -87,7 +92,15 @@ def connect_to_db():
             FOREIGN KEY (id_locacao) REFERENCES Locacao(id)
         );
     ''')
-
+    
+    cursor.execute('SELECT pessoa_id FROM Usuario WHERE cargo = ?',('admin',))
+    admin = cursor.fetchone()
+    print('ADMIN:',admin)
+    if not admin:
+        cursor.execute('INSERT INTO Pessoa (CPF,Endereco,Data_Nascimento,Email,Telefone,Nome) VALUES (?,?,?,?,?,?)',('admin','Algum_lugar','22/10/1998','admin@email','40028922','admin'))        
+        usuarioIdP = cursor.lastrowid
+        cursor.execute('INSERT INTO Usuario (pessoa_id,Senha,Cargo,Status) VALUES (?, ?, ?, ?)', (usuarioIdP, generate_password_hash('senha123'), 'admin', 'ativo'))
+        conn.commit()
     conn.commit()
     return conn
 
