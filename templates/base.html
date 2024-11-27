@@ -25,9 +25,21 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <a class="logotipo navbar-brand" href="{{ url_for('administrador') }}">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
-            </a>
+            {% if 'usuario' in session %}
+                {% if session['usuario'] == 'admin' %}
+                    <a class="logotipo navbar-brand" href="{{ url_for('administrador') }}">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                    </a>
+                {% else %}
+                    <a class="logotipo navbar-brand" href="{{ url_for('funcionarios') }}">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                    </a>
+                {% endif %}
+            {% else %}
+                <a class="logotipo navbar-brand" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </a>
+            {% endif %}
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +63,7 @@
                     </li>
                     <li class="nav-item">
                         <!-- incluir rota para o logout do sistema -->
-                        <a class="nav-link" href="#">Sair</a>
+                        <a class="nav-link" href="/sair">Sair</a>
                     </li>
                 </ul>
             </div>
