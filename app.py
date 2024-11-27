@@ -14,6 +14,11 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
+# Rota criada para edição (Deve ser removida no merge)
+@app.route("/clientes/loc")
+def loc():
+    return render_template("criar_locacao.html")
+
 # Rota para a página principal do administrador
 @app.route("/administrador")
 def administrador():

@@ -1,0 +1,85 @@
+{% extends 'base_cliente.html' %}
+
+{% block titulo %}
+Cadastro
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block conteudo %}
+
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+  {% endwith %}
+  <div id="divCriaFuncionario">
+                                <!--Inclua a rota correta aqui-->>
+    <form method="POST" action="{{ url_for('loc') }}" id="formCriaFuncionario" novalidate>
+      <div id="blocoCriaFuncionario">
+        <div class="row mb-3">
+          <label for="dataAluguel" class="form-label">Data do aluguel:</label>
+          <input type="date" class="form-control w-100" id="dataAluguel" name="dataAluguel" required>
+          <div class="invalid-feedback">Por favor, insira uma data válida.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="horaAluguel" class="form-label">Hora do aluguel:</label>
+          <input type="time" class="form-control w-100" id="horaAluguel" name="horaAluguel" required>
+          <div class="invalid-feedback">Por favor, insira uma hora válida.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="dataDevolucao" class="form-label">Data prevista da devolução:</label>
+          <input type="date" class="form-control w-100" id="dataDevolucao" name="dataDevolucao" required>
+          <div class="invalid-feedback">Por favor, insira uma data válida.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="horaDevolucao" class="form-label">Hora prevista da devolução:</label>
+          <input type="time" class="form-control w-100" id="horaDevolucao" name="horaDevolucao" required>
+          <div class="invalid-feedback">Por favor, insira uma hora válida.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="cliente" class="form-label">Cliente:</label>
+          <input type="text" class="form-control w-100" id="cliente" name="cliente" required>
+          <div class="invalid-feedback">Por favor, insira o nome do cliente.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="veiculo" class="form-label">Veículo:</label>
+          <input type="text" class="form-control w-100" id="veiculo" name="veiculo" required>
+          <div class="invalid-feedback">Por favor, insira o veículo.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="percentualDesconto" class="form-label">Percentual Desconto:</label>
+          <input type="number" class="form-control w-100" id="percentualDesconto" name="percentualDesconto" step="0.01" min="0" max="100" required>
+          <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
+        </div>
+        <div class="row mb-3">
+          <label for="percentualMulta" class="form-label">Percentual Multa:</label>
+          <input type="number" class="form-control w-100" id="percentualMulta" name="percentualMulta" step="0.01" min="0" max="100" required>
+          <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
+        </div>
+        <div class="row mb-3">
+          <label for="condicoesSaida" class="form-label">Condições de saída do veículo:</label>
+          <textarea class="form-control w-100" id="condicoesSaida" name="condicoesSaida" rows="3" required></textarea>
+          <div class="invalid-feedback">Por favor, insira as condições de saída do veículo.</div>
+        </div>
+      </div>
+      <div id="confirmaCriaFuncionario" class="botao">
+        <button type="submit">Confirmar</button>
+      </div>
+      <div id="cancelaCriaFuncionario" class="botao">
+        <a href="{{ url_for('pesquisar_clientes') }}"><button type="button">Cancelar</button></a>
+      </div>
+    </form>
+  </div>
+</main>
+
+  
+{% endblock %}
