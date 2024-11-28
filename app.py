@@ -14,13 +14,65 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
+
+@app.after_request
+def no_cache(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+# Decorator para proteger as rotas de usuario
+def user_required(f):
+    from functools import wraps
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        
+        if 'usuario' not in session:
+            flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
+            return redirect(url_for('processoSair'))  # Redireciona para a página de login
+        
+        if session['usuario'] == 'admin':
+            flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
+            return redirect(url_for('processoSair'))  # Redireciona para a página de login
+        
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+# Decorator para proteger as rotas de usuario
+def admin_required(f):
+    from functools import wraps
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        
+        if 'usuario' not in session:
+            flash("! Você precisa estar autenticado como administrador para acessar esta rota !",'danger')
+            return redirect(url_for('index'))  # Redireciona para a página de login
+        
+        if session['usuario'] != 'admin':
+            flash("! Você precisa estar autenticado como administrador para acessar esta rota !",'danger')
+            return redirect(url_for('processoSair'))  # Redireciona para a página de login
+        
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+
+
+
 # Rota criada para edição (Deve ser removida no merge)
 @app.route("/clientes/loc")
 def loc():
     return render_template("criar_locacao.html")
 
+
 # Rota para a página principal do administrador
 @app.route("/administrador")
+@admin_required
 def administrador():
     return render_template("administrador.html")
 
@@ -29,11 +81,13 @@ def administrador():
 
 #Rota principal para a página de gerenciamento de clientes
 @app.route("/funcionarios")
+@user_required
 def funcionarios():
     return render_template("funcionarios.html")
 
 #rota principal para a página de gerenciamento de clientes
 @app.route("/clientes", methods=['GET', 'POST'])
+@user_required
 def pesquisar_clientes():
 
     clientes = None
@@ -97,6 +151,7 @@ def pesquisar_clientes():
     return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
 
 @app.route("/clientes/cadastrar", methods=['GET', 'POST'])
+@user_required
 def criar_cliente():
 
     cpf = None
@@ -173,6 +228,7 @@ def locacoes():
 
 #rota para a página para pesquisar funcionários
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
+@admin_required
 def pesquisar_funcionario():
     funcionarios = None
     funcionario= None
@@ -234,6 +290,7 @@ def pesquisar_funcionario():
 
 #rota para criar um novo funcionário no banco de dados
 @app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])
+@admin_required
 def criar_funcionario():
     script1_url = url_for('static', filename='js/menssagemErro.js') #Caminho absoluto do script
     script2_url = url_for('static', filename='js/Script.js')
@@ -266,6 +323,7 @@ def criar_funcionario():
 
 # ROTAS PARA HISTÓRICO DE VEICULOS ----------------------------
 @app.route("/funcionario/historico_devolução",methods=['POST'])
+@user_required
 def historico_devolucao():
     
     veiculo = request.form['veiculo']
@@ -289,6 +347,7 @@ def historico_devolucao():
     return render_template("historico_devolução.html",devolucoes=devolucoes)
 
 @app.route("/funcionario/historico_locação",methods=['POST'])
+@user_required
 def historico_locacao():
 
     veiculo = request.form['veiculo']
@@ -322,6 +381,7 @@ def teste():
 
 #rota para a tela de listagem de veiculos
 @app.route("/administrador/veiculos")
+@admin_required
 def gerenciar_veiculos():
 
     conn = bd.connect_to_db()
@@ -331,8 +391,7 @@ def gerenciar_veiculos():
     if modeloVeiculo == None:
         cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo")
     else:
-        cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo WHERE Modelo = ?",(modeloVeiculo,))
-
+        cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo WHERE Modelo LIKE ?",('%' + modeloVeiculo + '%',))
     veiculosRaw = cursor.fetchall()
     veiculos = []
     colunas = ["id","Ano_Aquisicao","Placa","RENAVAM","Modelo","Marca","Ano_Fabricacao","Cor","Tipo_Combustivel","Valor_Locacao_Dia","Status"]
@@ -347,11 +406,13 @@ def gerenciar_veiculos():
 
 #Rota para a tela de cadastro de veiculos
 @app.route("/administrador/veiculos/frontend_criar_veiculo")
+@admin_required
 def frontend_criar_veiculos():
     return render_template("criar_veiculo.html")
 
 #Rota para cadastrar um novo veiculo
 @app.route("/administrador/veiculos/backend_criar_veiculo",methods=['POST'])
+@admin_required
 def backend_criar_veiculo():
 
     modelo = request.form["modelo"]
@@ -386,6 +447,7 @@ def backend_criar_veiculo():
 
 #Rota para a tela de editar um veiculo
 @app.route("/administrador/veiculos/frontend_editar_veiculo",methods=['POST','GET'])
+@admin_required
 def frontend_editar_veiculo():
 
     veiculo = None
@@ -409,6 +471,7 @@ def frontend_editar_veiculo():
 
 #Rota para salvar a edicao de um veiculo
 @app.route("/administrador/veiculos/backend_editar_veiculo",methods=['POST'])
+@admin_required
 def backend_editar_veiculo():
 
     veiculo = request.form["veiculo"]
@@ -428,12 +491,18 @@ def backend_editar_veiculo():
     cursor = conn.cursor()
 
     cursor.execute("SELECT id FROM Veiculo WHERE Placa = ? OR RENAVAM = ?",(placa,renavam))
-    veiculoExistente = cursor.fetchone()
-    print(f'ID: {veiculoExistente[0]}\nVEICULO: {veiculo}')
+    veiculosExistentes = cursor.fetchall()
 
-    if veiculoExistente != None:
+    if veiculosExistentes != None:
         
-        if int(veiculo) != int(veiculoExistente[0]):
+        jaExiste = False
+        if len(veiculosExistentes) > 1:
+            jaExiste = True
+        else:
+            if int(veiculosExistentes[0][0]) != int(veiculo):
+                jaExiste = True
+
+        if jaExiste:
             session['ultimaEdicao'] = veiculo
             flash('Erro ao editar veiculo! Já existe um veiculo com essa placa ou RENAVAM', 'danger')
             return redirect(url_for("frontend_editar_veiculo")) 
@@ -470,7 +539,11 @@ def processoEntrar():
         return redirect(url_for("index"))
     else:
         session['usuario'] = request.form['usuario']
-        return redirect(url_for("administrador"))
+        
+        if session['usuario'] == 'admin':
+            return redirect(url_for("administrador"))
+        else:
+            return redirect(url_for("funcionarios"))
 
 #rota para sair do sistema
 @app.route("/sair")

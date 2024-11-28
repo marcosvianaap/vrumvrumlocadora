@@ -40,8 +40,8 @@ Gerenciar Veiculos
     <div class="container mt-3">
 
         {% for veiculo in veiculos %}
-        <div class="card">
-            <div class="card-body">
+        <div>
+            <div class=" card card-body">
                 <div class="row mb-3 align-items-center">
                     <label for="placa" class="col-sm-5 col-form-label">Modelo:</label>
                     <div class="col-sm-7">
@@ -112,15 +112,23 @@ Gerenciar Veiculos
                     </div>
                 </div>
             </div>
+
+            <div class="align-items-end">
+                <form action="/administrador/veiculos/frontend_editar_veiculo" method="POST">
+                    <input type="hidden" value="{{veiculo.id}}" name="veiculo">
+                    <button class="btn" type="submit">Editar</button>
+                </form>
+            </div>
+            
             
         </div>
 
-        <div class="d-flex mt-2 align-items-center">
+        <!--div class="d-flex mt-2 align-items-center">
             <form action="/administrador/veiculos/frontend_editar_veiculo" method="POST" class="me-2">
                 <input type="hidden" value="{{veiculo.id}}" name="veiculo">
-                <button class="btn" type="submit" style="min-width: 150px">Editar</button>
+                <button class="btn" type="submit">Editar</button>
             </form>
-            <!--form action="/funcionario/historico_locação" method="POST" class="me-2">
+            form action="/funcionario/historico_locação" method="POST" class="me-2">
                 <input type="hidden" value="{{veiculo.id}}" name="veiculo">
                 <button class="btn" type="submit" style="min-width: 150px">
                     Locações
@@ -131,9 +139,7 @@ Gerenciar Veiculos
                 <button class="btn" type="submit" style="min-width: 150px">
                     Devoluções
                 </button>
-            </form-->
-        </div>
-        
+            </form-->        
         
         {% endfor %}
     </div>

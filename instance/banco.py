@@ -304,7 +304,8 @@ def filtro_funcionarios(informação):
         funcionario = {}
         for index,j in enumerate(i):
             funcionario[colunas[index]] = j
-        funcionarios.append(funcionario)
+        if funcionario['CPF'] != 'admin':
+            funcionarios.append(funcionario)
     conn.close()
     
     return funcionarios
