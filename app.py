@@ -14,6 +14,12 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
+@app.after_request
+def no_cache(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 # Decorator para proteger as rotas de usuario
 def user_required(f):
@@ -23,6 +29,10 @@ def user_required(f):
     def decorated_function(*args, **kwargs):
         
         if 'usuario' not in session:
+            flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
+            return redirect(url_for('processoSair'))  # Redireciona para a página de login
+        
+        if session['usuario'] == 'admin':
             flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
             return redirect(url_for('processoSair'))  # Redireciona para a página de login
         

@@ -77,7 +77,7 @@ Criar Veiculos
                     <div class="row mb-2 align-items-center">
                         <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" required>
+                            <input type="text" placeholder="00,00" oninput='formatarValor(this);' class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" required>
                         </div>
                     </div>
     
@@ -111,5 +111,13 @@ Criar Veiculos
         <button class="btn-criar-veic" type="button" onclick="window.location.href = '/administrador/veiculos'">Cancelar</button>
     </form>
     </div>
+    <script>
+        function formatarValor(elemento) {
+            let valorAlocacao = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
+            valorAlocacao = (valorAlocacao / 100).toFixed(2) + ''; // Converte para valor monetário
+            valorAlocacao = valorAlocacao.replace('.', ','); // Substitui ponto por vírgula
+            valorAlocacao = valorAlocacao.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
+            elemento.value = 'R$ ' + valorAlocacao;}
+    </script>
 </main>
 {% endblock %}
