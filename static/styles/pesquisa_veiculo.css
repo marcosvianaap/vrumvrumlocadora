@@ -1,0 +1,247 @@
+/* Gabrielli Danker */
+/* Última atualização: 26/11/2024 */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo geral */
+body {
+    background-color: #96c7d8;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header fixo no topo */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 100px; /* Ajuste a margem interna do header */
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header .logo img {
+    height: 80px; /* Ajuste a altura conforme necessário */
+    width: auto;
+}
+
+header nav {
+    display: flex;
+    gap: 25px;
+}
+
+header nav a {
+    text-decoration: none;
+    font-size: 16px;
+    color: black;
+}
+
+header nav a.active {
+    color: #96c7d8;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 110px; /* Espaço reservado para o header */
+}
+
+/* Seção do formulário fixa abaixo do header */
+.form-section {
+    position: fixed; /* Mantém a seção fixa na página */
+    top: 100px; /* Ajuste para alinhar logo abaixo do header */
+    width: 25%; /* Largura fixa */
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+/* Formulário com labels e inputs lado a lado */
+.form-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 23px; /* Espaçamento entre os campos */
+    padding-top: 10px;
+}
+
+.form-section form label {
+    display: flex; /* Alinha o label e o input na horizontal */
+    align-items: center; /* Alinha verticalmente */
+    font-size: 14px;
+    color: #333;
+    gap: 5px; /* Espaçamento entre o label e o input */
+}
+
+.form-section form input,
+.form-section form select {
+    flex: 1; /* Faz com que os inputs e selects ocupem o espaço restante */
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 150px;
+    height: 35px;
+}
+/* Botões alinhados lado a lado */
+.form-section form .button-container {
+    display: flex; /* Alinha os botões horizontalmente */
+    justify-content: space-between; /* Espaçamento uniforme entre os botões */
+    gap: 10px; /* Espaçamento horizontal entre os botões */
+}
+
+.form-section form button {
+    flex: 1; /* Faz com que os botões ocupem o mesmo espaço */
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #96c7d8;
+    color: black;
+    transition: background-color 0.3s ease; /* Adiciona transição suave ao hover */
+}
+
+.form-section form button:hover {
+    background-color: #005f8c;
+    color: white;
+}
+
+/* Seção dos resultados */
+.results-section {
+    margin-top: 20px;
+    width: 40%;
+    margin-left: 33%; /* Espaço deixado pelo formulário fixo */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.card .buttons {
+    display: flex; /* Faz com que os botões fiquem lado a lado */
+    gap: 10px; /* Espaçamento entre os botões */
+    margin-top: 15px;
+    justify-content: flex-end; /* Garante que os botões fiquem alinhados à direita */
+}
+
+/* Botões dentro do card */
+.card .buttons button {
+    width: 20%; /* Faz com que os botões ocupem 45% da largura do contêiner, deixando espaço entre eles */
+    height: 40px;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #96c7d8;
+    color: black;
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+/* Hover no botão */
+.card .buttons button:hover {
+    background-color: #005f8c; /* Altera a cor ao passar o mouse */
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 1024px) {
+    /* Ajusta a largura do formulário em telas menores */
+    .form-section {
+        width: 40%;
+        top: 80px; /* Ajusta a posição do formulário */
+    }
+
+    /* Ajuste o layout do container principal para telas menores */
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Ajusta a largura dos inputs e selects para 100% */
+    .form-section form input,
+    .form-section form select {
+        width: 100%;
+    }
+
+    /* Ajuste do botão para telas menores */
+    .form-section form button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Ajusta a largura da seção de resultados */
+    .results-section {
+        width: 90%;
+        margin-left: 0;
+    }
+
+    /* Ajuste do layout dos botões no card */
+    .card .buttons button {
+        width: 45%;
+    }
+}
+
+/* Responsividade para telas muito pequenas (smartphones) */
+@media (max-width: 600px) {
+    /* Formulário ocupa toda a largura da tela */
+    .form-section {
+        width: 100%;
+        top: 60px; /* Ajusta a posição do formulário */
+    }
+
+    /* Container principal fica empilhado */
+    .container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    /* Ajusta a largura dos inputs e selects para 100% */
+    .form-section form input,
+    .form-section form select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Ajusta a largura dos botões */
+    .form-section form button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Ajuste da seção de resultados para telas pequenas */
+    .results-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    /* Botões no card com largura maior */
+    .card .buttons button {
+        width: 100%;
+    }
+}
