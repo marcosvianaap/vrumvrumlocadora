@@ -415,9 +415,10 @@ def pesquisa_veiculo():
         modelo = request.form['modelo']
         marca = request.form['marca']
         cor = request.form['cor']
+        ano = request.form['ano']
         valorLocacaoDia = request.form['valor']
         
-        carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia)
+        carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
 
         # Lógica de pesquisa de veículos aqui
         return render_template('pesquisa_veiculos.html', carros=carros)
