@@ -148,6 +148,7 @@ Locações
                                     <select class="form-control" id="status" name="status" required>
                                         <option value="Em andamento" {% if locacao.status == "Ativo" %}selected{% endif %}>Ativo</option>
                                         <option value="Concluído" {% if locacao.status == "Concluído" %}selected{% endif %}>Concluído</option>
+                                        <option value="Cancelado" {% if locacao.status == "Cancelado" %}selected{% endif %}>Cancelado</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Por favor, selecione um status válido.
