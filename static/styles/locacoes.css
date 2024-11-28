@@ -1,0 +1,28 @@
+.linha {
+    display: flex;
+    
+    gap: 120px;
+    margin-bottom: 10px;
+}
+
+.linha p {
+    margin: 0;
+    
+}
+.botoesLoc {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; 
+    margin-top: 10px;
+}
+
+
+.botoesLoc a {
+    text-decoration: none;
+}
+
+
+.botoesLoc #ajuste button{
+   padding: 1px 138px 1px 10px;
+    white-space: nowrap;
+}

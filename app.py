@@ -14,6 +14,11 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
+# Rota criada para edição (Deve ser removida no merge)
+@app.route("/clientes/loc")
+def loc():
+    return render_template("criar_locacao.html")
+
 # Rota para a página principal do administrador
 @app.route("/administrador")
 def administrador():
@@ -126,7 +131,45 @@ def criar_cliente():
 
     return render_template("criar_cliente.html")
 
+
+#rota principal para a página de locações
+@app.route("/locacoes", methods=['GET', 'POST'])
+def locacoes():
+
+
+    # Dados de exemplo (Devem ser removidos)
+    locacoes = [
+        {
+            "cliente": "João Silva",
+            "veiculo": "Toyota Corolla",
+            "data_aluguel": "2024-11-20",
+            "hora_aluguel": "10:00",
+            "data_devolucao": "2024-11-25",
+            "hora_devolucao": "10:00",
+            "desconto": 5,
+            "multa": 10,
+            "condicoes_saida": "Tanque cheio, sem danos",
+            "status": "Ativo"
+        },
+        {
+            "cliente": "Maria Oliveira",
+            "veiculo": "Honda Civic",
+            "data_aluguel": "2024-11-22",
+            "hora_aluguel": "14:00",
+            "data_devolucao": "2024-11-27",
+            "hora_devolucao": "14:00",
+            "desconto": 10,
+            "multa": 0,
+            "condicoes_saida": "Tanque cheio, sem danos",
+            "status": "Concluído"
+        }
+    ]
+    return render_template('locacao.html', locacoes=locacoes)
+
+    
+
 #-------------------------------------------------------------------
+
 
 #rota para a página para pesquisar funcionários
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
