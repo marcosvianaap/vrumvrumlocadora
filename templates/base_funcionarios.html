@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/geren_veic.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/criar_veiculo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/locacoes.css') }}">
 
     {% block links %}
     {%endblock%}
@@ -40,7 +41,7 @@
                     class="nav-item {% if request.path.startswith('/clientes') %}active{% endif %} ">
                     <a class="nav-link " href="{{ url_for('pesquisar_clientes') }}">Clientes<span
                         class="sr-only"></span></a>
-                </li>
+                    </li>
                     <li
                     class="nav-item ">
                     <a class="nav-link" href="#">Pesquisar<span
