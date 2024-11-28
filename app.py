@@ -519,6 +519,23 @@ def backend_editar_veiculo():
     return redirect(url_for("gerenciar_veiculos")) 
 
 
+#ROTA PARA PESQUISAR VEICULOS
+@app.route('/pesquisar', methods=['GET', 'POST'])
+def pesquisa_veiculo():
+    if request.method == 'POST':
+        placa = request.form['placa']
+        modelo = request.form['modelo']
+        marca = request.form['marca']
+        cor = request.form['cor']
+        ano = request.form['ano']
+        valorLocacaoDia = request.form['valor']
+        
+        carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
+
+        # Lógica de pesquisa de veículos aqui
+        return render_template('pesquisa_veiculos.html', carros=carros)
+
+    return render_template('pesquisa_veiculos.html')
 
 @app.route('/')
 def index():

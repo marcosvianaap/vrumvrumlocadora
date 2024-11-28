@@ -366,3 +366,26 @@ def obterCPF_CNPJ(id):
 
     conn.close()
     return resultado
+
+def buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,
+                   Valor_Locacao_Dia,Status FROM Veiculo WHERE Placa LIKE ? AND Modelo LIKE ? AND
+                   Marca LIKE ? AND Ano_Fabricacao LIKE ? AND Cor LIKE ? AND Valor_Locacao_Dia LIKE ?""",
+                   ('%' + placa + '%','%' + modelo + '%','%' + marca + '%', '%' + ano + '%', '%' + cor + '%','%' + valorLocacaoDia + '%',))
+    veiculosRaw = cursor.fetchall()
+    
+    veiculos = []
+    colunas = ["id","Ano_Aquisicao","Placa","RENAVAM","Modelo","Marca","Ano_Fabricacao","Cor","Tipo_Combustivel","Valor_Locacao_Dia","Status"]
+    for i in veiculosRaw:
+        veiculo = {}
+        for index,j in enumerate(i):
+            veiculo[colunas[index]] = j
+        veiculos.append(veiculo)
+    conn.close()
+
+    return veiculos
+
+    
