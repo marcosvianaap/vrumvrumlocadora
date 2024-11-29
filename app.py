@@ -371,7 +371,7 @@ def historico_locacao():
 
 @app.route("/funcionario/teste")
 def teste():
-    return render_template("base_cliente.html")
+    return render_template("base_funcionarios.html")
 
 
 

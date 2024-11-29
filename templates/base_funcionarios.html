@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/geren_veic.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/criar_veiculo.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/locacoes.css') }}">
+    <link rel="icon" type="logotipo" href="../static/imagens/Logotipo-SemFundo.png"> 
 
     {% block links %}
     {%endblock%}
@@ -43,13 +44,13 @@
                         class="sr-only"></span></a>
                     </li>
                     <li
-                    class="nav-item ">
-                    <a class="nav-link" href="#">Pesquisar<span
+                    class="nav-item {% if request.path.startswith('/pesquisar') %}active{% endif %} ">
+                    <a class="nav-link" href="{{ url_for('pesquisa_veiculo') }}">Pesquisar<span
                             class="sr-only"></span></a>
                     </li>
                     <li
-                    class="nav-item ">
-                    <a class="nav-link" href="#">Locações<span
+                    class="nav-item {% if request.path.startswith('/locacoes') %}active{% endif %} ">
+                    <a class="nav-link" href="{{ url_for('locacoes') }}">Locações<span
                             class="sr-only"></span></a>
                     </li>
                     <li class="nav-item">

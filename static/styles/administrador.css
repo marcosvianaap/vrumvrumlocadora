@@ -70,13 +70,15 @@ img{
 main.admin-home{
     flex: 1;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 
 .icones{
     display: flex;
-    gap:80px
+    gap:80px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .icone{
@@ -91,11 +93,6 @@ main.admin-home{
     transform: scale(1.1);
 }
 
-@media (max-width:690px){
-    .icones{
-        flex-direction: column;
-    }
-}
 
 
 @media (min-width:992px){

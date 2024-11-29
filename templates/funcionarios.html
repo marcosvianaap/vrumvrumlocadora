@@ -9,7 +9,6 @@ clientes
 
 {% block conteudo %}
 
-
 <main class="admin-home">
     <div class="icones">
 
@@ -19,7 +18,7 @@ clientes
         </a>
       
         <!-- Caminho para a tela de pesquisar > A partir do card -->
-        <a href="#">
+        <a href="{{ url_for('pesquisa_veiculo') }}">
             <img class="icone" src="{{ url_for('static', filename='img/pesquisar.png') }}" alt="Ícone de pesquisa">
         </a>
 
