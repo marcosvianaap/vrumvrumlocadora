@@ -5,14 +5,21 @@ Pesquisar Cliente
 {% endblock %}
 
 {% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/geren_veic.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/criar_veiculo.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/locacoes.css') }}">
 {% endblock %}
+
+
 
 {% block conteudo %}
 
 
-<main class="pesquisar-funcionario">
+<main class="main-pesquisar">
 
-    <div id="botaoCriarFuncionario" class="botao">
+    <div id="botaoCriar" class="botao">
         <a href="{{ url_for('criar_cliente') }}">
             <button>Criar</button>
         </a>
@@ -20,7 +27,7 @@ Pesquisar Cliente
 
     <form action="{{ url_for('pesquisar_clientes') }}" method="POST">
         <div id="divBusca">
-            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="Nome/CPF/CNPJ"/ style="width: 200px;">
+            <input inputmode="numeric" type="text" id="numBusca" name="informacao" placeholder="Nome/CPF/CNPJ" style="width: 200px;">
             <button type="submit"  id="btnBusca" name="form1">
                 <img src="{{ url_for('static', filename='img/search.svg') }}" alt="Buscar" style="cursor: pointer; width: 25px;"/>
             </button>
@@ -71,8 +78,8 @@ Pesquisar Cliente
                                 <input name="id" type="hidden" value="{{i.id}}"></input>
                             </div>
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+                                <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" id="nome2" name="nome" value="{{ i.Nome }}" required minlength="3">
                                     <div class="invalid-feedback">
                                         Por favor, insira um nome válido.
@@ -81,8 +88,8 @@ Pesquisar Cliente
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+                                <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" id="cpf_cnpj" pattern="(\d{11}|\d{14})" name="cpf_cnpj" value="{{ i.CPF  if i.CPF else i.CNPJ}}" required>
                                     <div class="invalid-feedback">
                                         Por favor, insira um CPF ou CNPJ válido, apenas números.
@@ -91,8 +98,8 @@ Pesquisar Cliente
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+                                <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{ i.Telefone }}" required>
                                     <div class="invalid-feedback">
                                         Por favor, insira um número de telefone válido.
@@ -101,8 +108,8 @@ Pesquisar Cliente
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+                                <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+                                <div class="col-sm-10">
                                     <input type="email" class="form-control" id="email2"
                                     pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
                                     name="email" value="{{i.Email}}"  required>
@@ -124,8 +131,8 @@ Pesquisar Cliente
                 
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+                                <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" id="endereco2" name="endereco" value="{{ i.Endereco }}" required>
                                     <div class="invalid-feedback">
                                         Por favor, insira um endereço válido.
@@ -133,8 +140,8 @@ Pesquisar Cliente
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+                                <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" id="cnh" name="cnh" value="{{ i.Numero_CNH }}" required>
                                     <div class="invalid-feedback">
                                         Por favor, insira uma CNH válida.
@@ -143,8 +150,8 @@ Pesquisar Cliente
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo CNH</label>
+                                <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo CNH</label>
+                                <div class="col-sm-10">
                                     <select class="form-control" id="tipoCnh" name="tipo_cnh" required>
                                         <option value="A" {% if i.Tipo_CNH == "A" %}selected{% endif %}>A</option>
                                         <option value="B" {% if i.Tipo_CNH == "B" %}selected{% endif %}>B</option>

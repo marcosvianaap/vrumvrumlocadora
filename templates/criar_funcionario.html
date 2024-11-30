@@ -1,14 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'base_administrador.html' %}
 
 {% block titulo %}
 Teste
 {% endblock %}
 
 {% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
 {% endblock %}
 
 {% block conteudo %}
-
 
 <main>
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -26,17 +27,17 @@ Teste
     <form method="POST" action="{{ url_for('criar_funcionario') }}" id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="nome" class="col-sm-2 col-form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
+          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="nome" name="nome" required minlength="3" >
             <div class="invalid-feedback">
               Por favor, insira um nome.
             </div>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
+          <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="cpf" name="cpf" pattern="\d{11}" required>
             <div class="invalid-feedback">
               Por favor, insira um CPF válido, apenas números.
@@ -44,8 +45,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+          <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
             <div class="invalid-feedback">
               Por favor, insira um número de telefone válido.
@@ -53,8 +54,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+          <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+          <div class="col-sm-10">
             <input type="email" class="form-control" id="email" name="email"
               pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
               required>
@@ -64,8 +65,8 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+          <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+          <div class="col-sm-10">
             <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
             <div class="invalid-feedback">
               Por favor, informe uma data de nascimento válido.
@@ -73,35 +74,37 @@ Teste
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+          <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="endereco" name="endereco" required>
             <div class="invalid-feedback">
               Por favor, informe um endereço válido.
             </div>
           </div>
         </div>
+
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="senha" class="col-sm-2 col-form-label">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" required minlength="6">
-            <button type="button" class="input-group-text" onclick="mostrarOcultarSenha()" id="botaoVerSenha">
-              <img id="olho" src="{{ url_for('static', filename='img/eye.png') }}" 
-              style="cursor: pointer; width: 25px;"
-              data-olho1="{{ url_for('static', filename='img/eye.png') }}"
-              data-olho2="{{ url_for('static', filename='img/eye-close-up.png') }}"/>
-            </button>
-            <div class="invalid-feedback">
+          <label for="senha" class="col-sm-2 col-form-label">Senha</label>
+          <div class="col-sm-10 " style="display: flex; flex-wrap: wrap;">
+              <input style="flex: 1;" type="password" class="form-control" id="senha" name="senha" required minlength="6">
+              <button type="button" class="input-group-text" onclick="mostrarOcultarSenha()" id="botaoVerSenha">
+                <img id="olho" src="{{ url_for('static', filename='img/eye.png') }}" 
+                style="cursor: pointer; width: 25px;"
+                data-olho1="{{ url_for('static', filename='img/eye.png') }}"
+                data-olho2="{{ url_for('static', filename='img/eye-close-up.png') }}"/>
+              </button>
+            <div class="invalid-feedback" style="flex: 100%;">
               Por favor, insira uma senha de no mínimo 6 dígitos.
             </div>
           </div>
         </div>
+        
       </div>
       
-      <div id="confirmaCriaFuncionario" class="botao">
+      <div class="confirmaCriaFuncionario botao">
         <button type="submit">Confirmar</button>
       </div>
-      <div id="cancelaCriaFuncionario" class="botao">
+      <div class="cancelaCriaFuncionario botao">
         <a href="{{ url_for('pesquisar_funcionario') }}"><button type="button">Cancelar</button></a>
       </div>
     </form>

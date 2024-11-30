@@ -5,7 +5,9 @@ Cadastrar
 {% endblock %}
 
 {% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
 <link rel="stylesheet" href="/static/styles/pesquisa_veiculo.css">
+
 {% endblock %}
 
 {% block conteudo %}
@@ -44,6 +46,8 @@ Cadastrar
             </div>
         </form>
     </div>
+
+    <div class="bloco-carros">
     {% if carros %}
     {% for i in carros%}
 
@@ -68,7 +72,7 @@ Cadastrar
     {% endfor %}
 
     {% endif %}
-    
+    </div>    
     <script>
         document.querySelector("form-section").addEventListener("submit", function (e) {
             const input = document.getElementById("codigo").value;

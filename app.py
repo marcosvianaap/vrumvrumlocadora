@@ -30,11 +30,11 @@ def user_required(f):
     def decorated_function(*args, **kwargs):
         
         if 'usuario' not in session:
-            flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
+            flash("Você precisa estar autenticado para acessar esta rota!",'danger')
             return redirect(url_for('processoSair'))  # Redireciona para a página de login
         
         if session['usuario'] == 'admin':
-            flash("! Você precisa estar autenticado para acessar esta rota !",'danger')
+            flash("Você precisa estar autenticado para acessar esta rota!",'danger')
             return redirect(url_for('processoSair'))  # Redireciona para a página de login
         
         return f(*args, **kwargs)
@@ -49,11 +49,11 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         
         if 'usuario' not in session:
-            flash("! Você precisa estar autenticado como administrador para acessar esta rota !",'danger')
+            flash("Você precisa estar autenticado para acessar esta rota!",'danger')
             return redirect(url_for('index'))  # Redireciona para a página de login
         
         if session['usuario'] != 'admin':
-            flash("! Você precisa estar autenticado como administrador para acessar esta rota !",'danger')
+            flash("Você precisa estar autenticado para acessar esta rota!",'danger')
             return redirect(url_for('processoSair'))  # Redireciona para a página de login
         
         return f(*args, **kwargs)
@@ -457,6 +457,9 @@ def frontend_editar_veiculo():
         veiculo = session['ultimaEdicao']
         del session['ultimaEdicao']
 
+    
+    if not veiculo:
+        return redirect(url_for("gerenciar_veiculos")) 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
     cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo WHERE id = ?",(veiculo))
@@ -493,12 +496,13 @@ def backend_editar_veiculo():
     cursor.execute("SELECT id FROM Veiculo WHERE Placa = ? OR RENAVAM = ?",(placa,renavam))
     veiculosExistentes = cursor.fetchall()
 
-    if veiculosExistentes != None:
+    if veiculosExistentes != []:
         
         jaExiste = False
         if len(veiculosExistentes) > 1:
             jaExiste = True
         else:
+            print(veiculosExistentes)
             if int(veiculosExistentes[0][0]) != int(veiculo):
                 jaExiste = True
 
@@ -521,6 +525,7 @@ def backend_editar_veiculo():
 
 #ROTA PARA PESQUISAR VEICULOS
 @app.route('/pesquisar', methods=['GET', 'POST'])
+@user_required
 def pesquisa_veiculo():
     if request.method == 'POST':
         placa = request.form['placa']
@@ -533,6 +538,7 @@ def pesquisa_veiculo():
         carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
 
         # Lógica de pesquisa de veículos aqui
+        print(carros)
         return render_template('pesquisa_veiculos.html', carros=carros)
 
     return render_template('pesquisa_veiculos.html')

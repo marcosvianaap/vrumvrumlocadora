@@ -1,8 +1,9 @@
 /* Gabrielli Danker */
 /* Última atualização: 26/11/2024 */
-
 .main-pesquisa{
-    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
 }
 
 /* Seção do formulário fixa abaixo do header */
@@ -11,7 +12,8 @@
     background-color: #fff;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
+    height: auto;
+    min-height: 100%;
 }
 
 /* Formulário com labels e inputs lado a lado */
@@ -67,11 +69,18 @@
 /* Seção dos resultados */
 .results-section {
     margin-top: 20px;
-    width: 40%;
-    margin-left: 33%; /* Espaço deixado pelo formulário fixo */
+    width: 600px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.bloco-carros{
+    flex: 1;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .card {
@@ -115,31 +124,9 @@
 
 /* Responsividade para telas pequenas */
 @media (max-width: 1024px) {
-    /* Ajusta a largura do formulário em telas menores */
-    .form-section {
-        width: auto;
-        height: auto;
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-    
-
-    /* Ajusta a largura dos inputs e selects para 100% */
-    .form-section form input,
-    .form-section form select {
-        width: 100%;
-    }
-
-    /* Ajuste do botão para telas menores */
-    .form-section form button {
-        width: 100%;
-        margin-top: 10px;
-    }
-
     /* Ajusta a largura da seção de resultados */
     .results-section {
         width: 90%;
-        margin-left: 0;
     }
 
     /* Ajuste do layout dos botões no card */
@@ -149,10 +136,19 @@
 }
 
 /* Responsividade para telas muito pequenas (smartphones) */
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     /* Formulário ocupa toda a largura da tela */
 
     /* Ajusta a largura dos inputs e selects para 100% */
+    .main-pesquisa{
+        flex-direction: column;
+    }
+
+    .form-section{
+        min-height: auto;
+        width: 100%;
+    }
+
     .form-section form input,
     .form-section form select {
         width: 100%;

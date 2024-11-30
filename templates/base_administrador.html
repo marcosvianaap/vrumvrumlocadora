@@ -22,9 +22,21 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <a class="logotipo navbar-brand" href="{{ url_for('funcionarios') }}">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
-            </a>
+            {% if 'usuario' in session %}
+                {% if session['usuario'] == 'admin' %}
+                    <a class="logotipo navbar-brand" href="{{ url_for('administrador') }}">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                    </a>
+                {% else %}
+                    <a class="logotipo navbar-brand" href="{{ url_for('funcionarios') }}">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                    </a>
+                {% endif %}
+            {% else %}
+                <a class="logotipo navbar-brand" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </a>
+            {% endif %}
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,22 +45,21 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li                                              
-                    class="nav-item {% if request.path.startswith('/clientes') %}active{% endif %} ">
-                    <a class="nav-link " href="{{ url_for('pesquisar_clientes') }}">Clientes<span
-                        class="sr-only"></span></a>
-                    </li>
                     <li
-                    class="nav-item {% if request.path.startswith('/pesquisar') %}active{% endif %} ">
-                    <a class="nav-link" href="{{ url_for('pesquisa_veiculo') }}">Pesquisar<span
-                            class="sr-only"></span></a>
+                        class="nav-item {% if request.path.startswith('/administrador/funcionarios') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('pesquisar_funcionario') }}">Funcionários <span
+                                class="sr-only"></span></a>
                     </li>
+
+                     <!-- Caminho para a tela de gerenciamento de veiculos > A partir do botão no head -->
                     <li
-                    class="nav-item {% if request.path.startswith('/locacoes') %}active{% endif %} ">
-                    <a class="nav-link" href="{{ url_for('locacoes') }}">Locações<span
+                       
+                        class="nav-item {% if request.path.startswith('/administrador/veiculos') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('gerenciar_veiculos') }}">Veículos<span
                             class="sr-only"></span></a>
                     </li>
                     <li class="nav-item">
+                        <!-- incluir rota para o logout do sistema -->
                         <a class="nav-link" href="/sair">Sair</a>
                     </li>
                 </ul>
