@@ -1,9 +1,22 @@
-.pesquisar-funcionario{
+.main-pesquisar{
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content:flex-start;
     align-items:center;
+    margin-bottom: 10px;
+}
+
+#formCriaFuncionario, #formCriaCliente{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row{
+    display: flex;
+    flex-direction: row !important;
 }
 
 #divBusca{
@@ -61,15 +74,14 @@
     text-align: end;
 }
 
-#botaoCriarFuncionario{
+#botaoCriar{
     position: relative;
     left: 33%;
 }
 
 .dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
     border-radius: 36px; 
-    width: 600px; 
-    height: auto; 
+    width: 600px;
     background-color: var(--color7);
     margin: 20px;
     padding: 20px;
@@ -77,12 +89,6 @@
 
 .blocoVazio{
     text-align: center;
-}
-
-#divCriaFuncionario{
-    display: grid;
-    place-items: center;
-    height: 50vh;
 }
 
 
@@ -98,12 +104,25 @@
     display: none;
 }
 
-#confirmaCriaFuncionario, #cancelaCriaFuncionario{
+.confirmaCriaFuncionario, .cancelaCriaFuncionario{
     text-align: center;
-    height: 30px;
 }
 
+
 @media (max-width:620px){
+    .dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
+        width: 500px;
+    }
+}
+
+@media (max-width:570){
+    .dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
+        width: 500px;
+    }
+}
+
+
+@media (max-width:550px){
     .dadosFuncionario, .blocoVazio, #blocoCriaFuncionario, .blocoEdicao{
         width: auto;
     }

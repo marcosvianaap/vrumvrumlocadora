@@ -1,72 +1,19 @@
 /* Gabrielli Danker */
 /* Última atualização: 26/11/2024 */
-
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Estilo geral */
-body {
-    background-color: #96c7d8;
-    padding: 0;
-    margin: 0;
-}
-
-/* Header fixo no topo */
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+.main-pesquisa{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 100px; /* Ajuste a margem interna do header */
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-header .logo img {
-    height: 80px; /* Ajuste a altura conforme necessário */
-    width: auto;
-}
-
-header nav {
-    display: flex;
-    gap: 25px;
-}
-
-header nav a {
-    text-decoration: none;
-    font-size: 16px;
-    color: black;
-}
-
-header nav a.active {
-    color: #96c7d8;
-}
-
-/* Container principal */
-.container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding-top: 110px; /* Espaço reservado para o header */
+    flex-direction: row;
+    flex: 1;
 }
 
 /* Seção do formulário fixa abaixo do header */
 .form-section {
-    position: fixed; /* Mantém a seção fixa na página */
-    top: 100px; /* Ajuste para alinhar logo abaixo do header */
-    width: 25%; /* Largura fixa */
+    width: 300px; /* Largura fixa */
     background-color: #fff;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
+    height: auto;
+    min-height: 100%;
 }
 
 /* Formulário com labels e inputs lado a lado */
@@ -122,11 +69,18 @@ header nav a.active {
 /* Seção dos resultados */
 .results-section {
     margin-top: 20px;
-    width: 40%;
-    margin-left: 33%; /* Espaço deixado pelo formulário fixo */
+    width: 600px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.bloco-carros{
+    flex: 1;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .card {
@@ -170,34 +124,9 @@ header nav a.active {
 
 /* Responsividade para telas pequenas */
 @media (max-width: 1024px) {
-    /* Ajusta a largura do formulário em telas menores */
-    .form-section {
-        width: 40%;
-        top: 80px; /* Ajusta a posição do formulário */
-    }
-
-    /* Ajuste o layout do container principal para telas menores */
-    .container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Ajusta a largura dos inputs e selects para 100% */
-    .form-section form input,
-    .form-section form select {
-        width: 100%;
-    }
-
-    /* Ajuste do botão para telas menores */
-    .form-section form button {
-        width: 100%;
-        margin-top: 10px;
-    }
-
     /* Ajusta a largura da seção de resultados */
     .results-section {
         width: 90%;
-        margin-left: 0;
     }
 
     /* Ajuste do layout dos botões no card */
@@ -207,21 +136,19 @@ header nav a.active {
 }
 
 /* Responsividade para telas muito pequenas (smartphones) */
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     /* Formulário ocupa toda a largura da tela */
-    .form-section {
-        width: 100%;
-        top: 60px; /* Ajusta a posição do formulário */
-    }
-
-    /* Container principal fica empilhado */
-    .container {
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-    }
 
     /* Ajusta a largura dos inputs e selects para 100% */
+    .main-pesquisa{
+        flex-direction: column;
+    }
+
+    .form-section{
+        min-height: auto;
+        width: 100%;
+    }
+
     .form-section form input,
     .form-section form select {
         width: 100%;

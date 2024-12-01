@@ -5,6 +5,9 @@ Cadastrar
 {% endblock %}
 
 {% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+
 {% endblock %}
 
 {% block conteudo %}
@@ -26,8 +29,8 @@ Cadastrar
     <form method="POST" action="{{ url_for('criar_cliente') }}" id="formCriaCliente" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
             <div class="invalid-feedback">
               Por favor, insira um nome.
@@ -35,8 +38,8 @@ Cadastrar
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+          <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" pattern="(\d{11}|\d{14})" required>
             <div class="invalid-feedback">
               Por favor, insira um CPF ou CNPJ válido, apenas números.
@@ -44,8 +47,8 @@ Cadastrar
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+          <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
             <div class="invalid-feedback">
               Por favor, insira um número de telefone válido.
@@ -53,8 +56,8 @@ Cadastrar
           </div>
         </div>
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+          <label for="dataNascimento" class="col-sm-2 col-form-label">Data de Nascimento</label>
+          <div class="col-sm-10">
             <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
             <div class="invalid-feedback">
               Por favor, insira uma data de nascimento válida. O cliente deve ter pelo menos 18 anos.
@@ -63,8 +66,8 @@ Cadastrar
         </div>
 
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+          <label for="email" class="col-sm-2 col-form-label">E-mail</label>
+          <div class="col-sm-10">
             <input type="email" class="form-control" id="email" name="email"
               pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
               required>
@@ -75,8 +78,8 @@ Cadastrar
         </div>
 
         <div class="row mb-3">
-          <div class="input-group col-sm-10">
-            <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+          <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
+          <div class="col-sm-10">
             <input type="text" class="form-control" id="endereco" name="endereco" required>
             <div class="invalid-feedback">
               Por favor, informe um endereço válido.
@@ -84,8 +87,8 @@ Cadastrar
           </div>
         </div>
         <div class="row mb-3">
-            <div class="input-group col-sm-10">
-              <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+          <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
+            <div class="col-sm-10">
               <input type="text" class="form-control" id="cnh" name="cnh" pattern="\d{11}" required>
               <div class="invalid-feedback">
                 Por favor, informe o número da CNH.
@@ -93,8 +96,8 @@ Cadastrar
             </div>
           </div>
           <div class="row mb-3">
-            <div class="input-group col-sm-10">
-              <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo de CNH</label>
+            <label for="tipoCnh" class="col-sm-2 col-form-label">Tipo de CNH</label>
+            <div class="col-sm-10">
               <select class="form-select" id="tipoCnh" name="tipo_cnh" required>
                 <option value="" selected disabled>Selecione o tipo</option>
                 <option value="A">A</option>

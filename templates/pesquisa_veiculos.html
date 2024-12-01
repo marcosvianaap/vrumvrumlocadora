@@ -1,113 +1,102 @@
-<!--Gabrielli Danker-->
-<!--Lucas Taveira-->
-<!--Ultima atualização: 28/11/2024-->
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends 'base_funcionarios.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisar Veículos</title>
-    <link rel="stylesheet" href="/static/styles/pesquisa_veiculo.css">
-</head>
+{% block titulo %}
+Cadastrar
+{% endblock %}
 
-<body>
-    <header>
-        <div class="logo">
-            <img src="/static/imagens/Logotipo-SemFundo.png" alt="Logotipo">
-        </div>
-        <nav>
-            <a href="#">Clientes</a>
-            <a href="#" class="active">Pesquisar</a>
-            <a href="#">Locações</a>
-            <a href="#">Sair</a>
-        </nav>
-    </header>
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="/static/styles/pesquisa_veiculo.css">
 
-    <main>
-        <div class="container">
-            <div class="form-section">
-                <form method="POST">
-                    <label>Data locação: <input type="date"></label>
-                    <label>Data devolução: <input type="date"></label>
-                    <label>Placa: <input name="placa" type="text" maxlength="7" placeholder="MKT2347"
-                            oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')" ></label>
-                    <label>Valor: <input type="text" id="valor" name="valor" placeholder="R$ 00,00"
-                            oninput="formatarValor(this)"></label>
-                    <label>Modelo: <input name="modelo" type="text" placeholder="Hilux"></label>
-                    <label>Ano: <input name="ano" type="text" maxlength="4" placeholder="2024"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" ></label>
-                    <label>Cor:
-                        <select id="cor" name="cor" >
-                            <option value="">Selecione uma cor</option>
-                            <option value="amarelo">Amarelo</option>
-                            <option value="azul">Azul</option>
-                            <option value="chumbo">Chumbo</option>
-                            <option value="prata">Prata</option>
-                            <option value="dourado">Dourado</option>
-                            <option value="verde">Verde</option>
-                            <option value="preto">Preto</option>
-                            <option value="vermelho">Vermelho</option>
-                            <option value="branco">Branco</option>
-                        </select>
-                    </label>
-                    <label>Marca: <input name="marca" type="text" placeholder="Toyota"></label>
-                    <div class="button-container">
-                        <button type="reset" id="limpar">Limpar</button>
-                        <button type="submit">Pesquisar</button>
-                    </div>
-                </form>
+{% endblock %}
+
+{% block conteudo %}
+
+
+<main class="main-pesquisa">
+    <div class="form-section">
+        <form method="POST">
+            <label>Data locação: <input type="date"></label>
+            <label>Data devolução: <input type="date"></label>
+            <label>Placa: <input name="placa" type="text" maxlength="7" placeholder="MKT2347"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')" ></label>
+            <label>Valor: <input type="text" id="valor" name="valor" placeholder="R$ 00,00"
+                    oninput="formatarValor(this)"></label>
+            <label>Modelo: <input name="modelo" type="text" placeholder="Hilux"></label>
+            <label>Ano: <input name="ano" type="text" maxlength="4" placeholder="2024"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" ></label>
+            <label>Cor:
+                <select id="cor" name="cor" >
+                    <option value="">Selecione uma cor</option>
+                    <option value="amarelo">Amarelo</option>
+                    <option value="azul">Azul</option>
+                    <option value="chumbo">Chumbo</option>
+                    <option value="prata">Prata</option>
+                    <option value="dourado">Dourado</option>
+                    <option value="verde">Verde</option>
+                    <option value="preto">Preto</option>
+                    <option value="vermelho">Vermelho</option>
+                    <option value="branco">Branco</option>
+                </select>
+            </label>
+            <label>Marca: <input name="marca" type="text" placeholder="Toyota"></label>
+            <div class="button-container">
+                <button type="reset" id="limpar">Limpar</button>
+                <button type="submit">Pesquisar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="bloco-carros">
+    {% if carros %}
+    {% for i in carros%}
+
+    <div class="results-section">
+        <div class="card">
+            <p><b>Modelo:</b> {{ i.Modelo }}</p>
+            <p><b>Cor:</b> {{ i.Cor }}</p>
+            <p><b>Marca:</b> {{ i.Marca }}</p>
+            <p><b>Placa do veículo:</b> {{ i.Placa }}</p>
+            <p><b>RENAVAM:</b> {{ i.RENAVAM }}</p>
+            <p><b>Ano de fabricação:</b> {{ i.Ano_Fabricacao }}</p>
+            <p><b>Ano de aquisição:</b> {{ i.Ano_Aquisicao }}</p>
+            <p><b>Valor da alocação:</b> {{ i.Valor_Locacao_Dia }}</p>
+            <p><b>Tipo de combustível:</b> {{ i.Tipo_Combustivel }}</p>
+            <p><b>Status:</b> {{ i.Status }}</p>
+            <div class="buttons">
+                <button type="button">Histórico</button>
+                <button type="button">Alugar</button>
             </div>
         </div>
-            {% if carros %}
-            {% for i in carros%}
+    </div>
+    {% endfor %}
 
-            <div class="results-section">
-                <div class="card">
-                    <p><b>Modelo:</b> {{ i.Modelo }}</p>
-                    <p><b>Cor:</b> {{ i.Cor }}</p>
-                    <p><b>Marca:</b> {{ i.Marca }}</p>
-                    <p><b>Placa do veículo:</b> {{ i.Placa }}</p>
-                    <p><b>RENAVAM:</b> {{ i.RENAVAM }}</p>
-                    <p><b>Ano de fabricação:</b> {{ i.Ano_Fabricacao }}</p>
-                    <p><b>Ano de aquisição:</b> {{ i.Ano_Aquisicao }}</p>
-                    <p><b>Valor da alocação:</b> {{ i.Valor_Locacao_Dia }}</p>
-                    <p><b>Tipo de combustível:</b> {{ i.Tipo_Combustivel }}</p>
-                    <p><b>Status:</b> {{ i.Status }}</p>
-                    <div class="buttons">
-                        <button type="button">Histórico</button>
-                        <button type="button">Alugar</button>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+    {% endif %}
+    </div>    
+    <script>
+        document.querySelector("form-section").addEventListener("submit", function (e) {
+            const input = document.getElementById("codigo").value;
+            const isValid = /^[a-zA-Z0-9]{1,7}$/.test(input); // Verifica se é alfanumérico (1 a 7 caracteres)
 
-            {% endif %}
-        
-        <script>
-            document.querySelector("form-section").addEventListener("submit", function (e) {
-                const input = document.getElementById("codigo").value;
-                const isValid = /^[a-zA-Z0-9]{1,7}$/.test(input); // Verifica se é alfanumérico (1 a 7 caracteres)
-
-                if (!isValid) {
-                    e.preventDefault();
-                    alert("O campo deve conter apenas letras e números, com até 6 caracteres.");
-                }
-            });
-
-            document.getElementById('limpar').addEventListener('click', function () {
-                document.getElementById('formPesquisa').reset();
-            });
-
-            function formatarValor(elemento) {
-                let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
-                valor = (valor / 100).toFixed(2) + ''; // Converte para valor monetário
-                valor = valor.replace('.', ','); // Substitui ponto por vírgula
-                valor = valor.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
-                elemento.value = 'R$ ' + valor;
+            if (!isValid) {
+                e.preventDefault();
+                alert("O campo deve conter apenas letras e números, com até 6 caracteres.");
             }
-        </script>
-    </main>
-</body>
+        });
 
-</html>
+        document.getElementById('limpar').addEventListener('click', function () {
+            document.getElementById('formPesquisa').reset();
+        });
+
+        function formatarValor(elemento) {
+            let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
+            valor = (valor / 100).toFixed(2) + ''; // Converte para valor monetário
+            valor = valor.replace('.', ','); // Substitui ponto por vírgula
+            valor = valor.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
+            elemento.value = 'R$ ' + valor;
+        }
+    </script>
+
+</main>
+
+{% endblock %}

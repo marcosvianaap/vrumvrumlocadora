@@ -1,43 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../static/styles/index.css">
-        <link rel="icon" type="logotipo" href="../static/imagens/Logotipo-SemFundo.png"> 
+{% extends 'base.html' %}
 
-        <title>Login</title>
+{% block titulo %}
+Historico Devolução
+{% endblock %}
 
-    </head>
+{% block links %}
+{% endblock %}
 
-    <body>
+{% block conteudo %}
 
-        <header>
-            <div class="logo">
-                <img src="../static/imagens/Logotipo-SemFundo.png" alt="Logo">
-            </div>
-        </header>
-
+    <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div id="responseMessage">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} mt-3" id="alertMessage">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <main>
-
-            
+                {% if messages %}
+                    <div id="responseMessage">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
 
             <div class="login-box">
-                <img src="../static/imagens/IconeUsuário.png">
+                <img src="../static/img/IconeUsuário.png">
                 <form action="/entrar" method="post">
 
                     {% if usuario %}
@@ -48,18 +34,7 @@
                     
                     <input type="password" placeholder="Senha" name="senha" required>
                     <button type="submit">Entrar</button>
-                    <a href="#">Esqueci minha senha</a>
                 </form>
             </div>
-
-        </main>
-
-        <footer>
-
-        </footer>
-
-        <script src="../static/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script> 
-        <script src="../static/scripts/index.js"></script> 
-    </body>
-
-</html>
+    </main>
+{% endblock %}
