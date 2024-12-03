@@ -1,9 +1,5 @@
 #Autores: Gabrielli Danker, José Mateus, Lucas Sena, Marcos Viana, Monique Ellen
-#Ultima edição: 14/11/2024
-
-#USUARIO E SENHA
-#usuario: 11313993905
-#senha: 11313993905
+#Ultima edição: 28/11/2024
 
 from werkzeug.security import generate_password_hash
 from flask import Flask, flash, render_template, session,request,redirect,url_for
@@ -287,6 +283,10 @@ def pesquisar_funcionario():
         
     return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao, funcionarios=funcionarios)
 
+#ROTA PARA GERENCIMENTO DE DEVOLUÇÃO
+@app.route('/devolucao',methods=['GET', 'POST'] )
+def devolucao():
+    return render_template('devolucoes.html')
 
 #rota para criar um novo funcionário no banco de dados
 @app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])

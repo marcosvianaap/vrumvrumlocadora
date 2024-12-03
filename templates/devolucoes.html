@@ -1,0 +1,57 @@
+{% extends 'base_funcionarios.html' %}
+
+{% block titulo %}
+Devoluções
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/geren_veic.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/criar_veiculo.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/locacoes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/devolucoes.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+
+<main class="main-pesquisar">
+
+            <div class="blocoPesquisa">
+                <div class="blocoFuncionario">
+                    <div class="dadosFuncionario">
+                        <form method="POST">
+                            <label>Data de Devolução: <input  type="date"></label><br><br>
+                            <label>Hora da Devolução: <input  type="time"></label><br><br>
+                            <label>Local da Devolução: <input  type="text"></label><br><br>
+                            <label>Multa: <input  type="text"></label><br><br>
+                            <label>Valor Total: <input type="text" id="valor" name="valor" placeholder="R$ 00,00"
+                                oninput="formatarValor(this)"></label><br><br>
+                            <label>Condições: <input type="text"></label>
+                        </form>
+                    </div>
+                    <div class="botoesDev">
+                        <a href="#" id="confirmar" class="botaoConfirmarEdicao botao">
+                            <button>Confirmar</button> <!--Colocar para redirecionar para a locações atualizadas-->
+                        </a>
+                    
+                        <a href="#" class="botaoCancelar botao">
+                            <button onclick="window.history.back()">Cancelar</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <script>
+                    
+                function formatarValor(elemento) {
+                    let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
+                    valor = (valor / 100).toFixed(2) + ''; // Converte para valor monetário
+                    valor = valor.replace('.', ','); // Substitui ponto por vírgula
+                    valor = valor.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
+                    elemento.value = 'R$ ' + valor;
+                }
+            </script>
+     
+</main>
+
+{% endblock %}
