@@ -39,10 +39,15 @@ Locações
                     </div>
 
                     <div class="botoesLoc">
-                        <!-- Botão Criar Devolução -->
-                        <a href="#" id="ajuste" class="botao">
-                            <button>Criar Devolução</button>
-                        </a>
+
+                        <div>
+                            <form class="formDevolucao" action="{{ url_for('criar_devolucao') }}" method="POST">
+                                <input type="hidden" value="{{locacao.id}}" name="locacao">
+                                <div id="ajuste" class="botao">
+                                    <button name="form1">Criar Devolução</button>
+                                </div>
+                            </form>
+                        </div>
                     
                         <!-- Botão Editar (Redirecionando para o formulário de edição) -->
                         <a href="#" class="botaoEditarFuncionario botao">

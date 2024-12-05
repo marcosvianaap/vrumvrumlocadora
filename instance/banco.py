@@ -388,4 +388,97 @@ def buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano):
 
     return veiculos
 
+def obterLocacao(id_locacao):
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            id,
+                            DATE(Data_Hora_Locacao) AS Data_Locacao,
+                            TIME(Data_Hora_Locacao) AS Hora_Locacao,
+                            DATE(Data_Hora_Prevista_Devolucao) AS Data_Prevista_Devolucao,
+                            TIME(Data_Hora_Prevista_Devolucao) AS Hora_Prevista_Devolucao,
+                            Valor,
+                            Desconto,
+                            Multa
+                        FROM Locacao
+                        WHERE id == ?
+                    """, (id_locacao,))
+
+    locacao = cursor.fetchone()
+    conn.close()
+
+    if locacao:
+        return {
+            'id': locacao[0],
+            'Data_Locacao': locacao[1],
+            'Hora_Locacao': locacao[2],
+            'Data_Prevista_Devolucao': locacao[3],
+            'Hora_Prevista_Devolucao': locacao[4],
+            'Valor': locacao[5],
+            'Desconto': locacao[6],
+            'Multa': locacao[7]
+        }
+    else:
+        return None
+
+
+def obterDiariaVeiculo(id_locacao):
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            Valor_Locacao_Dia
+                        FROM Locacao join Veiculo
+                        ON Locacao.id_veiculo = veiculo.id WHERE Locacao.id = ?
+                    """, (2,))
+
+    valor_diaria = float((cursor.fetchone()[0]).replace("R$", "").replace(",", "."))
+    #arrumar depois que o valor de veiculo for corrigido
+    #valor_diaria = cursor.fetchone()[0]
+    conn.close()
+    print(valor_diaria)
+    if valor_diaria:
+        return valor_diaria
+    else:
+        return None
+
+def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoes, id_locacao):
     
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
+        conn.commit()
+        print("Devolucao adicionada com sucesso!")
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
+def verificarDevolucao(id_locacao):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            id
+                        FROM Devolucao
+                        WHERE id_locacao = ?
+                    """, (id_locacao,))
+
+    devolucao = cursor.fetchall()
+
+    conn.close()
+
+    print(devolucao)
+    if devolucao:
+        return True
+    else:
+        return False
