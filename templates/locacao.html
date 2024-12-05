@@ -23,26 +23,29 @@ Locações
                 <div class="blocoFuncionario">
                     <div class="dadosFuncionario">
                         <div class="linha">
-                            <p><strong>Cliente:</strong> {{ locacao.cliente }}</p>
-                            <p><strong>Veículo:</strong> {{ locacao.veiculo }}</p>
+                            <p><strong>Cliente:</strong> {{ locacao.Nome }}</p>
+                            <p><strong>Veículo:</strong> {{ locacao.Modelo }}</p>
                         </div>
-                        <p><strong>Data do aluguel:</strong> {{ locacao.data_aluguel }}</p>
-                        <p><strong>Hora do aluguel:</strong> {{ locacao.hora_aluguel }}</p>
-                        <p><strong>Data prevista da devolução:</strong> {{ locacao.data_devolucao }}</p>
-                        <p><strong>Hora prevista da devolução:</strong> {{ locacao.hora_devolucao }}</p>
+                        <p><strong>Data/Hora do aluguel:</strong> {{ locacao.Data_Hora_Locacao }}</p>
+                        <p><strong>Data/Hora prevista da devolução:</strong> {{ locacao.Data_Hora_Prevista_Devolucao }}</p>
                         <div class="linha">
-                            <p><strong>Desconto:</strong> {{ locacao.desconto }}%</p>
-                            <p><strong>Multa:</strong> {{ locacao.multa }}%</p>
+                            <p><strong>Desconto:</strong> {{ locacao.Desconto }}%</p>
+                            <p><strong>Multa:</strong> {{ locacao.Multa }}%</p>
                         </div>
-                        <p><strong>Condições de saída do veículo:</strong> {{ locacao.condicoes_saida }}</p>
-                        <p><strong>Status:</strong> {{ locacao.status }}</p>
+                        <p><strong>Condições de saída do veículo:</strong> {{ locacao.Condicoes_Veiculo }}</p>
+                        <p><strong>Status:</strong> {{ locacao.Status }}</p>
                     </div>
 
                     <div class="botoesLoc">
-                        <!-- Botão Criar Devolução -->
-                        <a href="#" id="ajuste" class="botao">
-                            <button>Criar Devolução</button>
-                        </a>
+
+                        <div>
+                            <form class="formDevolucao" action="{{ url_for('criar_devolucao') }}" method="POST">
+                                <input type="hidden" value="{{locacao.id}}" name="locacao">
+                                <div id="ajuste" class="botao">
+                                    <button name="form1">Criar Devolução</button>
+                                </div>
+                            </form>
+                        </div>
                     
                         <!-- Botão Editar (Redirecionando para o formulário de edição) -->
                         <a href="#" class="botaoEditarFuncionario botao">

@@ -1,0 +1,172 @@
+{% extends 'base_funcionarios.html' %}
+
+{% block titulo %}
+Devolução
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/devolucoes.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+
+<main class="main-pesquisar">
+            <div class="blocoPesquisa">
+                <div class="blocoFuncionario">
+
+                        <form method="POST" id="formCriaDevolucao" novalidate>
+                            <div id="blocoCriaFuncionario">
+
+                                <input type="hidden" name="id" value="{{locacao.id}}">
+
+                                <div class="row mb-3">
+                                <label for="dataRealDevolucao" class="col-sm-2 col-form-label">Data de devolução</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="dataDevolucao" name="dataDevolucao" min="{{ locacao.Data_Locacao}}" required>
+                                    <div class="invalid-feedback">
+                                    Por favor, insira uma data de devolução válida.
+                                    </div>
+                                </div>
+                                </div>
+                    
+                                <div class="row mb-3">
+                                <label for="horaDevolucao" class="col-sm-2 col-form-label">Hora de devolução</label>
+                                <div class="col-sm-10">
+                                    <input type="time" class="form-control" id="horaDevolucao" name="horaDevolucao"  required>
+                                    <div class="invalid-feedback">
+                                    Por favor, insira um horário válido.
+                                    </div>
+                                </div>
+                                </div>
+                    
+                                <div class="row mb-3">
+                                <label for="multa" class="col-sm-2 col-form-label">Valor de multa</label>
+                                <div class="col-sm-10">
+                                    <input placeholder="R$ 0" type="text" class="form-control" id="multa" name="multa" readonly>
+                                </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                <label for="valorRealTotal" class="col-sm-2 col-form-label">Valor total</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="valorRealTotal" name="valorRealTotal" value="{{locacao.Valor}}" readonly>
+                                </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="localDevolucao" class="col-sm-2 col-form-label">Local de devolução</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="localDevolucao" name="localDevolucao" required>
+                                        <div class="invalid-feedback">
+                                            Por favor, informe sobre o local de devolução.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="condicoesDevolucao" class="col-sm-2 col-form-label">Condições de devolução</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="condicoesDevolucao" name="condicoesDevolucao" required>
+                                        <div class="invalid-feedback">
+                                            Por favor, informe sobre a condição de devolução.
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                          <div id="confirmaCriaCliente" class="botao" style="text-align: center;">
+                            <button name="form2" type="submit">Confirmar</button>
+                          </div>
+                          <div id="cancelaCriaCliente" class="botao" style="text-align: center;">
+                            <button onclick="window.history.back()" type="button">Cancelar</button></a>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script>
+                    
+                function formatarValor(elemento) {
+                    let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
+                    valor = (valor / 100).toFixed(2) + ''; // Converte para valor monetário
+                    valor = valor.replace('.', ','); // Substitui ponto por vírgula
+                    valor = valor.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
+                    elemento.value = 'R$ ' + valor;
+                }
+
+                window.onload = function () {
+                    const valorRealTotal = document.getElementById('valorRealTotal');
+                    if (valorRealTotal) {
+                        let valor = valorRealTotal.value;
+                        valorRealTotal.value = 'R$ ' + valor.replace('.', ','); // Junta com a vírgula como separador decimal
+                        }
+                };
+
+                document.getElementById('dataDevolucao').addEventListener('input', function() {
+                const dataDevolucao = this.value;  // Data inserida no campo dataDevolucao
+                const dataLocacao = "{{ locacao.Data_Locacao }}";  // Data de locação vindo do backend
+                const horaLocacao = "{{ locacao.Hora_Locacao }}";  // Hora de locação no formato "HH:MM"
+                
+                if (dataDevolucao === dataLocacao) {
+                    // Se a data de devolução for a mesma que a data de locação, define a hora mínima
+                    document.getElementById('horaDevolucao').setAttribute('min', horaLocacao);
+                } else {
+                    // Caso contrário, a hora de devolução não tem restrição
+                    document.getElementById('horaDevolucao').removeAttribute('min');
+                }
+                });
+
+                document.getElementById('dataDevolucao').addEventListener('input', calcularValores);
+                document.getElementById('horaDevolucao').addEventListener('input', calcularValores);
+
+                function calcularValores() {
+                    const dataDevolucao = document.getElementById('dataDevolucao').value; // data de devolução real
+                    const horaDevolucao = document.getElementById('horaDevolucao').value;
+                    const dataDev = new Date(dataDevolucao + 'T' + horaDevolucao);
+
+                    const dataLocacao =  ("{{locacao.Data_Locacao}}");  // data de locacao
+                    const horaLocacao =  ("{{locacao.Hora_Locacao}}");
+                    const dataLoc = new Date(dataLocacao + 'T' + horaLocacao);
+
+                    const valorDiaria = "{{valor_diaria}}"; 
+                    const desconto = "{{locacao.Desconto}}";
+                    const multa = "{{locacao.Multa}}";
+
+                    const dataDevolucaoPrevista = "{{ locacao.Data_Prevista_Devolucao }}";  //data de devolução prevista
+                    const horaDevolucaoPrevista = "{{locacao.Hora_Prevista_Devolucao}}";
+                    const dataDevPrev = new Date(dataDevolucaoPrevista + 'T' + horaDevolucaoPrevista);
+
+                    // caso a data de devolução ocorra antes da data de devolução prevista (recalcular valor total)
+                    if (dataDev <= dataDevPrev){
+                        document.getElementById('multa').value = 'R$' + "0";
+
+                        const diffTempo= dataDev - dataLoc;
+                        const diffDias = Math.ceil(diffTempo / (1000 * 3600 * 24));  
+                        
+                        let totalDesconto = Math.round(((valorDiaria * diffDias) * (1-(desconto/100))) * 100)/100;
+                        document.getElementById('valorRealTotal').value = 'R$' + totalDesconto;
+                    }
+                    
+                    // caso a data de devolução seja após a data de devolução prevista
+                    if (dataDevolucao && horaDevolucao) {
+                       
+                        const diffTime = dataDev - dataDevPrev;
+                        if (diffTime >= 1) {
+                            const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); 
+                            
+                            let totalMulta = Math.round(((valorDiaria * diffDays) * (1+(multa/100))) * 100)/100;
+                            const total = parseFloat("{{locacao.Valor}}".replace('R$','').replace(',','.')) + totalMulta;
+                            
+                            document.getElementById('valorRealTotal').value = 'R$' + total;
+                            document.getElementById('multa').value = 'R$ ' + totalMulta;
+                        } 
+                    }
+                }
+
+            </script>
+     
+</main>
+
+{% endblock %}

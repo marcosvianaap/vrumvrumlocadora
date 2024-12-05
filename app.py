@@ -1,12 +1,9 @@
 #Autores: Gabrielli Danker, José Mateus, Lucas Sena, Marcos Viana, Monique Ellen
-#Ultima edição: 14/11/2024
+#Ultima edição: 28/11/2024
 
-#USUARIO E SENHA
-#usuario: 11313993905
-#senha: 11313993905
 
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, flash, render_template, session,request,redirect,url_for
+from werkzeug.security import generate_password_hash
+from flask import Flask, flash, render_template, session,request,redirect,url_for,jsonify
 from flask import render_template
 import instance.banco as bd
 
@@ -65,8 +62,40 @@ def admin_required(f):
 
 
 # Rota criada para edição (Deve ser removida no merge)
-@app.route("/clientes/loc")
+@app.route("/clientes/loc", methods=['GET', 'POST'])
 def loc():
+    query = request.args.get('query', '').strip()
+
+    if query:  # Se "query" está presente, retorna JSON
+        nomes = bd.buscaCliente(query)
+        return jsonify(nomes)
+    
+    if request.method == 'POST':             
+        Local_Devolucao = "Matriz"
+        DataLocacao = request.form['dataAluguel']
+        HoraLocacao = request.form['horaAluguel']
+        DataHoraLocacao = DataLocacao + " " + HoraLocacao
+        DataPrevistaDevolucao = request.form['dataDevolucao']
+        HoraPrevistaDevolucao = request.form['horaDevolucao']
+        DataHoraPrevDevolucao = DataPrevistaDevolucao + " " + HoraPrevistaDevolucao
+        Valor = 3 #request.form['']
+        id_cliente = bd.filtro_clientes(request.form['nomeCliente'])
+        id_cliente = [d['id'] for d in id_cliente]
+        id_cliente = id_cliente[0]
+        id_veiculo = request.form['idveiculo']
+        Condicoes_Veiculo = request.form['condicoesSaida']
+        Desconto = 0
+        Multa = 0
+        Status = "ativo, concluído e cancelado"
+
+        bd.adicionarLocacao(Local_Devolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
+                            id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status)
+        flash('Locação criada com sucesso!', 'success')
+
+        return render_template("pesquisa_veiculos.html")
+
+
+    # Caso contrário, renderiza a página HTML
     return render_template("criar_locacao.html")
 
 
@@ -196,6 +225,7 @@ def locacoes():
     locacoes = [
         {
             "cliente": "João Silva",
+            "id": "1",
             "veiculo": "Toyota Corolla",
             "data_aluguel": "2024-11-20",
             "hora_aluguel": "10:00",
@@ -208,6 +238,7 @@ def locacoes():
         },
         {
             "cliente": "Maria Oliveira",
+            "id" : "2",
             "veiculo": "Honda Civic",
             "data_aluguel": "2024-11-22",
             "hora_aluguel": "14:00",
@@ -219,9 +250,11 @@ def locacoes():
             "status": "Concluído"
         }
     ]
-    return render_template('locacao.html', locacoes=locacoes)
 
-    
+    locacoes = bd.buscaLocacao()
+    print(locacoes)
+
+    return render_template('locacao.html', locacoes=locacoes)
 
 #-------------------------------------------------------------------
 
@@ -287,6 +320,52 @@ def pesquisar_funcionario():
         
     return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao, funcionarios=funcionarios)
 
+#ROTA PARA GERENCIMENTO DE DEVOLUÇÃO
+@app.route('/criar_devolucao',methods=['GET', 'POST'] )
+@user_required
+def criar_devolucao():
+
+    if request.method =='POST':
+
+        if "form1" in request.form:
+
+            id_locacao = request.form['locacao']
+            if bd.verificarDevolucao(id_locacao):
+                return redirect(url_for('locacoes'))
+
+            locacao = bd.obterLocacao(id_locacao)
+            valor_diaria = bd.obterDiariaVeiculo(id_locacao)
+            return render_template('criar_devolucao.html', locacao=locacao, valor_diaria=valor_diaria)
+
+        elif "form2" in request.form:
+
+            id_locacao = request.form['id']
+            dataDevolucao = request.form['dataDevolucao']
+            horaDevolucao = request.form['horaDevolucao']
+            dataHoraDevolucao = dataDevolucao + " " + horaDevolucao
+
+            multa = float(request.form['multa'].replace('R$ ','').replace(',','.'))
+            valorTotal = float(request.form['valorRealTotal'].replace('R$','').replace(',','.'))
+            localDevolucao = request.form['localDevolucao']
+            condicoes = request.form['condicoesDevolucao']
+
+            bd.criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoes, id_locacao)
+            flash('Devolução criada com sucesso!', 'success')
+
+            #alterar a locacao para status concluído
+
+            return redirect(url_for('locacoes'))
+            
+    return redirect(url_for('locacoes'))
+
+# criar ver editar devolução
+# editar data e hora da devolução, valor da multa e valor total, local e condições
+
+#questão do R$ do banco de dados
+#botoes de criar locação, ver locação e editar locacao
+#locacao nao pode editar se estiver concluída
+#o valor total é com o desconto?
+    
 
 #rota para criar um novo funcionário no banco de dados
 @app.route("/administrador/funcionarios/criarFuncionario", methods=['GET','POST'])
@@ -341,8 +420,6 @@ def historico_devolucao():
             devolucao[colunas[index]] = j
         devolucoes.append(devolucao)
     conn.close()
-
-    print('devolucoes:',devolucoes)
     
     return render_template("historico_devolução.html",devolucoes=devolucoes)
 
@@ -364,9 +441,6 @@ def historico_locacao():
             locacao[colunas[index]] = j
         locacoes.append(locacao)
     conn.close()
-
-    print('LOCACOES:',locacoes)
-
     return render_template("historico_locação.html",locacoes=locacoes)
 
 @app.route("/funcionario/teste")
@@ -502,7 +576,6 @@ def backend_editar_veiculo():
         if len(veiculosExistentes) > 1:
             jaExiste = True
         else:
-            print(veiculosExistentes)
             if int(veiculosExistentes[0][0]) != int(veiculo):
                 jaExiste = True
 
@@ -528,18 +601,34 @@ def backend_editar_veiculo():
 @user_required
 def pesquisa_veiculo():
     if request.method == 'POST':
-        placa = request.form['placa']
-        modelo = request.form['modelo']
-        marca = request.form['marca']
-        cor = request.form['cor']
-        ano = request.form['ano']
-        valorLocacaoDia = request.form['valor']
+        if "pesquisar" in request.form:
+            placa = request.form['placa']
+            modelo = request.form['modelo']
+            marca = request.form['marca']
+            cor = request.form['cor']
+            ano = request.form['ano']
+            valorLocacaoDia = request.form['valor']
         
-        carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
+            carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
 
-        # Lógica de pesquisa de veículos aqui
-        print(carros)
-        return render_template('pesquisa_veiculos.html', carros=carros)
+            # Lógica de pesquisa de veículos aqui
+            print(carros)
+            return render_template('pesquisa_veiculos.html', carros=carros)
+        
+        elif "alugar" in request.form:
+
+            id = request.form['id']
+
+
+            veiculo = bd.buscaCarros(id)
+            modelo = veiculo[4]
+            print(modelo)
+            print(veiculo)
+
+            return render_template('criar_locacao.html', veiculo=veiculo)
+        
+        elif "historico" in request.form:
+            return render_template("historico_locação.html")
 
     return render_template('pesquisa_veiculos.html')
 

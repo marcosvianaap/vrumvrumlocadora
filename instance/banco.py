@@ -367,27 +367,182 @@ def obterCPF_CNPJ(id):
     conn.close()
     return resultado
 
-def buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano):
+def buscaCarros(*args):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,
-                   Valor_Locacao_Dia,Status FROM Veiculo WHERE Placa LIKE ? AND Modelo LIKE ? AND
-                   Marca LIKE ? AND Ano_Fabricacao LIKE ? AND Cor LIKE ? AND Valor_Locacao_Dia LIKE ?""",
-                   ('%' + placa + '%','%' + modelo + '%','%' + marca + '%', '%' + ano + '%', '%' + cor + '%','%' + valorLocacaoDia + '%',))
-    veiculosRaw = cursor.fetchall()
+    if (len(args) == 6):
+        placa = args[0]
+        modelo = args[1]
+        marca = args[2]
+        ano = args[3]
+        cor = args[4]
+        valorLocacaoDia = args[5]
+
+        cursor.execute("""SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,
+                    Valor_Locacao_Dia,Status FROM Veiculo WHERE Placa LIKE ? AND Modelo LIKE ? AND
+                    Marca LIKE ? AND Ano_Fabricacao LIKE ? AND Cor LIKE ? AND Valor_Locacao_Dia LIKE ?""",
+                    ('%' + placa + '%','%' + modelo + '%','%' + marca + '%', '%' + ano + '%', '%' + cor + '%','%' + valorLocacaoDia + '%',))
+        veiculosRaw = cursor.fetchall()
+        
+        veiculos = []
+        colunas = ["id","Ano_Aquisicao","Placa","RENAVAM","Modelo","Marca","Ano_Fabricacao","Cor","Tipo_Combustivel","Valor_Locacao_Dia","Status"]
+        for i in veiculosRaw:
+            veiculo = {}
+            for index,j in enumerate(i):
+                veiculo[colunas[index]] = j
+            veiculos.append(veiculo)
+        conn.close()
+        return veiculos
     
-    veiculos = []
-    colunas = ["id","Ano_Aquisicao","Placa","RENAVAM","Modelo","Marca","Ano_Fabricacao","Cor","Tipo_Combustivel","Valor_Locacao_Dia","Status"]
-    for i in veiculosRaw:
-        veiculo = {}
+    else:
+        id = args[0]
+        cursor.execute("SELECT * FROM Veiculo WHERE id = ?", (id,))
+        veiculo = cursor.fetchone()
+        return veiculo
+
+def buscaCliente(informação):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
+            FROM Pessoa 
+            JOIN Cliente ON Pessoa.id = Cliente.pessoa_id 
+            WHERE Pessoa.Nome LIKE ?''', ('%' + informação + '%',))
+    resultados = [row[6] for row in cursor.fetchall()]
+    conn.close()
+    return resultados
+
+def adicionarLocacao(LocalDevolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('INSERT INTO Locacao (Local_Devolucao,Data_Hora_Locacao,Data_Hora_Prevista_Devolucao,Valor,id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (LocalDevolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status))
+        conn.commit()
+        print("Locação adicionado com sucesso!")
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
+def buscaLocacao():
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+
+    cursor.execute("""SELECT Locacao.id, Locacao.Local_Devolucao, Locacao.Data_Hora_Locacao, Locacao.Data_Hora_Prevista_Devolucao, Locacao.Valor, Locacao.id_cliente, Locacao.id_veiculo, Locacao.Condicoes_Veiculo, Locacao.Desconto, Locacao.Multa, Locacao.Status, 
+                   Pessoa.Nome, Veiculo.Modelo
+                   FROM Locacao
+                   JOIN Pessoa ON Locacao.id_cliente = Pessoa.id 
+                   JOIN Cliente ON Locacao.id_cliente = Cliente.pessoa_id
+                   JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id""")
+    locacaoRaw = cursor.fetchall()
+
+    locacoes = []
+    colunas = ["id","Local_Devolucao","Data_Hora_Locacao","Data_Hora_Prevista_Devolucao","Valor","id_cliente","id_veiculo","Condicoes_Veiculo","Desconto","Multa","Status","Nome","Modelo"]
+    for i in locacaoRaw:
+        locacao = {}
         for index,j in enumerate(i):
-            veiculo[colunas[index]] = j
-        veiculos.append(veiculo)
+            locacao[colunas[index]] = j
+        locacoes.append(locacao)
+    conn.close()
+    return locacoes
+
+def obterLocacao(id_locacao):
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            id,
+                            DATE(Data_Hora_Locacao) AS Data_Locacao,
+                            TIME(Data_Hora_Locacao) AS Hora_Locacao,
+                            DATE(Data_Hora_Prevista_Devolucao) AS Data_Prevista_Devolucao,
+                            TIME(Data_Hora_Prevista_Devolucao) AS Hora_Prevista_Devolucao,
+                            Valor,
+                            Desconto,
+                            Multa
+                        FROM Locacao
+                        WHERE id == ?
+                    """, (id_locacao,))
+
+    locacao = cursor.fetchone()
     conn.close()
 
-    return veiculos
+    if locacao:
+        return {
+            'id': locacao[0],
+            'Data_Locacao': locacao[1],
+            'Hora_Locacao': locacao[2],
+            'Data_Prevista_Devolucao': locacao[3],
+            'Hora_Prevista_Devolucao': locacao[4],
+            'Valor': locacao[5],
+            'Desconto': locacao[6],
+            'Multa': locacao[7]
+        }
+    else:
+        return None
 
+
+def obterDiariaVeiculo(id_locacao):
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            Valor_Locacao_Dia
+                        FROM Locacao join Veiculo
+                        ON Locacao.id_veiculo = veiculo.id WHERE Locacao.id = ?
+                    """, (2,))
+
+    valor_diaria = float((cursor.fetchone()[0]).replace("R$", "").replace(",", "."))
+    #arrumar depois que o valor de veiculo for corrigido
+    #valor_diaria = cursor.fetchone()[0]
+    conn.close()
+    print(valor_diaria)
+    if valor_diaria:
+        return valor_diaria
+    else:
+        return None
+
+def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoes, id_locacao):
+    
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
+        conn.commit()
+        print("Devolucao adicionada com sucesso!")
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
+def verificarDevolucao(id_locacao):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                        SELECT 
+                            id
+                        FROM Devolucao
+                        WHERE id_locacao = ?
+                    """, (id_locacao,))
+
+    devolucao = cursor.fetchall()
+
+    conn.close()
+
+    print(devolucao)
+    if devolucao:
+        return True
+    else:
+        return False
 
 if __name__ == "__main__":
     # Cria o banco de dados e as tabelas
