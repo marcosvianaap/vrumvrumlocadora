@@ -93,7 +93,17 @@ main.admin-home{
     transform: scale(1.1);
 }
 
-
+.pos-bottom-right {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding-right: 0;
+    list-style: none; 
+    font-size: small;
+    .nav-link {
+        font-size: 0.9rem; 
+    }
+}
 
 @media (min-width:992px){
     #navbarNav{
