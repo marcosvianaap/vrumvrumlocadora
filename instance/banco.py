@@ -496,7 +496,7 @@ def obterDiariaVeiculo(id_locacao):
                             Valor_Locacao_Dia
                         FROM Locacao join Veiculo
                         ON Locacao.id_veiculo = veiculo.id WHERE Locacao.id = ?
-                    """, (2,))
+                    """, (id_locacao,))
 
     valor_diaria = float((cursor.fetchone()[0]).replace("R$", "").replace(",", "."))
     #arrumar depois que o valor de veiculo for corrigido
