@@ -388,4 +388,8 @@ def buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano):
 
     return veiculos
 
-    
+
+if __name__ == "__main__":
+    # Cria o banco de dados e as tabelas
+    connect_to_db()
+    print("Banco de dados criado com sucesso!")

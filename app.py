@@ -5,7 +5,7 @@
 #usuario: 11313993905
 #senha: 11313993905
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, flash, render_template, session,request,redirect,url_for
 from flask import render_template
 import instance.banco as bd
@@ -567,6 +567,50 @@ def processoEntrar():
             return redirect(url_for("administrador"))
         else:
             return redirect(url_for("funcionarios"))
+
+
+#---------------------------------------------------------------
+
+# Rota para Atualizar senha
+@app.route("/administrador/alterar_senha", methods=['GET'])
+def alterar_senha():
+    if 'usuario' not in session or session['usuario'] != 'admin':
+        session["statusLogin"] = {"acessoNegado": True, "mensagemErro": "Acesso não autorizado!"}
+        return redirect(url_for("index"))
+    return render_template('senha_adm.html')
+
+@app.route("/administrador/alterar_senha", methods=['POST'])
+def processar_alterar_senha():
+    if 'usuario' not in session or session['usuario'] != 'admin':
+        session["statusLogin"] = {"acessoNegado": True, "mensagemErro": "Acesso não autorizado!"}
+        return redirect(url_for("index"))
+
+    senha_atual = request.form['senha_atual']
+    senha_nova = request.form['senha_nova']
+    confirmar_senha_nova = request.form['confirmar_senha_nova']
+
+    if senha_nova != confirmar_senha_nova:
+        flash('As novas senhas não coincidem. Tente novamente.', 'danger')
+        return redirect(url_for('alterar_senha'))
+
+    if not bd.autenticarUsuario({'usuario': session['usuario'], 'senha': senha_atual}):
+        flash('Senha atual incorreta. Tente novamente.', 'danger')
+        return redirect(url_for('alterar_senha'))
+
+    conn = bd.connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE Usuario
+        SET Senha = ?
+        WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)
+    ''', (generate_password_hash(senha_nova), session['usuario']))
+    conn.commit()
+    conn.close()
+
+    flash('Senha alterada com sucesso!', 'success')
+    return redirect(url_for('alterar_senha'))
+#---------------------------------------------------------------
+
 
 #rota para sair do sistema
 @app.route("/sair")
