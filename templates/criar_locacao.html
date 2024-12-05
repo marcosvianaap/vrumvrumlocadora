@@ -16,18 +16,18 @@ Cadastro
 
 <main>
   {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div id="responseMessage">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+  {% if messages %}
+  <div id="responseMessage">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
   {% endwith %}
   <div id="divCriaFuncionario">
-                                <!--Inclua a rota correta aqui-->>
+    <!--Inclua a rota correta aqui-->
     <form method="POST" action="{{ url_for('loc') }}" id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
@@ -51,23 +51,26 @@ Cadastro
           <div class="invalid-feedback">Por favor, insira uma hora válida.</div>
         </div>
         <div class="row mb-3">
-          <label for="cliente" class="form-label">Cliente:</label>
-          <input type="text" class="form-control w-100" id="cliente" name="cliente" required>
-          <div class="invalid-feedback">Por favor, insira o nome do cliente.</div>
+          <label for="campo" class="form-label">Cliente:</label>
+          <input type="text" id="campo-pesquisa" name="nomeCliente" placeholder="Digite um nome..." oninput="buscarNomes()" autocomplete="off">
+          <div id="sugestoes"></div>
         </div>
         <div class="row mb-3">
           <label for="veiculo" class="form-label">Veículo:</label>
-          <input type="text" class="form-control w-100" id="veiculo" name="veiculo" required>
+          <input type="text" class="form-control w-100" id="veiculo" name="veiculo" value="{{veiculo[4]}}" disabled>
+          <input type="text" name="idveiculo" id="idveiculo" value="{{veiculo[0]}}" hidden>
           <div class="invalid-feedback">Por favor, insira o veículo.</div>
         </div>
         <div class="row mb-3">
           <label for="percentualDesconto" class="form-label">Percentual Desconto:</label>
-          <input type="number" class="form-control w-100" id="percentualDesconto" name="percentualDesconto" step="0.01" min="0" max="100" required>
+          <input type="number" class="form-control w-100" id="percentualDesconto" name="percentualDesconto" step="0.01"
+            min="0" max="100" required>
           <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
         </div>
         <div class="row mb-3">
           <label for="percentualMulta" class="form-label">Percentual Multa:</label>
-          <input type="number" class="form-control w-100" id="percentualMulta" name="percentualMulta" step="0.01" min="0" max="100" required>
+          <input type="number" class="form-control w-100" id="percentualMulta" name="percentualMulta" step="0.01"
+            min="0" max="100" required>
           <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
         </div>
         <div class="row mb-3">
@@ -84,7 +87,36 @@ Cadastro
       </div>
     </form>
   </div>
+  <script>
+    async function buscarNomes() {
+      const query = document.getElementById('campo-pesquisa').value;
+      const sugestoes = document.getElementById('sugestoes');
+
+      if (query.length === 0) {
+        sugestoes.innerHTML = '';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/clientes/loc?query=${encodeURIComponent(query)}`);
+        const nomes = await response.json();
+
+        sugestoes.innerHTML = '';
+        nomes.forEach(nome => {
+          const div = document.createElement('div');
+          div.textContent = nome;
+          div.onclick = () => {
+            document.getElementById('campo-pesquisa').value = nome;
+            sugestoes.innerHTML = '';
+          };
+          sugestoes.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Erro ao buscar nomes:', error);
+      }
+    }
+  </script>
 </main>
 
-  
+
 {% endblock %}
