@@ -263,7 +263,7 @@ def locacoes():
 @app.route("/administrador/funcionarios", methods=['GET', 'POST'])
 @admin_required
 def pesquisar_funcionario():
-    funcionarios = None
+    funcionarios = bd.filtro_funcionarios('')
     funcionario= None
     informacao= None #verificar se foi digitado algum cpf ou nome
 
@@ -317,7 +317,7 @@ def pesquisar_funcionario():
             
             except Exception as e:
                 return f"Ocorreu um erro ao atualizar os dados: {e}", 500
-        
+    
     return render_template('pesquisar_funcionario.html', funcionario=funcionario, informacao=informacao, funcionarios=funcionarios)
 
 #ROTA PARA GERENCIMENTO DE DEVOLUÇÃO
