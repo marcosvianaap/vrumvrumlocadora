@@ -47,9 +47,9 @@ Criar Funcionário
         <div class="row mb-3">
           <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
+            <input type="tel" class="form-control" id="telefone" name="telefone" pattern="\(\d{2}\) \d{4,5}-\d{4}" required placeholder="(47) 99999-9999" title="Digite no formato (47) 99999-9999.">
             <div class="invalid-feedback">
-              Por favor, insira um número de telefone válido.
+              Por favor, insira um número de telefone válido com 10 ou 11 dígitos (apenas números).
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@ Criar Funcionário
               pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
               required>
             <div class="invalid-feedback">
-              Por favor, insira um email válido.
+              Por favor, insira um email válido (Ex: email@gmail.com).
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@ Criar Funcionário
           <div class="col-sm-10">
             <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
             <div class="invalid-feedback">
-              Por favor, informe uma data de nascimento válido.
+              Por favor, informe uma data de nascimento válida.
             </div>
           </div>
         </div>
@@ -109,6 +109,44 @@ Criar Funcionário
       </div>
     </form>
   </div>
+  <script>
+    document.getElementById('telefone').addEventListener('input', function (e) {
+      let input = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+      if (input.length > 10) {
+        input = input.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); // Formato com 5 dígitos no número
+      } else if (input.length > 6) {
+        input = input.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); // Formato com 4 dígitos no número
+      } else if (input.length > 2) {
+        input = input.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); // Formato com DDD
+      } else {
+        input = input.replace(/^(\d*)/, '($1'); // Apenas DDD
+      }
+      e.target.value = input;
+    });
+
+    document.getElementById('formCriaFuncionario').addEventListener('submit', function (e) {
+      const dataNascimentoInput = document.getElementById('dataNascimento');
+      const dataNascimento = new Date(dataNascimentoInput.value);
+      const hoje = new Date();
+      
+      // Calcula a idade
+      const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+      const aniversarioPassou = 
+        hoje.getMonth() > dataNascimento.getMonth() || 
+        (hoje.getMonth() === dataNascimento.getMonth() && hoje.getDate() >= dataNascimento.getDate());
+
+      const idadeFinal = aniversarioPassou ? idade : idade - 1;
+
+      // Verifica se a idade é menor que 18
+      if (idadeFinal < 18) {
+        e.preventDefault(); // Impede o envio do formulário
+        dataNascimentoInput.setCustomValidity('O funcionário deve ter no mínimo 18 anos.');
+        dataNascimentoInput.reportValidity(); // Mostra a mensagem de erro
+      } else {
+        dataNascimentoInput.setCustomValidity(''); // Limpa o erro, se válido
+      }
+    });
+  </script>
 
 </main>
 

@@ -49,9 +49,9 @@ Cadastrar
         <div class="row mb-3">
           <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="telefone" name="telefone" pattern="\d{8,9}" required>
+            <input type="tel" class="form-control" id="telefone" name="telefone" pattern="\(\d{2}\) \d{4,5}-\d{4}" required placeholder="(47) 99999-9999" title="Digite no formato (47) 99999-9999.">
             <div class="invalid-feedback">
-              Por favor, insira um número de telefone válido.
+              Por favor, insira um número de telefone válido com 10 ou 11 dígitos (apenas números).
             </div>
           </div>
         </div>
