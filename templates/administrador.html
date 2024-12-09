@@ -13,6 +13,7 @@ Home
 
 <main class="admin-home">
     <div class="icones">
+
         <a href="{{ url_for('pesquisar_funcionario') }}"> 
             <img class="icone" src="{{ url_for('static', filename='img/funcionario.png') }}" alt="Ícone de gerenciamento de funcionarios">
         </a>
@@ -20,6 +21,11 @@ Home
         <!-- Caminho para a tela de gerenciamento de veiculos > A partir do card -->
         <a href="{{ url_for('gerenciar_veiculos') }}">
             <img class="icone" src="{{ url_for('static', filename='img/veiculo.png') }}" alt="Ícone de gerenciamento de veículos">
+        </a>
+
+        <!-- Ícone para Alterar senha -->
+        <a href="{{ url_for('alterar_senha') }}">
+            <img class="icone" src="{{ url_for('static', filename='img/AlterarSenha.png') }}" alt="Ícone de perfil do administrador">
         </a>
 
     </div>

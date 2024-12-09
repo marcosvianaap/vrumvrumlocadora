@@ -1,8 +1,8 @@
 #Autores: Gabrielli Danker, José Mateus, Lucas Sena, Marcos Viana, Monique Ellen
-#Ultima edição: 28/11/2024
+#Ultima edição: 08/12/2024
 
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Flask, flash, render_template, session,request,redirect,url_for,jsonify
 from flask import render_template
 import instance.banco as bd
@@ -660,7 +660,7 @@ def processoEntrar():
 
 #---------------------------------------------------------------
 
-# Rota para Atualizar senha
+# Rota para ALTERAR senha
 @app.route("/administrador/alterar_senha", methods=['GET'])
 def alterar_senha():
     if 'usuario' not in session or session['usuario'] != 'admin':
@@ -678,21 +678,30 @@ def processar_alterar_senha():
     senha_nova = request.form['senha_nova']
     confirmar_senha_nova = request.form['confirmar_senha_nova']
 
+    # Verificando se a nova senha e a confirmação são iguais
     if senha_nova != confirmar_senha_nova:
         flash('As novas senhas não coincidem. Tente novamente.', 'danger')
         return redirect(url_for('alterar_senha'))
 
-    if not bd.autenticarUsuario({'usuario': session['usuario'], 'senha': senha_atual}):
-        flash('Senha atual incorreta. Tente novamente.', 'danger')
-        return redirect(url_for('alterar_senha'))
-
+    # Verificando se a senha atual está correta
+    # Aqui, assumimos que o 'usuario' na sessão é o CPF ou nome de usuário para buscar a senha
+    usuario = session['usuario']
     conn = bd.connect_to_db()
     cursor = conn.cursor()
+    cursor.execute('SELECT Senha FROM Usuario WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)', (usuario,))
+    senha_armazenada = cursor.fetchone()
+    
+    if senha_armazenada is None or not check_password_hash(senha_armazenada[0], senha_atual):
+        flash('Senha atual incorreta. Tente novamente.', 'danger')
+        conn.close()
+        return redirect(url_for('alterar_senha'))
+
+    # Atualizando a senha no banco de dados
     cursor.execute('''
         UPDATE Usuario
         SET Senha = ?
         WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)
-    ''', (generate_password_hash(senha_nova), session['usuario']))
+    ''', (generate_password_hash(senha_nova), usuario))
     conn.commit()
     conn.close()
 
