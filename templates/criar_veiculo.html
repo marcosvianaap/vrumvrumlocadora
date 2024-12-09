@@ -16,15 +16,15 @@ Criar Veiculos
 <main>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="responseMessage">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} mt-3" id="alertMessage">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div id="responseMessage">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mt-3" id="alertMessage">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <div class="container mt-3">
@@ -32,64 +32,80 @@ Criar Veiculos
             <div class="card-body">
                 <form action="/administrador/veiculos/backend_criar_veiculo" method="POST" id="formulario">
                     <div class="row mb-3 align-items-center">
-                        <label for="modelo" class="col-sm-5 col-form-label">Modelo:</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="modelo" required>
+                        <label for="modelo" class="col-sm-4 col-form-label">Modelo:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo"
+                                required>
                         </div>
                     </div>
 
-                    <div class="row mb-3 align-items-center">
+                    <div class="row mb-2 align-items-center">
                         <label for="cor" class="col-sm-4 col-form-label">Cor:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="cor" name="cor" placeholder="cor" required>
+                            <select class="form-select" id="cor" name="tipoCombustivel" required>
+                                <option selected disabled>Selecione...</option>
+                                <option value="amarelo">Amarelo</option>
+                                <option value="azul">Azul</option>
+                                <option value="branco">Branco</option>
+                                <option value="chumbo">Chumbo</option>
+                                <option value="dourado">Dourado</option>
+                                <option value="prata">Prata</option>
+                                <option value="preto">Preto</option>
+                                <option value="verde">Verde</option>
+                                <option value="vermelho">Vermelho</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="row mb-3 align-items-center">
                         <label for="marca" class="col-sm-4 col-form-label">Marca:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="marca" name="marca" placeholder="marca" required>
+                            <input type="text" class="form-control" id="marca" name="marca" placeholder="Marca"
+                                required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-3 align-items-center">
-                        <label for="placa" class="col-sm-6 col-form-label">Placa do veículo:</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="placa" name="placa" pattern="[A-Za-z]{3}[0-9]{4}" placeholder="Ex.: ABC1234" required>
+                        <label for="placa" class="col-sm-4 col-form-label">Placa do veículo:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="placa" name="placa"
+                                pattern="[A-Za-z]{3}[0-9]{4}" placeholder="Ex.: ABC1234" required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
                         <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="renavam" name="renavam" pattern="^\d{11}$" placeholder="Ex.: 12345678901" required>
+                            <input type="text" class="form-control" id="renavam" name="renavam" pattern="^\d{11}$"
+                                placeholder="Ex.: 12345678901" required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
-                        <label for="anoFabricacao" class="col-sm-6 col-form-label">Ano de fabricação:</label>
-                        <div class="col-sm-6">
+                        <label for="anoFabricacao" class="col-sm-4 col-form-label">Ano de fabricação:</label>
+                        <div class="col-sm-8">
                             <input type="date" class="form-control" id="anoFabricacao" name="anoFabricacao" required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
-                        <label for="anoAquisicao" class="col-sm-6 col-form-label">Ano de aquisição:</label>
-                        <div class="col-sm-6">
+                        <label for="anoAquisicao" class="col-sm-4 col-form-label">Ano de aquisição:</label>
+                        <div class="col-sm-8">
                             <input type="date" class="form-control" id="anoAquisicao" name="anoAquisicao" required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
-                        <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
-                        <div class="col-sm-6">
-                            <input type="text" placeholder="00,00" oninput='formatarValor(this);' class="form-control" id="valorAlocacao" name="valorAlocacao" required>
+                        <label for="valorAlocacao" class="col-sm-4 col-form-label">Valor da alocação:</label>
+                        <div class="col-sm-8">
+                            <input type="text" placeholder="00,00" oninput='formatarValor(this);' class="form-control"
+                                id="valorAlocacao" name="valorAlocacao" required>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
-                        <label for="tipoCombustivel" class="col-sm-6 col-form-label">Tipo de combustível:</label>
-                        <div class="col-sm-6">
+                        <label for="tipoCombustivel" class="col-sm-4 col-form-label">Tipo de combustível:</label>
+                        <div class="col-sm-8">
                             <select class="form-select" id="tipoCombustivel" name="tipoCombustivel" required>
                                 <option selected disabled>Selecione...</option>
                                 <option value="gasolina">Gasolina</option>
@@ -99,7 +115,7 @@ Criar Veiculos
                             </select>
                         </div>
                     </div>
-    
+
                     <div class="row mb-2 align-items-center">
                         <label for="status" class="col-sm-4 col-form-label">Status:</label>
                         <div class="col-sm-8">
@@ -113,15 +129,15 @@ Criar Veiculos
                     </div>
             </div>
         </div>
-        
+
         <div class="confirmaCriaFuncionario botao">
             <button type="submit">Confirmar</button>
         </div>
         <div class="cancelaCriaFuncionario botao">
-        <button type="button" onclick="window.location.href = '/administrador/veiculos'">Cancelar</button></a>
+            <button type="button" onclick="window.location.href = '/administrador/veiculos'">Cancelar</button></a>
         </div>
 
-    </form>
+        </form>
     </div>
     <script>
         function formatarValor(elemento) {
@@ -129,7 +145,8 @@ Criar Veiculos
             valorAlocacao = (valorAlocacao / 100).toFixed(2) + ''; // Converte para valor monetário
             valorAlocacao = valorAlocacao.replace('.', ','); // Substitui ponto por vírgula
             valorAlocacao = valorAlocacao.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
-            elemento.value = 'R$ ' + valorAlocacao;}
+            elemento.value = 'R$ ' + valorAlocacao;
+        }
     </script>
 </main>
 {% endblock %}
