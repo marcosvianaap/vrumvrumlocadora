@@ -106,6 +106,9 @@
 
 .confirmaCriaFuncionario, .cancelaCriaFuncionario{
     text-align: center;
+    #pos {
+        margin-left: 29px;
+    }
 }
 
 

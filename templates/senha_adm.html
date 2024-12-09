@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_administrador.html' %}
 
 {% block titulo %}
 Alterar Senha
@@ -7,6 +7,9 @@ Alterar Senha
 {% block links %}
 <!-- link do Font Awesome para os ícones -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/senha_adm.css') }}"> 
 {% endblock %}
 
 {% block conteudo %}
@@ -24,16 +27,12 @@ Alterar Senha
         {% endif %}
     {% endwith %}
 
-
-    <li class="nav-item {% if request.path.startswith('/administrador/veiculos') %}active{% endif %} pos-bottom-right">
-        <a class="nav-link" href="{{ url_for('administrador') }}">Voltar<span class="sr-only"></span></a>
-    </li>
     <div class="password-box">
-        <form action="/administrador/alterar_senha" method="post">
+        <form id="alterarSenhaForm" action="/administrador/alterar_senha" method="post">
             <div class="form-group">
                 <label for="senhaAtual">Senha atual:</label>
                 <div class="password-container">
-                    <input type="password" id="senhaAtual" name="senha_atual" placeholder="Digite sua senha atual" required>
+                    <input type="password" id="senhaAtual" name="senha_atual" placeholder="Digite a senha atual" required>
                     <i class="far fa-eye" id="toggleSenhaAtual" onclick="togglePassword('senhaAtual')"></i>
                 </div>
             </div>
@@ -41,7 +40,7 @@ Alterar Senha
             <div class="form-group">
                 <label for="novaSenha">Senha nova:</label>
                 <div class="password-container">
-                    <input type="password" id="novaSenha" name="senha_nova" placeholder="Digite sua nova senha" required>
+                    <input type="password" id="novaSenha" name="senha_nova" placeholder="Digite a nova senha" required>
                     <i class="far fa-eye" id="toggleNovaSenha" onclick="togglePassword('novaSenha')"></i>
                 </div>
             </div>
@@ -49,31 +48,42 @@ Alterar Senha
             <div class="form-group">
                 <label for="confirmarNovaSenha">Confirmar senha nova:</label>
                 <div class="password-container">
-                    <input type="password" id="confirmarNovaSenha" name="confirmar_senha_nova" placeholder="Confirme sua nova senha" required>
+                    <input type="password" id="confirmarNovaSenha" name="confirmar_senha_nova" placeholder="Confirme a nova senha" required>
                     <i class="far fa-eye" id="toggleConfirmarNovaSenha" onclick="togglePassword('confirmarNovaSenha')"></i>
                 </div>
             </div>
-            
-            <button type="submit">Confirmar</button>
         </form>
     </div>
-</main>
 
-<script>
-    function togglePassword(inputId) {
-        var inputField = document.getElementById(inputId);
-        var icon = document.getElementById("toggle" + inputId.charAt(0).toUpperCase() + inputId.slice(1));
-    
-        if (inputField.type === "password") {
-            inputField.type = "text"; 
-            icon.classList.remove('fa-eye'); 
-            icon.classList.add('fa-eye-slash'); 
-        } else {
-            inputField.type = "password"; 
-            icon.classList.remove('fa-eye-slash'); 
-            icon.classList.add('fa-eye');
+    <div  class="confirmaCriaFuncionario botao">
+        <a href="{{ url_for('administrador') }}">
+            <button type="button">Voltar</button>
+        </a>
+        <button id="pos" type="button" onclick="submitForm()">Confirmar</button>
+    </div>
+
+    <script>
+        function submitForm() {
+            // Submete o formulário
+            document.getElementById('alterarSenhaForm').submit();
         }
-    }
+    
+        function togglePassword(inputId) {
+            var inputField = document.getElementById(inputId);
+            var icon = document.getElementById("toggle" + inputId.charAt(0).toUpperCase() + inputId.slice(1));
+    
+            if (inputField.type === "password") {
+                inputField.type = "text"; 
+                icon.classList.remove('fa-eye'); 
+                icon.classList.add('fa-eye-slash'); 
+            } else {
+                inputField.type = "password"; 
+                icon.classList.remove('fa-eye-slash'); 
+                icon.classList.add('fa-eye');
+            }
+        }
     </script>
+
+</main>
 
 {% endblock %}

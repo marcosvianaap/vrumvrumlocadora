@@ -1,22 +1,22 @@
 .password-box {
-    max-width: 400px;
-    margin: 0 auto;
+    max-width:400px;
+    margin: 60px auto;
+    margin-bottom: 45px;
     padding: 20px;
     background-color: #f8f8f8;
-    border-radius: 8px;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 .password-box form .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     text-align: left;
 }
 
 .password-box label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
 }
 
 .password-box input[type="password"] {
