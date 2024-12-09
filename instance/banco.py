@@ -283,7 +283,13 @@ def filtro_funcionarios(informação):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    if informação.isnumeric() :
+    if informação=='':
+        cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
+                    FROM Pessoa 
+                    JOIN Usuario ON Pessoa.id = Usuario.pessoa_id 
+                    ''',)
+
+    elif informação.isnumeric() :
 
         cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
                     FROM Pessoa 
