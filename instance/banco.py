@@ -109,19 +109,24 @@ def autenticarUsuario(formulario):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT Usuario.Senha
+        SELECT Usuario.Senha, Usuario.Status
         FROM Pessoa
         JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
         WHERE Pessoa.CPF = ?
     ''', (formulario['usuario'],))
-    senha = cursor.fetchone()
+    resultado = cursor.fetchone()
     conn.close()
 
-    #usuario nao existe
-    if not senha:
+    # verificação de status de usuario
+    if not resultado:
         return False
+    
+    senha, status = resultado
 
-    if check_password_hash(senha[0], formulario["senha"]):
+    if status.lower() != 'ativo':
+        return False 
+
+    if check_password_hash(senha, formulario["senha"]):
         return True    
 
     return False
