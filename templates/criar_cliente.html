@@ -123,6 +123,20 @@ Cadastrar
   </div>
 
   <script>
+    document.getElementById('telefone').addEventListener('input', function (e) {
+      let input = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+      if (input.length > 10) {
+        input = input.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); // Formato com 5 dígitos no número
+      } else if (input.length > 6) {
+        input = input.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); // Formato com 4 dígitos no número
+      } else if (input.length > 2) {
+        input = input.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); // Formato com DDD
+      } else {
+        input = input.replace(/^(\d*)/, '($1'); // Apenas DDD
+      }
+      e.target.value = input;
+    });
+
     // Validação de idade mínima
     document.getElementById('formCriaCliente').addEventListener('submit', function(event) {
       const dataNascimento = document.getElementById('dataNascimento').value;

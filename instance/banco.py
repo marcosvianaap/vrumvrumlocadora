@@ -320,7 +320,14 @@ def filtro_clientes(informação):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    if informação.isnumeric() :
+    if informação=='':
+        cursor.execute('''
+                    SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
+                    FROM Pessoa
+                    JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
+                    ''',)
+
+    elif informação.isnumeric() :
 
         cursor.execute('''
                     SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ

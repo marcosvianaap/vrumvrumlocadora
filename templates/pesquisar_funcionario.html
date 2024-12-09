@@ -96,7 +96,7 @@ Pesquisar Funcionários
                             <div class="row mb-3">
                                 <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="telefone2" pattern="\d{8,9}" name="telefone" value="{{i.Telefone}}"  required>
+                                    <input type="text" class="form-control" id="telefone2" pattern="\(\d{2}\) \d{4,5}-\d{4}" name="telefone" value="{{i.Telefone}}" required placeholder="(47) 99999-9999" title="Digite no formato (47) 99999-9999.">
                                     <div class="invalid-feedback">
                                     Por favor, insira um número de telefone válido.
                                     </div>
@@ -174,7 +174,44 @@ Pesquisar Funcionários
         {% endfor %}
 
     {% endif %}
+    <script>
+        document.getElementById('telefone2').addEventListener('input', function (e) {
+          let input = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+          if (input.length > 10) {
+            input = input.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); // Formato com 5 dígitos no número
+          } else if (input.length > 6) {
+            input = input.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); // Formato com 4 dígitos no número
+          } else if (input.length > 2) {
+            input = input.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); // Formato com DDD
+          } else {
+            input = input.replace(/^(\d*)/, '($1'); // Apenas DDD
+          }
+          e.target.value = input;
+        });
 
+        // Script para validação da data de nascimento (Editar cliente)
+        document.querySelectorAll('.editarFuncionario').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                const dataNascimentoInput = form.querySelector('input[name="data_nascimento"]');
+                const dataNascimento = new Date(dataNascimentoInput.value);
+                const dataAtual = new Date();
+    
+                let idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
+                const mes = dataAtual.getMonth() - dataNascimento.getMonth();
+    
+                if (mes < 0 || (mes === 0 && dataAtual.getDate() < dataNascimento.getDate())) {
+                    idade--;
+                }
+    
+                if (idade < 18) {
+                    dataNascimentoInput.classList.add('is-invalid');
+                    event.preventDefault();
+                } else {
+                    dataNascimentoInput.classList.remove('is-invalid');
+                }
+            });
+        });
+      </script>
 </main>
 
 {% endblock %}

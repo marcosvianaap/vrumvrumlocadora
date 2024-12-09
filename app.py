@@ -176,6 +176,8 @@ def pesquisar_clientes():
             
             except Exception as e:
                 return f"Ocorreu um erro ao atualizar os dados: {e}", 500
+    
+    clientes = bd.filtro_clientes('')
         
     return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
 
