@@ -31,7 +31,7 @@ Cadastrar
         <div class="row mb-3">
           <label for="nome" class="col-sm-2 col-form-label">Nome</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" name="nome" required minlength="3">
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex.: Nome" required minlength="3">
             <div class="invalid-feedback">
               Por favor, insira um nome.
             </div>
@@ -40,7 +40,7 @@ Cadastrar
         <div class="row mb-3">
           <label for="cpf" class="col-sm-2 col-form-label">CPF/CNPJ</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" pattern="(\d{11}|\d{14})" required>
+            <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" pattern="(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})"  placeholder="Ex.: 000.000.000-00 ou 00.000.000/0001-00" oninput="formatarCPFeCNPJ(this)" required>
             <div class="invalid-feedback">
               Por favor, insira um CPF ou CNPJ válido, apenas números.
             </div>
@@ -68,7 +68,7 @@ Cadastrar
         <div class="row mb-3">
           <label for="email" class="col-sm-2 col-form-label">E-mail</label>
           <div class="col-sm-10">
-            <input type="email" class="form-control" id="email" name="email"
+            <input type="email" class="form-control" id="email" name="email" placeholder="Ex.: nome@gmail.com"
               pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
               required>
             <div class="invalid-feedback">
@@ -80,7 +80,7 @@ Cadastrar
         <div class="row mb-3">
           <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="endereco" name="endereco" required>
+            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Ex.: Avenida Paulista, 358, São Paulo, SP, 01310-000"  required>
             <div class="invalid-feedback">
               Por favor, informe um endereço válido.
             </div>
@@ -89,7 +89,7 @@ Cadastrar
         <div class="row mb-3">
           <label for="cnh" class="col-sm-2 col-form-label">CNH</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="cnh" name="cnh" pattern="\d{11}" required>
+              <input type="text" class="form-control" id="cnh" name="cnh" pattern="\d{11}" maxlength="11" placeholder="Ex.: 00000000000" required>
               <div class="invalid-feedback">
                 Por favor, informe o número da CNH.
               </div>
@@ -160,6 +160,38 @@ Cadastrar
         document.getElementById('dataNascimento').classList.remove('is-invalid');
       }
     });
+
+    function formatarCPFeCNPJ(input) {
+            let valor = input.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+            
+            if (valor.length > 14) valor = valor.slice(0, 14); // Limita a 14 dígitos (CNPJ)
+
+            if (valor.length <= 11) {
+                // Aplica a máscara de CPF
+                if (valor.length > 9) {
+                    input.value = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+                } else if (valor.length > 6) {
+                    input.value = valor.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+                } else if (valor.length > 3) {
+                    input.value = valor.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+                } else {
+                    input.value = valor;
+                }
+            } else {
+                // Aplica a máscara de CNPJ
+                if (valor.length > 12) {
+                    input.value = valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/, "$1.$2.$3/$4-$5");
+                } else if (valor.length > 8) {
+                    input.value = valor.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/, "$1.$2.$3/$4");
+                } else if (valor.length > 5) {
+                    input.value = valor.replace(/(\d{2})(\d{3})(\d{1,3})/, "$1.$2.$3");
+                } else if (valor.length > 2) {
+                    input.value = valor.replace(/(\d{2})(\d{1,3})/, "$1.$2");
+                } else {
+                    input.value = valor;
+                }
+            }
+        }
   </script>
 
 </main>

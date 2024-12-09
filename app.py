@@ -170,8 +170,8 @@ def pesquisar_clientes():
             try:
                 bd.atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, cnh, tipo_cnh, cpf_cnpj_original)
                 flash('Cliente atualizado com sucesso!', 'success')
-
                 clientes = bd.filtro_clientes(cpf_cnpj_novo)
+                print(clientes)
                 return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
             
             except Exception as e:
@@ -254,7 +254,6 @@ def locacoes():
     ]
 
     locacoes = bd.buscaLocacao()
-    print(locacoes)
 
     return render_template('locacao.html', locacoes=locacoes)
 
@@ -614,7 +613,6 @@ def pesquisa_veiculo():
             carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
 
             # Lógica de pesquisa de veículos aqui
-            print(carros)
             return render_template('pesquisa_veiculos.html', carros=carros)
         
         elif "alugar" in request.form:
@@ -624,8 +622,6 @@ def pesquisa_veiculo():
 
             veiculo = bd.buscaCarros(id)
             modelo = veiculo[4]
-            print(modelo)
-            print(veiculo)
 
             return render_template('criar_locacao.html', veiculo=veiculo)
         

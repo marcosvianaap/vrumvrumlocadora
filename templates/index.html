@@ -9,6 +9,20 @@ Login
 
 {% block conteudo %}
 
+<style>
+
+    #admin, #func{
+        color: white;
+        border: none;
+        background-color: transparent;
+        margin: 5px;
+    }
+
+    #admin:hover, #func:hover{
+        color: #2f98bc;
+    }
+</style>
+
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -22,19 +36,75 @@ Login
                 {% endif %}
             {% endwith %}
 
-            <div class="login-box">
+            <div class="login-box" id="funcionario">
                 <img src="../static/img/IconeUsuário.png">
                 <form action="/entrar" method="post">
 
                     {% if usuario %}
-                        <input type="text" placeholder="Usuário" name="usuario" value="{{usuario}}" required>
+                        <input type="text" name="usuario" value="{{usuario}}" required pattern="(\d{3}\.\d{3}\.\d{3}-\d{2})" placeholder="CPF" oninput="formatarCPF(this)">
                     {% else %}
-                        <input type="text" placeholder="Usuário" name="usuario" required>
+                        <input type="text" name="usuario" required pattern="(\d{3}\.\d{3}\.\d{3}-\d{2})" placeholder="CPF" oninput="formatarCPF(this)">
                     {% endif %}
                     
                     <input type="password" placeholder="Senha" name="senha" required>
                     <button type="submit">Entrar</button>
                 </form>
             </div>
+
+            <div class="login-box" id="administrador" style="display: none;">
+                <img src="../static/img/IconeUsuário.png">
+                <form action="/entrar" method="post">
+
+                    {% if usuario %}
+                    <input type="text" name="usuario" value="{{usuario}}" required placeholder="Usuário">
+                    {% else %}
+                        <input type="text" name="usuario" required placeholder="Usuário">
+                    {% endif %}
+                    
+                    <input type="password" placeholder="Senha" name="senha" required>
+                    <button type="submit">Entrar</button>
+                </form>
+            </div>
+
+            <button id="admin" onclick="alternar()">Administrador</button>
+            <button id="func" onclick="alternar()" style="display: none;">Funcionario</button>
+        
+            <script>
+                function alternar() {
+                    const blocoAdmin = document.getElementById('administrador');
+                    const blocoFunc = document.getElementById('funcionario');
+                    const admin = document.getElementById("admin")
+                    const func = document.getElementById("func")
+
+                    if (func.style.display=='none'){
+                        blocoAdmin.style.display = 'block'; 
+                        admin.style.display = 'none';
+                        func.style.display = 'block';
+                        blocoFunc.style.display = 'none';
+                    }
+                    else {
+                        blocoAdmin.style.display = 'none'; 
+                        admin.style.display = 'block';
+                        func.style.display = 'none';
+                        blocoFunc.style.display = 'block';
+                    }   
+                }
+
+                function formatarCPF(input) {
+                    let valor = input.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                    if (valor.length > 11) valor = valor.slice(0, 11); // Limita a 11 dígitos
+
+                    // Aplica a máscara de CPF
+                    if (valor.length > 9) {
+                        input.value = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+                    } else if (valor.length > 6) {
+                        input.value = valor.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+                    } else if (valor.length > 3) {
+                        input.value = valor.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+                    } else {
+                        input.value = valor;
+                    }
+                }
+            </script>
     </main>
 {% endblock %}
