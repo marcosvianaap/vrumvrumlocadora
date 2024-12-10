@@ -10,6 +10,7 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.3-dist/css/bootstrap.min.css') }}">
     <link rel="icon" type="logotipo" href="../static/img/Logotipo-SemFundo.png"> 
 
@@ -64,11 +65,20 @@
                     </li>
                 </ul>
             </div>
-           
-
         </nav>
-        
     </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="responseMessage">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
 
     {%block conteudo %}
     {% endblock %}
@@ -80,6 +90,19 @@
     <script src="../static/js/menssagemErro.js"></script> 
     <script src="{{ script1_url }}"></script> 
     <script src="{{ script2_url }}"></script>
+    
+    <script>
+        // JavaScript global para o comportamento das mensagens flash
+        window.addEventListener('DOMContentLoaded', () => {
+            const flashMessages = document.querySelectorAll('#responseMessage .alert');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0'; // Faz a mensagem desaparecer
+                    setTimeout(() => message.remove(), 500); // Remove o elemento após a transição
+                }, 5000); // 5 segundos
+            });
+        });
+    </script>
 </body>
 
 </html>

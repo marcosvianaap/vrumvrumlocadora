@@ -14,17 +14,6 @@ Cadastrar
 
 
 <main>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div id="responseMessage">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} mt-3" id="alertMessage">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-  {% endwith %}
   <div id="divCriaFuncionario">
     <form method="POST" action="{{ url_for('criar_cliente') }}" id="formCriaCliente" novalidate>
       <div id="blocoCriaFuncionario">
@@ -145,6 +134,19 @@ Cadastrar
       } else {
         document.getElementById('dataNascimento').classList.remove('is-invalid');
       }
+    });
+    document.getElementById('telefone').addEventListener('input', function (e) {
+      let input = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+      if (input.length > 10) {
+        input = input.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); // Formato com 5 dígitos no número
+      } else if (input.length > 6) {
+        input = input.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); // Formato com 4 dígitos no número
+      } else if (input.length > 2) {
+        input = input.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); // Formato com DDD
+      } else {
+        input = input.replace(/^(\d*)/, '($1'); // Apenas DDD
+      }
+      e.target.value = input;
     });
   </script>
 
