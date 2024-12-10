@@ -47,6 +47,7 @@ body {
 .login-box {
     background-color: #fff;
     padding: 30px;
+    margin-top: 50px;
     width: 300px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -99,4 +100,16 @@ body {
 
 .login-box a:hover {
     text-decoration: underline;
+}
+
+#admin, #func{
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 7px;
+    padding: 7px;
+    margin: 5px;
+}
+
+#admin:hover, #func:hover{
+    color: #2f98bc;
 }
