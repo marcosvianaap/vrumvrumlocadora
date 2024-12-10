@@ -95,7 +95,6 @@ def connect_to_db():
     
     cursor.execute('SELECT pessoa_id FROM Usuario WHERE cargo = ?',('admin',))
     admin = cursor.fetchone()
-    print('ADMIN:',admin)
     if not admin:
         cursor.execute('INSERT INTO Pessoa (CPF,Endereco,Data_Nascimento,Email,Telefone,Nome) VALUES (?,?,?,?,?,?)',('admin','Algum_lugar','22/10/1998','admin@email','40028922','admin'))        
         usuarioIdP = cursor.lastrowid
@@ -177,7 +176,6 @@ def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, 
         usuarioIdP = cursor.lastrowid
         cursor.execute('INSERT INTO Usuario (senha, cargo, status, pessoa_id) VALUES (?, ?, ?, ?)', (senha, cargo, status, usuarioIdP))
         conn.commit()
-        print("Usuário adicionado com sucesso!")
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
@@ -193,7 +191,6 @@ def adicionarCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome
         usuarioIdP = cursor.lastrowid
         cursor.execute('INSERT INTO Cliente (CNPJ, Numero_CNH, Tipo_CNH, pessoa_id) VALUES (?, ?, ?, ?)', (cnpj, numero_cnh, tipo_cnh, usuarioIdP))
         conn.commit()
-        print("Cliente adicionado com sucesso!")
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
@@ -294,7 +291,7 @@ def filtro_funcionarios(informação):
                     JOIN Usuario ON Pessoa.id = Usuario.pessoa_id 
                     ''',)
 
-    elif informação.isnumeric() :
+    elif re.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$', informação):
 
         cursor.execute('''SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Usuario.Status 
                     FROM Pessoa 
@@ -325,7 +322,14 @@ def filtro_clientes(informação):
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    if informação.isnumeric() :
+    if informação=='':
+        cursor.execute('''
+                    SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
+                    FROM Pessoa
+                    JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
+                    ''',)
+
+    elif re.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$', informação):
 
         cursor.execute('''
                     SELECT Pessoa.id, Pessoa.CPF, Pessoa.Endereco, Pessoa.Data_Nascimento, Pessoa.Email, Pessoa.Telefone, Pessoa.Nome, Cliente.Numero_CNH, Cliente.Tipo_CNH, Cliente.CNPJ
@@ -344,7 +348,6 @@ def filtro_clientes(informação):
     
     clientesRaw = cursor.fetchall()
 
-    print(clientesRaw)
     clientes = []
     colunas = ["id", "CPF", "Endereco", "Data_Nascimento", "Email", "Telefone", "Nome", "Numero_CNH", "Tipo_CNH", "CNPJ"]
     for i in clientesRaw:
@@ -353,8 +356,6 @@ def filtro_clientes(informação):
             cliente[colunas[index]] = j
         clientes.append(cliente)
     conn.close()
-
-    print(clientes)
     
     return clientes
 
@@ -430,7 +431,6 @@ def adicionarLocacao(LocalDevolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
     try:
         cursor.execute('INSERT INTO Locacao (Local_Devolucao,Data_Hora_Locacao,Data_Hora_Prevista_Devolucao,Valor,id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (LocalDevolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status))
         conn.commit()
-        print("Locação adicionado com sucesso!")
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
@@ -513,7 +513,6 @@ def obterDiariaVeiculo(id_locacao):
     #arrumar depois que o valor de veiculo for corrigido
     #valor_diaria = cursor.fetchone()[0]
     conn.close()
-    print(valor_diaria)
     if valor_diaria:
         return valor_diaria
     else:
@@ -527,7 +526,6 @@ def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoe
     try:
         cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
         conn.commit()
-        print("Devolucao adicionada com sucesso!")
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
@@ -549,7 +547,6 @@ def verificarDevolucao(id_locacao):
 
     conn.close()
 
-    print(devolucao)
     if devolucao:
         return True
     else:
