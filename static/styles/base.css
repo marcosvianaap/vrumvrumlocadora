@@ -1,0 +1,42 @@
+/*Autora: Gabrielli Danker*/
+/*Utima atualização: 10/12/2024*/
+
+/* Estilo padrão para mensagens flash */
+#responseMessage {
+    position: fixed; /* Fixa a posição no topo */
+    top: 20px; /* Define a distância do topo da página */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta para o centro horizontal */
+    z-index: 9999; /* Garante que esteja acima de outros elementos */
+    width: 20%; /* Define a largura */
+    max-width: 90%; /* Limita a largura máxima */
+}
+
+/* Estilo das mensagens */
+.alert {
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 10px; /* Espaçamento entre mensagens */
+    color: white; /* Cor do texto */
+    font-size: 14px; /* Tamanho da fonte */
+    text-align: center; /* Centraliza o texto */
+    opacity: 1; /* Define a visibilidade inicial */
+    transition: opacity 0.5s ease-in-out; /* Animação de desaparecimento */
+}
+
+/* Cores por tipo de alerta */
+.alert-danger {
+    background-color: #f44336; /* Vermelho para erros */
+}
+
+.alert-success {
+    background-color: #4caf50; /* Verde para sucesso */
+}
+
+.alert-warning {
+    background-color: #ff9800; /* Laranja para avisos */
+}
+
+.alert-info {
+    background-color: #2196f3; /* Azul para informações */
+}

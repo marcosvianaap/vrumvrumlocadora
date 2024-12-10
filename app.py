@@ -676,34 +676,48 @@ def processar_alterar_senha():
     senha_nova = request.form['senha_nova']
     confirmar_senha_nova = request.form['confirmar_senha_nova']
 
-    # Verificando se a nova senha e a confirmação são iguais
+    # Verificando campos vazios
+    if not all([senha_atual, senha_nova, confirmar_senha_nova]):
+        flash('Todos os campos são obrigatórios.', 'danger')
+        return redirect(url_for('alterar_senha'))
+
+    # Garantindo que a nova senha seja diferente da atual
+    if senha_atual == senha_nova:
+        flash('A nova senha deve ser diferente da senha atual.', 'danger')
+        return redirect(url_for('alterar_senha'))
+    
+    # Verificando se as senhas novas são iguais
     if senha_nova != confirmar_senha_nova:
         flash('As novas senhas não coincidem. Tente novamente.', 'danger')
         return redirect(url_for('alterar_senha'))
-
-    # Verificando se a senha atual está correta
-    # Aqui, assumimos que o 'usuario' na sessão é o CPF ou nome de usuário para buscar a senha
+    
+     # Verificando se a senha atual está correta
     usuario = session['usuario']
     conn = bd.connect_to_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT Senha FROM Usuario WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)', (usuario,))
-    senha_armazenada = cursor.fetchone()
-    
-    if senha_armazenada is None or not check_password_hash(senha_armazenada[0], senha_atual):
-        flash('Senha atual incorreta. Tente novamente.', 'danger')
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            'SELECT Senha FROM Usuario WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)', (usuario,))
+        senha_armazenada = cursor.fetchone()
+        if senha_armazenada is None or not check_password_hash(senha_armazenada[0], senha_atual):
+            flash('Senha atual incorreta. Tente novamente.', 'danger')
+            return redirect(url_for('alterar_senha'))
+
+        # Atualizando a senha no banco de dados
+        cursor.execute('''
+            UPDATE Usuario
+            SET Senha = ?
+            WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)
+        ''', (generate_password_hash(senha_nova), usuario))
+        conn.commit()        
+        flash('Senha alterada com sucesso!', 'success')
+
+    except Exception as e:
+        flash(f'Ocorreu um erro: {str(e)}', 'danger')
+    finally:
         conn.close()
-        return redirect(url_for('alterar_senha'))
 
-    # Atualizando a senha no banco de dados
-    cursor.execute('''
-        UPDATE Usuario
-        SET Senha = ?
-        WHERE Pessoa_id = (SELECT id FROM Pessoa WHERE CPF = ?)
-    ''', (generate_password_hash(senha_nova), usuario))
-    conn.commit()
-    conn.close()
 
-    flash('Senha alterada com sucesso!', 'success')
     return redirect(url_for('alterar_senha'))
 #---------------------------------------------------------------
 
