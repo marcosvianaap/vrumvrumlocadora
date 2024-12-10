@@ -634,7 +634,7 @@ def pesquisa_veiculo():
 def index():
     if 'statusLogin' in session:
         del session['statusLogin']
-        flash('Credenciais de acesso inválidas.', 'danger')
+        flash('Credenciais de acesso inválidas ou inativas.', 'danger')
         return render_template("index.html")
     else:
         return render_template("index.html")
