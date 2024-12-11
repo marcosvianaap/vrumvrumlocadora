@@ -131,39 +131,52 @@ def autenticarUsuario(formulario):
     return False
 
 
-def buscarUsuarioPorCPF(cpf):
+def buscarClientePorCPFouCNPJ(cpf_ou_cnpj):
     conn = connect_to_db()
     cursor = conn.cursor()
-    
+    usuario = None
+
     try:
+        # Primeira tentativa: Buscar pelo CPF
         cursor.execute('''
-            SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco, Usuario.Status
+            SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco
             FROM Pessoa
-            JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
+            JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
             WHERE Pessoa.CPF = ?
-        ''', (cpf,))
+        ''', (cpf_ou_cnpj,))
         
         usuario = cursor.fetchone()
+        # Se não encontrar pelo CPF, buscar pelo CNPJ
+        if usuario==None:
+            print(cpf_ou_cnpj)
+            cursor.execute('''
+                SELECT Pessoa.id, Pessoa.Nome, Cliente.CNPJ, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco
+                FROM Pessoa
+                JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
+                WHERE Cliente.CNPJ = ?
+            ''', (cpf_ou_cnpj,))
+            print(usuario)
+            usuario = cursor.fetchone()
 
     except Exception as e:
         print(f"Erro: {e}")
         
     finally:
         conn.close()
-    
+
     if usuario:
         return {
             'id': usuario[0],
             'nome': usuario[1],
-            'cpf': usuario[2],
+            'cpf_ou_cnpj': usuario[2],
             'telefone': usuario[3],
             'email': usuario[4],
             'data_nascimento': usuario[5],
             'endereco': usuario[6],
-            'status': usuario[7]
         }
     
     return None
+
 
 def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha):
     conn = connect_to_db()
@@ -229,7 +242,7 @@ def atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone,nome, 
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    if len(cpf_cnpj_original)==11:
+    if len(cpf_cnpj_original)==14:
 
         cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf_cnpj_original,))
         row = cursor.fetchone()
@@ -453,7 +466,7 @@ def buscaLocacao():
         JOIN Pessoa ON Locacao.id_cliente = Pessoa.id 
         JOIN Cliente ON Locacao.id_cliente = Cliente.pessoa_id
         JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id
-        WHERE Locacao.Status = 'Ativo'
+        WHERE Locacao.Status='Ativo'
     """)
     locacaoRaw = cursor.fetchall()
 
@@ -461,8 +474,7 @@ def buscaLocacao():
     colunas = [
         "id", "Local_Devolucao", "Data_Hora_Locacao", "Data_Hora_Prevista_Devolucao", "Valor", 
         "id_cliente", "id_veiculo", "Condicoes_Veiculo", "Desconto", "Multa", "Status", "Nome", "Modelo"
-    ]
-    
+    ]    
     for i in locacaoRaw:
         locacao = {}
         for index, j in enumerate(i):
@@ -483,6 +495,8 @@ def buscaLocacao():
             locacao["hora_prevista_locacao"] = data_hora_prevista.time().isoformat()  # Apenas hora
 
         locacoes.append(locacao)
+    print(locacoes)
+
     conn.close()
     return locacoes
 

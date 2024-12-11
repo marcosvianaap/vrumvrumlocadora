@@ -425,6 +425,10 @@ def pesquisa_veiculo():
             return render_template('criar_locacao.html', veiculo=veiculo)
         
         elif "historico" in request.form:
+            id = request.form['id']
+
+
+            veiculo = bd.buscaCarros(id)
             return render_template("historico_locação.html", veiculo=veiculo)
 
     return render_template('pesquisa_veiculos.html')
@@ -464,11 +468,11 @@ def pesquisar_clientes():
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
             nome = request.form['nome']
-            cpf = None
-            cnpj = None
+            cpf = ''
+            cnpj = ''
             cpf_cnpj_novo = request.form['cpf_cnpj'] #CPF que irá substituir no banco
 
-            if len(cpf_cnpj_novo) ==11:
+            if len(cpf_cnpj_novo) ==14:
                 cpf = cpf_cnpj_novo
             else:
                 cnpj = cpf_cnpj_novo
@@ -517,7 +521,7 @@ def criar_cliente():
         nome = request.form['nome']
         cpf_cnpj = request.form['cpf_cnpj']
 
-        if len(cpf_cnpj)==11:
+        if len(cpf_cnpj)==14:
             cpf = cpf_cnpj
             cnpj=''
         else:
@@ -556,18 +560,17 @@ def loc():
         DataHoraPrevDevolucao = DataPrevistaDevolucao + " " + HoraPrevistaDevolucao
 
         id_veiculo = request.form['idveiculo']
-        id_cliente = bd.buscarUsuarioPorCPF(request.form['cpf'])
+        id_cliente = bd.buscarClientePorCPFouCNPJ(request.form['cpf'])
         
         if id_cliente==None:
-            flash('Não há cliente com esse CPF!', 'warning')
+            flash('Não há cliente com esse CPF ou CNPJ!', 'warning')
             return render_template("criar_locacao.html", veiculo=id_veiculo)
 
-        id_cliente = [d['id'] for d in id_cliente]
-        id_cliente = id_cliente[0]
+        id_cliente = id_cliente['id']
         
         Condicoes_Veiculo = request.form['condicoesSaida']
-        Desconto = request.form['desconto']
-        Multa = request.form['multa']
+        Desconto = request.form['percentualDesconto']
+        Multa = request.form['percentualMulta']
         Status = "Ativo"
 
         Valor = request.form['valor']
