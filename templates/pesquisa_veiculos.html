@@ -64,12 +64,14 @@ Cadastrar
                     <p><b>RENAVAM:</b> {{ i.RENAVAM }}</p>
                     <p><b>Ano de fabricação:</b> {{ i.Ano_Fabricacao }}</p>
                     <p><b>Ano de aquisição:</b> {{ i.Ano_Aquisicao }}</p>
-                    <p><b>Valor da alocação:</b> {{ i.Valor_Locacao_Dia }}</p>
+                    <p><b>Valor do aluguel:</b> {{ i.Valor_Locacao_Dia }}</p>
                     <p><b>Tipo de combustível:</b> {{ i.Tipo_Combustivel }}</p>
                     <p><b>Status:</b> {{ i.Status }}</p>
                     <div class="buttons">
                         <button type="submit" name="historico">Histórico</button>
-                        <button type="submit" name="alugar">Alugar</button>
+                        {% if i.Status != "Desativado" %}
+                            <button type="submit" name="alugar">Alugar</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
