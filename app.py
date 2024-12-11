@@ -422,10 +422,14 @@ def pesquisa_veiculo():
 
 
             veiculo = bd.buscaCarros(id)
+            modelo = veiculo[4]
+
             return render_template('criar_locacao.html', veiculo=veiculo)
         
         elif "historico" in request.form:
-            return render_template("historico_locação.html", veiculo=veiculo)
+            print('PASSANDO POR AQUI...')
+            session['historico_veiculo'] = request.form['id']
+            return redirect(url_for("historico_locacao"))
 
     return render_template('pesquisa_veiculos.html')
 
@@ -545,38 +549,36 @@ def criar_cliente():
 # Rota criada para edição (Deve ser removida no merge)
 @app.route("/clientes/loc", methods=['GET', 'POST'])
 def loc():
+    query = request.args.get('query', '').strip()
+
+    if query:  # Se "query" está presente, retorna JSON
+        nomes = bd.buscaCliente(query)
+        return jsonify(nomes)
     
     if request.method == 'POST':             
-        Local_Devolucao = request.form['localDevolucao']
+        Local_Devolucao = "Matriz"
         DataLocacao = request.form['dataAluguel']
         HoraLocacao = request.form['horaAluguel']
         DataHoraLocacao = DataLocacao + " " + HoraLocacao
         DataPrevistaDevolucao = request.form['dataDevolucao']
         HoraPrevistaDevolucao = request.form['horaDevolucao']
         DataHoraPrevDevolucao = DataPrevistaDevolucao + " " + HoraPrevistaDevolucao
-
-        id_veiculo = request.form['idveiculo']
-        id_cliente = bd.buscarUsuarioPorCPF(request.form['cpf'])
-        
-        if id_cliente==None:
-            flash('Não há cliente com esse CPF!', 'warning')
-            return render_template("criar_locacao.html", veiculo=id_veiculo)
-
+        Valor = 3 #request.form['']
+        id_cliente = bd.filtro_clientes(request.form['nomeCliente'])
         id_cliente = [d['id'] for d in id_cliente]
         id_cliente = id_cliente[0]
-        
+        id_veiculo = request.form['idveiculo']
         Condicoes_Veiculo = request.form['condicoesSaida']
-        Desconto = request.form['desconto']
-        Multa = request.form['multa']
-        Status = "Ativo"
-
-        Valor = request.form['valor']
+        Desconto = 0
+        Multa = 0
+        Status = "ativo, concluído e cancelado"
 
         bd.adicionarLocacao(Local_Devolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
                             id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status)
         flash('Locação criada com sucesso!', 'success')
 
         return render_template("pesquisa_veiculos.html")
+
 
     # Caso contrário, renderiza a página HTML
     return render_template("criar_locacao.html")
@@ -585,6 +587,8 @@ def loc():
 @app.route("/locacoes", methods=['GET', 'POST'])
 def locacoes():
 
+
+    # Dados de exemplo (Devem ser removidos)
     locacoes = bd.buscaLocacao()
 
     return render_template('locacao.html', locacoes=locacoes)
@@ -617,8 +621,8 @@ def criar_devolucao():
             horaDevolucao = request.form['horaDevolucao']
             dataHoraDevolucao = dataDevolucao + " " + horaDevolucao
 
-            multa = float(request.form['multa'])
-            valorTotal = float(request.form['valorRealTotal'])
+            multa = float(request.form['multa'].replace('R$ ','').replace(',','.'))
+            valorTotal = float(request.form['valorRealTotal'].replace('R$','').replace(',','.'))
             localDevolucao = request.form['localDevolucao']
             condicoes = request.form['condicoesDevolucao']
 
@@ -663,11 +667,11 @@ def historico_devolucao():
     
     return render_template("historico_devolução.html",devolucoes=devolucoes)
 
-@app.route("/funcionario/historico_locação",methods=['POST'])
+@app.route("/funcionario/historico_locacao",methods=['POST','GET'])
 @user_required
 def historico_locacao():
 
-    veiculo = request.form['veiculo']
+    veiculo = session['historico_veiculo']
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
@@ -679,9 +683,62 @@ def historico_locacao():
         locacao = {}
         for index,j in enumerate(i):
             locacao[colunas[index]] = j
+        locacao['data_locacao'] = locacao['Data_Hora_Locacao'].split(' ')[0]
+        locacao['hora_locacao'] = locacao['Data_Hora_Locacao'].split(' ')[1]
+        locacao['data_devolucao'] = locacao['Data_Hora_Prevista_Devolucao'].split(' ')[0]
+        locacao['hora_devolucao'] = locacao['Data_Hora_Prevista_Devolucao'].split(' ')[1]
         locacoes.append(locacao)
+    
+
+    for locacao in locacoes:
+        cursor.execute("SELECT id, Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo FROM Devolucao WHERE id_locacao = ?",(locacao['id'],))
+        devolucoesRaw = cursor.fetchone()
+        if devolucoesRaw != None:
+            colunas = ['id','Data_Hora_Devolucao','Multa','Local_devolucao','Valor_Total','Condicoes_Veiculo']
+            devolucao = {}
+            for index,j in enumerate(devolucoesRaw):
+                devolucao[colunas[index]] = j
+            locacao['devolucao'] = devolucao
+
     conn.close()
+
     return render_template("historico_locação.html",locacoes=locacoes)
+
+@app.route("/funcionario/editar_devolucao",methods=['POST'])
+@user_required
+def editar_devolucao():
+
+    id = request.form['id_devolucao']
+    print('DEVOLUCAO SENDO EDITADA:',id)
+
+    return render_template("historico_locação.html")
+
+@app.route("/funcionario/editar_locacao",methods=['POST'])
+@user_required
+def editar_locacao():
+
+    id = request.form['id']
+    cliente = request.form["cliente"]
+    veiculo = request.form["veiculo"]
+    data_aluguel = request.form["data_aluguel"]
+    hora_aluguel = request.form["hora_aluguel"]
+    data_devolucao = request.form["data_devolucao"]
+    hora_devolucao = request.form["hora_devolucao"]
+    desconto = request.form["desconto"]
+    multa = request.form["multa"]
+    condicoes_saida = request.form["condicoes_saida"]
+    status = request.form["status"]
+
+    data_hora_devolucao = data_devolucao + " " + hora_devolucao
+    data_hora_aluguel = data_aluguel + " " + hora_aluguel
+             
+    conn = bd.connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('UPDATE Locacao SET Data_Hora_Locacao = ?, Data_Hora_Prevista_Devolucao = ?, id_cliente = ?, id_veiculo = ?, Condicoes_Veiculo = ?, Desconto = ?, Multa = ?, Status = ? WHERE id = ?',(data_hora_aluguel,data_hora_devolucao,cliente,veiculo,condicoes_saida,desconto,multa,status,id))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('historico_locacao'))
 
 #---------------------------------------------------------------
 
