@@ -43,7 +43,7 @@ Criar Veiculos
                     <div class="row mb-3 align-items-center">
                         <label for="placa" class="col-sm-6 col-form-label">Placa do veículo:</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="placa" name="placa" value="{{veiculo.Placa}}" pattern="[A-Za-z]{3}[0-9]{4}"  placeholder="Ex.: ABC1234" required>
+                            <input type="text" class="form-control" id="placa" maxlength="7" name="placa" value="{{veiculo.Placa}}" pattern="[A-Za-z]{3}[0-9]{4}"  placeholder="Ex.: ABC1234" required>
                             
                         </div>
                     </div>
@@ -51,7 +51,7 @@ Criar Veiculos
                     <div class="row mb-2 align-items-center">
                         <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="renavam" name="renavam" value="{{veiculo.RENAVAM}}" pattern="^\d{11}$" placeholder="Ex.: 12345678901" required>
+                            <input type="text" class="form-control" id="renavam" maxlength="11" name="renavam" value="{{veiculo.RENAVAM}}" pattern="^\d{11}$" placeholder="Ex.: 12345678901" required>
                         </div>
                     </div>
     

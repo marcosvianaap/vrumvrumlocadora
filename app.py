@@ -232,6 +232,7 @@ def gerenciar_veiculos():
     cursor = conn.cursor()
     
     modeloVeiculo = request.args.get('modelo')
+    
     if modeloVeiculo == None:
         cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo")
     else:
