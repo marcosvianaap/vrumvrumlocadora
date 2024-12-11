@@ -19,7 +19,7 @@ Criar Veiculos
             <div class="card-body">
                 <form action="/administrador/veiculos/backend_criar_veiculo" method="POST" id="formulario">
                     <div class="row mb-3 align-items-center">
-                        <label for="modelo" class="col-sm-4 col-form-label">Modelo:</label>
+                        <label for="modelo" class="col-sm-4 col-form-label">Modelo</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo"
                                 required>
@@ -27,7 +27,7 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="cor" class="col-sm-4 col-form-label">Cor:</label>
+                        <label for="cor" class="col-sm-4 col-form-label">Cor</label>
                         <div class="col-sm-8">
                             <select class="form-select" id="cor" name="cor" required>
                                 <option selected disabled>Selecione...</option>
@@ -45,7 +45,7 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-3 align-items-center">
-                        <label for="marca" class="col-sm-4 col-form-label">Marca:</label>
+                        <label for="marca" class="col-sm-4 col-form-label">Marca</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="marca" name="marca" placeholder="Marca"
                                 required>
@@ -53,7 +53,7 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-3 align-items-center">
-                        <label for="placa" class="col-sm-4 col-form-label">Placa do veículo:</label>
+                        <label for="placa" class="col-sm-4 col-form-label">Placa do veículo</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="placa" name="placa"
                                 pattern="[A-Za-z]{3}[0-9]{4}" maxlength="7" placeholder="Ex.: ABC1234" required>
@@ -61,7 +61,7 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
+                        <label for="renavam" class="col-sm-4 col-form-label">RENAVAM</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="renavam" name="renavam" pattern="^\d{11}$"
                                 placeholder="Ex.: 12345678901" maxlength="11" required>
@@ -69,21 +69,21 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="anoFabricacao" class="col-sm-4 col-form-label">Ano de fabricação:</label>
+                        <label for="anoFabricacao" class="col-sm-4 col-form-label">Ano de fabricação</label>
                         <div class="col-sm-8">
                             <input type="date" class="form-control" id="anoFabricacao" name="anoFabricacao" required>
                         </div>
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="anoAquisicao" class="col-sm-4 col-form-label">Ano de aquisição:</label>
+                        <label for="anoAquisicao" class="col-sm-4 col-form-label">Ano de aquisição</label>
                         <div class="col-sm-8">
                             <input type="date" class="form-control" id="anoAquisicao" name="anoAquisicao" required>
                         </div>
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="valorAlocacao" class="col-sm-4 col-form-label">Valor da alocação:</label>
+                        <label for="valorAlocacao" class="col-sm-4 col-form-label">Valor do aluguel</label>
                         <div class="col-sm-8">
                             <input type="text" placeholder="00,00" oninput='formatarValor(this);' class="form-control"
                                 id="valorAlocacao" name="valorAlocacao" required>
@@ -91,7 +91,7 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="tipoCombustivel" class="col-sm-4 col-form-label">Tipo de combustível:</label>
+                        <label for="tipoCombustivel" class="col-sm-4 col-form-label">Tipo de combustível</label>
                         <div class="col-sm-8">
                             <select class="form-select" id="tipoCombustivel" name="tipoCombustivel" required>
                                 <option selected disabled>Selecione...</option>
@@ -104,13 +104,13 @@ Criar Veiculos
                     </div>
 
                     <div class="row mb-2 align-items-center">
-                        <label for="status" class="col-sm-4 col-form-label">Status:</label>
+                        <label for="status" class="col-sm-4 col-form-label">Status</label>
                         <div class="col-sm-8">
                             <select class="form-select" id="status" name="status">
                                 <option selected disabled required>Selecione...</option>
-                                <option value="disponível">Disponível</option>
+                                <option value="Disponível">Disponível</option>
                                 <option value="Indisponível">Indisponível</option>
-                                <option value="desativado">Desativado</option>
+                                <option value="Desativado">Desativado</option>
                             </select>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ Criar Veiculos
             valorAlocacao = (valorAlocacao / 100).toFixed(2) + ''; // Converte para valor monetário
             valorAlocacao = valorAlocacao.replace('.', ','); // Substitui ponto por vírgula
             valorAlocacao = valorAlocacao.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
-            elemento.value = 'R$ ' + valorAlocacao;
+            elemento.value = valorAlocacao;
         }
     </script>
 </main>

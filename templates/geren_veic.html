@@ -35,9 +35,9 @@ Gerenciar Veiculos
 
         {% for veiculo in veiculos %}
         <div style="margin-bottom: 10px;" >
-            <div class=" card card-body">
+            <div class=" card card-body"  style="align-items:normal;">
                 <div class="row mb-3 align-items-center">
-                    <label for="placa" class="col-sm-5 col-form-label">Modelo:</label>
+                    <label for="placa" class="col-sm-5 col-form-label">Modelo</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="modelo" name="modelo" value="{{veiculo.Modelo}}" readonly>
                     </div>
@@ -51,56 +51,56 @@ Gerenciar Veiculos
                 </div>
                 
                 <div class="row mb-3 align-items-center">
-                    <label for="placa" class="col-sm-4 col-form-label">Marca:</label>
+                    <label for="placa" class="col-sm-4 col-form-label">Marca</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="marca" name="marca" value="{{veiculo.Marca}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-3 align-items-center">
-                    <label for="placa" class="col-sm-6 col-form-label">Placa do veículo:</label>
+                    <label for="placa" class="col-sm-6 col-form-label">Placa do veículo</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="placa" name="placa" value="{{veiculo.Placa}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="renavam" class="col-sm-4 col-form-label">RENAVAM:</label>
+                    <label for="renavam" class="col-sm-4 col-form-label">RENAVAM</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="renavam" name="renavam" value="{{veiculo.RENAVAM}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="anoFabricacao" class="col-sm-6 col-form-label">Ano de fabricação:</label>
+                    <label for="anoFabricacao" class="col-sm-6 col-form-label">Ano de fabricação</label>
                     <div class="col-sm-6">
                         <input type="date" class="form-control" id="anoFabricacao" name="anoFabricacao" value="{{veiculo.Ano_Fabricacao}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="anoAquisicao" class="col-sm-6 col-form-label">Ano de aquisição:</label>
+                    <label for="anoAquisicao" class="col-sm-6 col-form-label">Ano de aquisição</label>
                     <div class="col-sm-6">
                         <input type="date" class="form-control" id="anoAquisicao" name="anoAquisicao" value="{{veiculo.Ano_Aquisicao}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação:</label>
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Valor da alocação</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="valorAlocacao" name="valorAlocacao" value="{{veiculo.Valor_Locacao_Dia}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Tipo de combustível:</label>
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Tipo de combustível</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="tipoCombustivel" name="tipoCombustivel" value="{{veiculo.Tipo_Combustivel}}" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2 align-items-center">
-                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Status:</label>
+                    <label for="valorAlocacao" class="col-sm-6 col-form-label">Status</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="Status" name="Status" value="{{veiculo.Status}}" readonly>
                     </div>
