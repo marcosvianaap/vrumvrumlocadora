@@ -44,7 +44,7 @@ Devolução
                                 <div class="row mb-3">
                                 <label for="multa" class="col-sm-2 col-form-label">Valor de multa</label>
                                 <div class="col-sm-10">
-                                    <input placeholder="0" type="text" class="form-control" id="multa" name="multa" readonly>
+                                    <input placeholder="R$ 0" type="text" class="form-control" id="multa" name="multa" readonly>
                                 </div>
                                 </div>
 
@@ -58,7 +58,7 @@ Devolução
                                 <div class="row mb-3">
                                     <label for="localDevolucao" class="col-sm-2 col-form-label">Local de devolução</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="localDevolucao" name="localDevolucao" placeholder="Ex.: Avenida Paulista, 358, São Paulo, SP, 01310-000" required>
+                                        <input type="text" class="form-control" id="localDevolucao" name="localDevolucao" required>
                                         <div class="invalid-feedback">
                                             Por favor, informe sobre o local de devolução.
                                         </div>
@@ -68,7 +68,7 @@ Devolução
                                 <div class="row mb-3">
                                     <label for="condicoesDevolucao" class="col-sm-2 col-form-label">Condições de devolução</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="condicoesDevolucao" name="condicoesDevolucao" placeholder="Detalhes do veículo..." required>
+                                        <input type="text" class="form-control" id="condicoesDevolucao" name="condicoesDevolucao" required>
                                         <div class="invalid-feedback">
                                             Por favor, informe sobre a condição de devolução.
                                         </div>
@@ -87,14 +87,22 @@ Devolução
                 </div>
             </div>
             <script>
+                    
+                function formatarValor(elemento) {
+                    let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não for número
+                    valor = (valor / 100).toFixed(2) + ''; // Converte para valor monetário
+                    valor = valor.replace('.', ','); // Substitui ponto por vírgula
+                    valor = valor.replace(/(\d)(\d{3}),/, '$1.$2,'); // Adiciona o separador de milhar
+                    elemento.value = 'R$ ' + valor;
+                }
 
-                // window.onload = function () {
-                //     const valorRealTotal = document.getElementById('valorRealTotal');
-                //     if (valorRealTotal) {
-                //         let valor = valorRealTotal.value;
-                //         valorRealTotal.value = 'R$ ' + valor.replace('.', ','); // Junta com a vírgula como separador decimal
-                //         }
-                // };
+                window.onload = function () {
+                    const valorRealTotal = document.getElementById('valorRealTotal');
+                    if (valorRealTotal) {
+                        let valor = valorRealTotal.value;
+                        valorRealTotal.value = 'R$ ' + valor.replace('.', ','); // Junta com a vírgula como separador decimal
+                        }
+                };
 
                 document.getElementById('dataDevolucao').addEventListener('input', function() {
                 const dataDevolucao = this.value;  // Data inserida no campo dataDevolucao
@@ -132,13 +140,13 @@ Devolução
 
                     // caso a data de devolução ocorra antes da data de devolução prevista (recalcular valor total)
                     if (dataDev <= dataDevPrev){
-                        document.getElementById('multa').value = 0;
+                        document.getElementById('multa').value = 'R$' + "0";
 
                         const diffTempo= dataDev - dataLoc;
                         const diffDias = Math.ceil(diffTempo / (1000 * 3600 * 24));  
                         
                         let totalDesconto = Math.round(((valorDiaria * diffDias) * (1-(desconto/100))) * 100)/100;
-                        document.getElementById('valorRealTotal').value = totalDesconto;
+                        document.getElementById('valorRealTotal').value = 'R$' + totalDesconto;
                     }
                     
                     // caso a data de devolução seja após a data de devolução prevista
@@ -149,10 +157,10 @@ Devolução
                             const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); 
                             
                             let totalMulta = Math.round(((valorDiaria * diffDays) * (1+(multa/100))) * 100)/100;
-                            const total = parseFloat("{{locacao.Valor}}") + totalMulta;
+                            const total = parseFloat("{{locacao.Valor}}".replace('R$','').replace(',','.')) + totalMulta;
                             
-                            document.getElementById('valorRealTotal').value = total;
-                            document.getElementById('multa').value = totalMulta;
+                            document.getElementById('valorRealTotal').value = 'R$' + total;
+                            document.getElementById('multa').value = 'R$ ' + totalMulta;
                         } 
                     }
                 }

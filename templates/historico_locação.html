@@ -1,9 +1,8 @@
 {% extends 'base_funcionarios.html' %}
 
 {% block titulo %}
-Historico Locação
+Locações
 {% endblock %}
-
 
 {% block links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
@@ -15,39 +14,203 @@ Historico Locação
 
 {% block conteudo %}
 
-<main class="historico"  >
+<main class="main-pesquisar">
+
+    {% if locacoes %}
         {% for locacao in locacoes %}
-        <div class="alocação">
-            <div class="linha">
-                <label for="cliente">Cliente:</label>
-                <input type="text" id="cliente" name="cliente" style='margin-right:10%' value='{{locacao.id_cliente}}' readonly>
-                <label for="veiculo">Veículo:</label>
-                <input type="text" id="veiculo" name="veiculo" value="{{locacao.id_veiculo}}">
+            <div class="blocoPesquisa">
+
+                <div class="blocoFuncionario">
+                    {% if 'devolucao' in locacao %}
+                    <div class="dadosFuncionario" style="background: rgb(191, 191, 191); !important;border-radius:36px 36px 0px 0px;margin:36px 0px 0px 0px!important">
+                    {% else %}
+                    <div class="dadosFuncionario" style="margin:36px 0px 0px 0px!important">
+                    {% endif %}
+                        <div class="linha">
+                            <p><strong>Cliente:</strong> {{ locacao.Nome }}</p>
+                            <p><strong>Veículo:</strong> {{ locacao.id_veiculo }}</p>
+                        </div>
+                        <p><strong>Data/Hora do aluguel:</strong> {{ locacao.Data_Hora_Locacao }}</p>
+                        <p><strong>Data/Hora prevista da devolução:</strong> {{ locacao.Data_Hora_Prevista_Devolucao }}</p>
+                        <div class="linha">
+                            <p><strong>Desconto:</strong> {{ locacao.Desconto }}%</p>
+                            <p><strong>Multa:</strong> {{ locacao.Multa }}%</p>
+                        </div>
+                        <p><strong>Condições de saída do veículo:</strong> {{ locacao.Condicoes_Veiculo }}</p>
+                        <p><strong>Status:</strong> {{ locacao.Status }}</p>
+                    </div>
+
+                    {% if 'devolucao' not in locacao %}
+                    <div class="botoesLoc">
+                        <div>
+                            <form class="formDevolucao" action="{{ url_for('criar_devolucao') }}" method="POST">
+                                <input type="hidden" value="{{locacao.id}}" name="locacao">
+                                <div id="ajuste" class="botao">
+                                    <button name="form1">Criar Devolução</button>
+                                </div>
+                            </form>
+                        </div>
+                    
+                        <!-- Botão Editar (Redirecionando para o formulário de edição) -->
+                        <a href="#" class="botaoEditarFuncionario botao">
+                            <button>Editar</button>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if 'devolucao' in locacao %}
+                    <div class="dadosFuncionario" style="border-radius: 0px 0px 36px 36px;margin:0px">
+                        <div>
+                            <!--['id','Data_Hora_Devolucao','Multa','Local_devolucao','Valor_Total','Condicoes_Veiculo']-->
+                            <p><strong>Data/Hora da Devolução:</strong> {{ locacao.devolucao.Data_Hora_Devolucao }}</p>
+                            <p><strong>Local da Devolução:</strong> {{ locacao.devolucao.Local_devolucao }}</p>
+                            <p><strong>Multa:</strong> {{ locacao.devolucao.Multa }}</p>
+                            <p><strong>Valor Total:</strong> {{ locacao.devolucao.Valor_Total }}</p>
+                            <p><strong>Condições do Veiculo:</strong> {{ locacao.devolucao.Condicoes_Veiculo }}</p>
+                        </div>
+                    </div>
+
+                    <div class="botoesLoc">
+                        <div>
+                            <form action="/editar_devolucao" method="POST">
+                                <input type="hidden" value="{{locacao.devolucao.id}}" name="id_devolucao">
+                                <div class="botao">  
+                                    <button>Editar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                </div>
+
+                <div class="blocoEditarDados">
+                    <form action="{{ url_for('editar_locacao') }}" method="POST" class="editarFuncionario" novalidate>
+                        <div class="blocoEdicao">
+                            <input type='hidden' name="destino" value="historico_locacao">
+                            <input name="id" type="hidden" value="{{ locacao.id }}">
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="cliente" class="col-sm-2 col-form-label">Cliente</label>
+                                    <input type="text" class="form-control" id="cliente" name="cliente" value="{{ locacao.id_cliente }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um cliente válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="veiculo" class="col-sm-2 col-form-label">Veículo</label>
+                                    <input type="text" class="form-control" id="veiculo" name="veiculo" value="{{ locacao.id_veiculo }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um veículo válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="data_aluguel" class="col-sm-2 col-form-label">Data do Aluguel</label>
+                                    <input type="date" class="form-control" id="data_aluguel" name="data_aluguel" value="{{ locacao.data_locacao }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma data válida.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="hora_aluguel" class="col-sm-2 col-form-label">Hora do Aluguel</label>
+                                    <input type="time" class="form-control" id="hora_aluguel" name="hora_aluguel" value="{{ locacao.hora_locacao }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um horário válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="data_devolucao" class="col-sm-2 col-form-label">Data Prevista da Devolução</label>
+                                    <input type="date" class="form-control" id="data_devolucao" name="data_devolucao" value="{{ locacao.data_devolucao }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma data válida.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="hora_devolucao" class="col-sm-2 col-form-label">Hora Prevista da Devolução</label>
+                                    <input type="time" class="form-control" id="hora_devolucao" name="hora_devolucao" value="{{ locacao.hora_devolucao }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um horário válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="desconto" class="col-sm-2 col-form-label">Desconto (%)</label>
+                                    <input type="number" class="form-control" id="desconto" name="desconto" value="{{ locacao.Desconto }}" min="0" max="100" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um desconto válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="multa" class="col-sm-2 col-form-label">Multa (%)</label>
+                                    <input type="number" class="form-control" id="multa" name="multa" value="{{ locacao.Multa }}" min="0" max="100" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma multa válida.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="condicoes_saida" class="col-sm-2 col-form-label">Condições de Saída</label>
+                                    <textarea class="form-control" id="condicoes_saida" name="condicoes_saida" required>{{ locacao.Condicoes_Veiculo }}</textarea>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira condições de saída válidas.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="input-group col-sm-10">
+                                    <label for="status" class="col-sm-2 col-form-label">Status</label>
+                                    <select class="form-control" id="status" name="status" required>
+                                        <option value="Em andamento" {% if locacao.status == "Ativo" %}selected{% endif %}>Ativo</option>
+                                        <option value="Concluído" {% if locacao.status == "Concluído" %}selected{% endif %}>Concluído</option>
+                                        <option value="Cancelado" {% if locacao.status == "Cancelado" %}selected{% endif %}>Cancelado</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um status válido.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="botaoConfirmarEdicao botao">
+                            <button type="submit">Confirmar</button>
+                        </div>
+                        <div class="botaoCancelarEdicao botao">
+                            <a href="{{ url_for('historico_locacao') }}"><button type="button">Cancelar</button></a>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-            <div class="linha">
-                <label for="dataAluguel">Data/Hora do Aluguel:</label>
-                <input type="text" id="DataHoraAluguel" name="dataAluguel" value='{{locacao.Data_Hora_Locacao}}' readonly>
-            </div>
-            <div class="linha">
-                <label for="dataPrevistaDevolução">Data/Hora Prevista da Devolução:</label>
-                <input type="text" id="DataHoraPrevistaDevolução" name="dataPrevistaDevolução" value='{{locacao.Data_Hora_Prevista_Devolucao}}' readonly>
-            </div>
-            <div class="linha">
-                <label for="desconto">Desconto:</label>
-                <input type="text" id="desconto" name="desconto" value='{{locacao.Desconto}}' style='margin-right:10%' readonly>
-                <label for="multa">Multas:</label>
-                <input type="text" id="multa" name="multa" value='{{locacao.Multa}}' readonly>
-            </div>
-            <div class="linha">
-                <label for="valor">Valor:</label>
-                <input type="text" id="valor" name="valor" value='{{locacao.Valor}}' readonly>
-            </div>
-            <div class="linha">
-                <label for="status" class="col-sm-4 col-form-label">Status:</label>
-                <input type="text" id="status" name="status" value='{{locacao.Status}}' readonly>
-            </div>
-        </div>
         {% endfor %}
+    {% else %}
+        <div class="alert alert-warning mt-3">
+            Nenhuma locação disponível no momento.
+        </div>
+    {% endif %}
 
 </main>
 

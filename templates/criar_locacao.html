@@ -13,73 +13,59 @@ Cadastro
 {% endblock %}
 
 {% block conteudo %}
-<style>
-  .row  {
-    padding: 0 20px;
-  }
-  .row label{
-    padding-left: 0;
-  }
-</style>
+
 <main>
   <div id="divCriaFuncionario">
     <!--Inclua a rota correta aqui-->
     <form method="POST" action="{{ url_for('loc') }}" id="formCriaFuncionario" novalidate>
       <div id="blocoCriaFuncionario">
         <div class="row mb-3">
-          <label for="dataAluguel" class="form-label">Data do aluguel</label>
+          <label for="dataAluguel" class="form-label">Data do aluguel:</label>
           <input type="date" class="form-control w-100" id="dataAluguel" name="dataAluguel" required>
           <div class="invalid-feedback">Por favor, insira uma data válida.</div>
         </div>
         <div class="row mb-3">
-          <label for="horaAluguel" class="form-label">Hora do aluguel</label>
+          <label for="horaAluguel" class="form-label">Hora do aluguel:</label>
           <input type="time" class="form-control w-100" id="horaAluguel" name="horaAluguel" required>
           <div class="invalid-feedback">Por favor, insira uma hora válida.</div>
         </div>
         <div class="row mb-3">
-          <label for="dataDevolucao" class="form-label">Data de devolução</label>
+          <label for="dataDevolucao" class="form-label">Data prevista da devolução:</label>
           <input type="date" class="form-control w-100" id="dataDevolucao" name="dataDevolucao" required>
           <div class="invalid-feedback">Por favor, insira uma data válida.</div>
         </div>
         <div class="row mb-3">
-          <label for="horaDevolucao" class="form-label">Hora de devolução</label>
+          <label for="horaDevolucao" class="form-label">Hora prevista da devolução:</label>
           <input type="time" class="form-control w-100" id="horaDevolucao" name="horaDevolucao" required>
           <div class="invalid-feedback">Por favor, insira uma hora válida.</div>
         </div>
         <div class="row mb-3">
-          <label for="campo" class="form-label">CPF do cliente</label>
-          <input type="text" class="form-control w-100" id="campo-pesquisa" name="cpf" pattern="(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})"  placeholder="Ex.: 000.000.000-00 ou 00.000.000/0001-00" oninput="formatarCPFeCNPJ(this)" >
+
+          <label for="campo" class="form-label">Cliente:</label>
+          <input type="text" id="campo-pesquisa" name="nomeCliente" placeholder="Digite um nome..." oninput="buscarNomes()" autocomplete="off">
+          <div id="sugestoes"></div>
         </div>
-               
-        <input type="text" name="idveiculo" id="idveiculo" value="{{veiculo[0]}}" hidden>
-         
         <div class="row mb-3">
-          <label for="percentualDesconto" class="form-label">Desconto (%)</label>
+          <label for="veiculo" class="form-label">Veículo:</label>
+          <input type="text" class="form-control w-100" id="veiculo" name="veiculo" value="{{veiculo[4]}}" disabled>
+          <input type="text" name="idveiculo" id="idveiculo" value="{{veiculo[0]}}" hidden>
+          <div class="invalid-feedback">Por favor, insira o veículo.</div>
+        </div>
+        <div class="row mb-3">
+          <label for="percentualDesconto" class="form-label">Percentual Desconto:</label>
           <input type="number" class="form-control w-100" id="percentualDesconto" name="percentualDesconto" step="0.01"
-            min="0" max="100" placeholder="0" required>
+            min="0" max="100" required>
           <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
         </div>
         <div class="row mb-3">
-          <label for="percentualMulta" class="form-label">Multa (%)</label>
+          <label for="percentualMulta" class="form-label">Percentual Multa:</label>
           <input type="number" class="form-control w-100" id="percentualMulta" name="percentualMulta" step="0.01"
-            min="0" max="100" placeholder="0" required>
+            min="0" max="100" required>
           <div class="invalid-feedback">Por favor, insira um percentual válido (0-100).</div>
         </div>
-
         <div class="row mb-3">
-          <label for="valor" class="form-label">Valor da locação</label>
-          <input type="text" class="form-control w-100" id="valor" name="valor" placeholder="00.00" readonly>
-        </div>
-
-        <div class="row mb-3">
-          <label for="localDevolucao" class="form-label">Local de devolução</label>
-          <input type="text" class="form-control w-100" id="localDevolucao" name="localDevolucao" placeholder="Ex.: Avenida Paulista, 358, São Paulo, SP, 01310-000" required>
-          <div class="invalid-feedback">Por favor, insira uma data válida.</div>
-        </div>
-
-        <div class="row mb-3">
-          <label for="condicoesSaida" class="form-label">Condições de saída do veículo</label>
-          <textarea class="form-control w-100" id="condicoesSaida" name="condicoesSaida" rows="3" placeholder="Detalhes do veículo..." required></textarea>
+          <label for="condicoesSaida" class="form-label">Condições de saída do veículo:</label>
+          <textarea class="form-control w-100" id="condicoesSaida" name="condicoesSaida" rows="3" required></textarea>
           <div class="invalid-feedback">Por favor, insira as condições de saída do veículo.</div>
         </div>
       </div>
@@ -87,7 +73,7 @@ Cadastro
         <button type="submit">Confirmar</button>
       </div>
       <div id="cancelaCriaFuncionario" class="botao">
-        <a href="{{ url_for('pesquisa_veiculo') }}"><button type="button">Cancelar</button></a>
+        <a href="{{ url_for('pesquisar_clientes') }}"><button type="button">Cancelar</button></a>
       </div>
     </form>
   </div>
@@ -125,42 +111,34 @@ Cadastro
             }
         }
 
-      document.getElementById('dataDevolucao').addEventListener('input', calcularValores);
-      document.getElementById('horaDevolucao').addEventListener('input', calcularValores);
-      document.getElementById('dataAluguel').addEventListener('input', calcularValores);
-      document.getElementById('horaAluguel').addEventListener('input', calcularValores);
-      document.getElementById('percentualDesconto').addEventListener('input', calcularValores);
 
-      function calcularValores() {
-          const dataDevolucao = document.getElementById('dataDevolucao').value; // data de devolução real
-          const horaDevolucao = document.getElementById('horaDevolucao').value;
-          const dataDev = new Date(dataDevolucao + 'T' + horaDevolucao);
+    async function buscarNomes() {
+      const query = document.getElementById('campo-pesquisa').value;
+      const sugestoes = document.getElementById('sugestoes');
 
-          const dataLocacao =  document.getElementById('dataAluguel').value;
-          const horaLocacao =  document.getElementById('horaAluguel').value;
-          const dataLoc = new Date(dataLocacao + 'T' + horaLocacao);
-
-          const valorDiaria = parseFloat("{{veiculo[9]}}".replace(',','.'));
-
-          
-          const desconto = document.getElementById('percentualDesconto').value; 
-
-          if (!(dataDev && dataLoc && valorDiaria && desconto)){
-            document.getElementById('valor').value = 0;
-          }
-          
-          // caso a data de devolução seja após a data de devolução prevista
-          if (dataDev && dataLoc && valorDiaria && desconto)  {
-              
-              const diffTime = dataDev - dataLoc;
-              if (diffTime >= 1) {
-                  const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); 
-                  
-                  let totalDesconto = Math.round(((valorDiaria * diffDays) * (1-(desconto/100))) * 100)/100;
-                  document.getElementById('valor').value = totalDesconto;
-              } 
-          }
+      if (query.length === 0) {
+        sugestoes.innerHTML = '';
+        return;
       }
+
+      try {
+        const response = await fetch(`/clientes/loc?query=${encodeURIComponent(query)}`);
+        const nomes = await response.json();
+
+        sugestoes.innerHTML = '';
+        nomes.forEach(nome => {
+          const div = document.createElement('div');
+          div.textContent = nome;
+          div.onclick = () => {
+            document.getElementById('campo-pesquisa').value = nome;
+            sugestoes.innerHTML = '';
+          };
+          sugestoes.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Erro ao buscar nomes:', error);
+      }
+    }
   </script>
 </main>
 
