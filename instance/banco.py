@@ -131,39 +131,52 @@ def autenticarUsuario(formulario):
     return False
 
 
-def buscarUsuarioPorCPF(cpf):
+def buscarClientePorCPFouCNPJ(cpf_ou_cnpj):
     conn = connect_to_db()
     cursor = conn.cursor()
-    
+    usuario = None
+
     try:
+        # Primeira tentativa: Buscar pelo CPF
         cursor.execute('''
-            SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco, Usuario.Status
+            SELECT Pessoa.id, Pessoa.Nome, Pessoa.CPF, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco
             FROM Pessoa
-            JOIN Usuario ON Pessoa.id = Usuario.pessoa_id
+            JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
             WHERE Pessoa.CPF = ?
-        ''', (cpf,))
+        ''', (cpf_ou_cnpj,))
         
         usuario = cursor.fetchone()
+        # Se não encontrar pelo CPF, buscar pelo CNPJ
+        if usuario==None:
+            print(cpf_ou_cnpj)
+            cursor.execute('''
+                SELECT Pessoa.id, Pessoa.Nome, Cliente.CNPJ, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco
+                FROM Pessoa
+                JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
+                WHERE Cliente.CNPJ = ?
+            ''', (cpf_ou_cnpj,))
+            print(usuario)
+            usuario = cursor.fetchone()
 
     except Exception as e:
         print(f"Erro: {e}")
         
     finally:
         conn.close()
-    
+
     if usuario:
         return {
             'id': usuario[0],
             'nome': usuario[1],
-            'cpf': usuario[2],
+            'cpf_ou_cnpj': usuario[2],
             'telefone': usuario[3],
             'email': usuario[4],
             'data_nascimento': usuario[5],
             'endereco': usuario[6],
-            'status': usuario[7]
         }
     
     return None
+
 
 def adicionarFuncionario(cpf, endereco, Data_Nascimento, email, telefone, nome, senha):
     conn = connect_to_db()
@@ -229,7 +242,7 @@ def atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone,nome, 
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    if len(cpf_cnpj_original)==11:
+    if len(cpf_cnpj_original)==14:
 
         cursor.execute("SELECT id FROM Pessoa WHERE cpf = ?", (cpf_cnpj_original,))
         row = cursor.fetchone()
@@ -437,26 +450,53 @@ def adicionarLocacao(LocalDevolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
     finally:
         conn.close()
 
+from datetime import datetime
+
+from datetime import datetime
+
 def buscaLocacao():
     conn = connect_to_db()
     cursor = conn.cursor()
 
-
-    cursor.execute("""SELECT Locacao.id, Locacao.Local_Devolucao, Locacao.Data_Hora_Locacao, Locacao.Data_Hora_Prevista_Devolucao, Locacao.Valor, Locacao.id_cliente, Locacao.id_veiculo, Locacao.Condicoes_Veiculo, Locacao.Desconto, Locacao.Multa, Locacao.Status, 
-                   Pessoa.Nome, Veiculo.Modelo
-                   FROM Locacao
-                   JOIN Pessoa ON Locacao.id_cliente = Pessoa.id 
-                   JOIN Cliente ON Locacao.id_cliente = Cliente.pessoa_id
-                   JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id""")
+    cursor.execute("""
+        SELECT Locacao.id, Locacao.Local_Devolucao, Locacao.Data_Hora_Locacao, Locacao.Data_Hora_Prevista_Devolucao, 
+               Locacao.Valor, Locacao.id_cliente, Locacao.id_veiculo, Locacao.Condicoes_Veiculo, 
+               Locacao.Desconto, Locacao.Multa, Locacao.Status, Pessoa.Nome, Veiculo.Modelo
+        FROM Locacao
+        JOIN Pessoa ON Locacao.id_cliente = Pessoa.id 
+        JOIN Cliente ON Locacao.id_cliente = Cliente.pessoa_id
+        JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id
+        WHERE Locacao.Status='Ativo'
+    """)
     locacaoRaw = cursor.fetchall()
 
     locacoes = []
-    colunas = ["id","Local_Devolucao","Data_Hora_Locacao","Data_Hora_Prevista_Devolucao","Valor","id_cliente","id_veiculo","Condicoes_Veiculo","Desconto","Multa","Status","Nome","Modelo"]
+    colunas = [
+        "id", "Local_Devolucao", "Data_Hora_Locacao", "Data_Hora_Prevista_Devolucao", "Valor", 
+        "id_cliente", "id_veiculo", "Condicoes_Veiculo", "Desconto", "Multa", "Status", "Nome", "Modelo"
+    ]    
     for i in locacaoRaw:
         locacao = {}
-        for index,j in enumerate(i):
+        for index, j in enumerate(i):
             locacao[colunas[index]] = j
+        
+        # Separar data e hora
+        data_hora_locacao = locacao.get("Data_Hora_Locacao")
+        data_hora_prevista = locacao.get("Data_Hora_Prevista_Devolucao")
+        
+        if data_hora_locacao:
+            data_hora_locacao = datetime.strptime(str(data_hora_locacao), "%Y-%m-%d %H:%M")  # Ajuste para o formato do banco
+            locacao["data_locacao"] = data_hora_locacao.date().isoformat()  # Apenas data
+            locacao["hora_locacao"] = data_hora_locacao.time().isoformat()  # Apenas hora
+
+        if data_hora_prevista:
+            data_hora_prevista = datetime.strptime(str(data_hora_prevista), "%Y-%m-%d %H:%M")  # Ajuste para o formato do banco
+            locacao["data_prevista_locacao"] = data_hora_prevista.date().isoformat()  # Apenas data
+            locacao["hora_prevista_locacao"] = data_hora_prevista.time().isoformat()  # Apenas hora
+
         locacoes.append(locacao)
+    print(locacoes)
+
     conn.close()
     return locacoes
 
@@ -509,9 +549,8 @@ def obterDiariaVeiculo(id_locacao):
                         ON Locacao.id_veiculo = veiculo.id WHERE Locacao.id = ?
                     """, (id_locacao,))
 
-    valor_diaria = float((cursor.fetchone()[0]).replace("R$", "").replace(",", "."))
-    #arrumar depois que o valor de veiculo for corrigido
-    #valor_diaria = cursor.fetchone()[0]
+    valor_diaria = float((cursor.fetchone()[0]).replace(",", "."))
+
     conn.close()
     if valor_diaria:
         return valor_diaria
@@ -525,6 +564,7 @@ def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoe
 
     try:
         cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
+        cursor.execute('UPDATE Locacao SET Status = ? WHERE id = ?', ('Concluído', id_locacao))
         conn.commit()
     except Exception as e:
         conn.rollback()

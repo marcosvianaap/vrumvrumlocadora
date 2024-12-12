@@ -232,6 +232,7 @@ def gerenciar_veiculos():
     cursor = conn.cursor()
     
     modeloVeiculo = request.args.get('modelo')
+    
     if modeloVeiculo == None:
         cursor.execute("SELECT id,Ano_Aquisicao,Placa,RENAVAM,Modelo,Marca,Ano_Fabricacao,Cor,Tipo_Combustivel,Valor_Locacao_Dia,Status FROM Veiculo")
     else:
@@ -421,12 +422,14 @@ def pesquisa_veiculo():
 
 
             veiculo = bd.buscaCarros(id)
-            modelo = veiculo[4]
-
             return render_template('criar_locacao.html', veiculo=veiculo)
         
         elif "historico" in request.form:
-            return render_template("historico_locação.html")
+            id = request.form['id']
+
+
+            veiculo = bd.buscaCarros(id)
+            return render_template("historico_locação.html", veiculo=veiculo)
 
     return render_template('pesquisa_veiculos.html')
 
@@ -465,11 +468,11 @@ def pesquisar_clientes():
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
             nome = request.form['nome']
-            cpf = None
-            cnpj = None
+            cpf = ''
+            cnpj = ''
             cpf_cnpj_novo = request.form['cpf_cnpj'] #CPF que irá substituir no banco
 
-            if len(cpf_cnpj_novo) ==11:
+            if len(cpf_cnpj_novo) ==14:
                 cpf = cpf_cnpj_novo
             else:
                 cnpj = cpf_cnpj_novo
@@ -518,7 +521,7 @@ def criar_cliente():
         nome = request.form['nome']
         cpf_cnpj = request.form['cpf_cnpj']
 
-        if len(cpf_cnpj)==11:
+        if len(cpf_cnpj)==14:
             cpf = cpf_cnpj
             cnpj=''
         else:
@@ -546,29 +549,31 @@ def criar_cliente():
 # Rota criada para edição (Deve ser removida no merge)
 @app.route("/clientes/loc", methods=['GET', 'POST'])
 def loc():
-    query = request.args.get('query', '').strip()
-
-    if query:  # Se "query" está presente, retorna JSON
-        nomes = bd.buscaCliente(query)
-        return jsonify(nomes)
     
     if request.method == 'POST':             
-        Local_Devolucao = "Matriz"
+        Local_Devolucao = request.form['localDevolucao']
         DataLocacao = request.form['dataAluguel']
         HoraLocacao = request.form['horaAluguel']
         DataHoraLocacao = DataLocacao + " " + HoraLocacao
         DataPrevistaDevolucao = request.form['dataDevolucao']
         HoraPrevistaDevolucao = request.form['horaDevolucao']
         DataHoraPrevDevolucao = DataPrevistaDevolucao + " " + HoraPrevistaDevolucao
-        Valor = 3 #request.form['']
-        id_cliente = bd.filtro_clientes(request.form['nomeCliente'])
-        id_cliente = [d['id'] for d in id_cliente]
-        id_cliente = id_cliente[0]
+
         id_veiculo = request.form['idveiculo']
+        id_cliente = bd.buscarClientePorCPFouCNPJ(request.form['cpf'])
+        
+        if id_cliente==None:
+            flash('Não há cliente com esse CPF ou CNPJ!', 'warning')
+            return render_template("criar_locacao.html", veiculo=id_veiculo)
+
+        id_cliente = id_cliente['id']
+        
         Condicoes_Veiculo = request.form['condicoesSaida']
-        Desconto = 0
-        Multa = 0
-        Status = "ativo, concluído e cancelado"
+        Desconto = request.form['percentualDesconto']
+        Multa = request.form['percentualMulta']
+        Status = "Ativo"
+
+        Valor = request.form['valor']
 
         bd.adicionarLocacao(Local_Devolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
                             id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status)
@@ -576,44 +581,12 @@ def loc():
 
         return render_template("pesquisa_veiculos.html")
 
-
     # Caso contrário, renderiza a página HTML
     return render_template("criar_locacao.html")
 
 #rota principal para a página de locações
 @app.route("/locacoes", methods=['GET', 'POST'])
 def locacoes():
-
-
-    # Dados de exemplo (Devem ser removidos)
-    locacoes = [
-        {
-            "cliente": "João Silva",
-            "id": "1",
-            "veiculo": "Toyota Corolla",
-            "data_aluguel": "2024-11-20",
-            "hora_aluguel": "10:00",
-            "data_devolucao": "2024-11-25",
-            "hora_devolucao": "10:00",
-            "desconto": 5,
-            "multa": 10,
-            "condicoes_saida": "Tanque cheio, sem danos",
-            "status": "Ativo"
-        },
-        {
-            "cliente": "Maria Oliveira",
-            "id" : "2",
-            "veiculo": "Honda Civic",
-            "data_aluguel": "2024-11-22",
-            "hora_aluguel": "14:00",
-            "data_devolucao": "2024-11-27",
-            "hora_devolucao": "14:00",
-            "desconto": 10,
-            "multa": 0,
-            "condicoes_saida": "Tanque cheio, sem danos",
-            "status": "Concluído"
-        }
-    ]
 
     locacoes = bd.buscaLocacao()
 
@@ -647,8 +620,8 @@ def criar_devolucao():
             horaDevolucao = request.form['horaDevolucao']
             dataHoraDevolucao = dataDevolucao + " " + horaDevolucao
 
-            multa = float(request.form['multa'].replace('R$ ','').replace(',','.'))
-            valorTotal = float(request.form['valorRealTotal'].replace('R$','').replace(',','.'))
+            multa = float(request.form['multa'])
+            valorTotal = float(request.form['valorRealTotal'])
             localDevolucao = request.form['localDevolucao']
             condicoes = request.form['condicoesDevolucao']
 
