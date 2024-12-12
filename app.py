@@ -427,6 +427,7 @@ def pesquisa_veiculo():
             return render_template('criar_locacao.html', veiculo=veiculo)
         
         elif "historico" in request.form:
+
             print('PASSANDO POR AQUI...')
             session['historico_veiculo'] = request.form['id']
             return redirect(url_for("historico_locacao"))
@@ -468,11 +469,11 @@ def pesquisar_clientes():
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
 
             nome = request.form['nome']
-            cpf = None
-            cnpj = None
+            cpf = ''
+            cnpj = ''
             cpf_cnpj_novo = request.form['cpf_cnpj'] #CPF que irá substituir no banco
 
-            if len(cpf_cnpj_novo) ==11:
+            if len(cpf_cnpj_novo) ==14:
                 cpf = cpf_cnpj_novo
             else:
                 cnpj = cpf_cnpj_novo
@@ -521,7 +522,7 @@ def criar_cliente():
         nome = request.form['nome']
         cpf_cnpj = request.form['cpf_cnpj']
 
-        if len(cpf_cnpj)==11:
+        if len(cpf_cnpj)==14:
             cpf = cpf_cnpj
             cnpj=''
         else:
@@ -572,6 +573,7 @@ def loc():
         Desconto = 0
         Multa = 0
         Status = "ativo, concluído e cancelado"
+
 
         bd.adicionarLocacao(Local_Devolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
                             id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status)
