@@ -618,6 +618,8 @@ def locacoes():
             flash(f'Ocorreu um erro: {str(e)}', 'danger')
         finally:
             conn.close()
+            return redirect(url_for("locacoes"))
+
 
     return render_template('locacao.html', locacoes=locacoes)
 
