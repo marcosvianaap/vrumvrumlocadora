@@ -22,7 +22,7 @@ Locações
 
                 <div class="blocoFuncionario">
                     {% if 'devolucao' in locacao %}
-                    <div class="dadosFuncionario" style="background: rgb(191, 191, 191); border-radius:36px 36px 0px 0px; margin:36px 0px 0px 0px;">
+                    <div class="dadosFuncionario" style="background: rgb(191, 191, 191) !important;border-radius:36px 36px 0px 0px;margin:36px 0px 0px 0px!important">
                     {% else %}
                     <div class="dadosFuncionario" style="margin:36px 0px 0px 0px">
                     {% endif %}
@@ -72,10 +72,10 @@ Locações
 
                     <div class="botoesLoc">
                         <div>
-                            <form action="/editar_devolucao" method="POST">
+                            <form action="{{ url_for('editar_devolucao') }}" method="POST" novalidate>
                                 <input type="hidden" value="{{locacao.devolucao.id}}" name="id_devolucao">
                                 <div class="botao">  
-                                    <button>Editar</button>
+                                    <button name="editar1" type="submit">Editar</button>
                                 </div>
                             </form>
                         </div>

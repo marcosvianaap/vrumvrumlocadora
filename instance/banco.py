@@ -570,6 +570,33 @@ def verificarDevolucao(id_locacao):
     else:
         return False
 
+def obterDevolucao(id):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Devolucao WHERE id = ?",(id))
+    devolucaoRaw = cursor.fetchall()
+    devolucoes = []
+    colunas = ['id','Data_Hora_Devolucao','Multa','Local_devolucao','Valor_Total','Condicoes_Veiculo','id_locacao']
+    for i in devolucaoRaw:
+        devolucao = {}
+        for index,j in enumerate(i):
+            devolucao[colunas[index]] = j
+        devolucao['data_devolucao'] = devolucao['Data_Hora_Devolucao'].split(' ')[0]
+        devolucao['hora_devolucao'] = devolucao['Data_Hora_Devolucao'].split(' ')[1]
+        devolucoes.append(devolucao)
+    return devolucoes
+def atualizaDevolucao(id_devolucao,dataHoraDevolucao,multa,localDevolucao,valorTotal,condicoes):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('UPDATE Devolucao SET Data_Hora_Devolucao = ?, Multa = ?, Local_devolucao = ?, Valor_Total = ?, Condicoes_Veiculo = ? WHERE id = ?', (dataHoraDevolucao,multa,localDevolucao,valorTotal,condicoes,id_devolucao))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro: {e}")
+    finally:
+        conn.close()
+
 if __name__ == "__main__":
     # Cria o banco de dados e as tabelas
     connect_to_db()
