@@ -7,7 +7,7 @@ from flask import Flask, flash, render_template, session,request,redirect,url_fo
 from flask import render_template
 import instance.banco as bd
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.static_folder = 'static'
 app.secret_key = 'chaveSecretaParaCriptografia'
 
@@ -398,10 +398,24 @@ def backend_editar_veiculo():
     return redirect(url_for("gerenciar_veiculos")) 
 
 
-#ROTA PARA PESQUISAR VEICULOS
-@app.route('/pesquisar', methods=['GET', 'POST'])
+#------------------------------------------------------------------
+
+"""GERENCIAMENTO DE CLIENTE"""
+
+
+
+
+#Rota principal para a página de gerenciamento de clientes
+@app.route("/funcionarios")
+@user_required
+def funcionarios():
+    return render_template("funcionarios.html")
+
+# Rota para pesquisar veículos
+@app.route('/funcionarios/pesquisar', methods=['GET', 'POST'])
 @user_required
 def pesquisa_veiculo():
+    carros = bd.buscaCarros('', '', '', '', '', '')
     if request.method == 'POST':
         if "pesquisar" in request.form:
             placa = request.form['placa']
@@ -411,41 +425,29 @@ def pesquisa_veiculo():
             ano = request.form['ano']
             valorLocacaoDia = request.form['valor']
         
-            carros = bd.buscaCarros(placa,modelo,marca,cor,valorLocacaoDia,ano)
+            # Realiza a busca com os parâmetros fornecidos no formulário
+            veiculos = bd.buscaCarros(placa, modelo, marca, cor, valorLocacaoDia, ano)
 
-            # Lógica de pesquisa de veículos aqui
-            return render_template('pesquisa_veiculos.html', carros=carros)
+            # Lógica de pesquisa de veículos
+            return render_template('pesquisa_veiculos.html', veiculos=veiculos)
         
         elif "alugar" in request.form:
-
             id = request.form['id']
-
-
             veiculo = bd.buscaCarros(id)
             modelo = veiculo[4]
 
             return render_template('criar_locacao.html', veiculo=veiculo)
         
         elif "historico" in request.form:
-
-            print('PASSANDO POR AQUI...')
             session['historico_veiculo'] = request.form['id']
             return redirect(url_for("historico_locacao"))
+    
+    # Exibe os veículos por padrão ao carregar a página
+    return render_template('pesquisa_veiculos.html', carros=carros)
 
-    return render_template('pesquisa_veiculos.html')
-
-#------------------------------------------------------------------
-
-"""GERENCIAMENTO DE CLIENTE"""
-
-#Rota principal para a página de gerenciamento de clientes
-@app.route("/funcionarios")
-@user_required
-def funcionarios():
-    return render_template("funcionarios.html")
 
 #rota principal para a página de gerenciamento de clientes
-@app.route("/clientes", methods=['GET', 'POST'])
+@app.route("/funcionarios/clientes", methods=['GET', 'POST'])
 @user_required
 def pesquisar_clientes():
 
@@ -511,7 +513,7 @@ def pesquisar_clientes():
         
     return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
 
-@app.route("/clientes/cadastrar", methods=['GET', 'POST'])
+@app.route("/funcionarios/clientes/cadastrar", methods=['GET', 'POST'])
 @user_required
 def criar_cliente():
 
@@ -548,7 +550,7 @@ def criar_cliente():
     return render_template("criar_cliente.html")
 
 # Rota criada para edição (Deve ser removida no merge)
-@app.route("/clientes/loc", methods=['GET', 'POST'])
+@app.route("/funcionarios/clientes/loc", methods=['GET', 'POST'])
 def loc():
     query = request.args.get('query', '').strip()
 
@@ -586,11 +588,11 @@ def loc():
     return render_template("criar_locacao.html")
 
 #rota principal para a página de locações
-@app.route("/locacoes", methods=['GET', 'POST'])
+@app.route("/funcionarios/locacoes", methods=['GET', 'POST'])
 def locacoes():
 
 
-    # Dados de exemplo (Devem ser removidos)
+  
     locacoes = bd.buscaLocacao()
 
     return render_template('locacao.html', locacoes=locacoes)
@@ -647,7 +649,7 @@ def criar_devolucao():
 
 
 # ROTAS PARA HISTÓRICO DE VEICULOS ----------------------------
-@app.route("/funcionario/historico_devolução",methods=['POST'])
+@app.route("/funcionarios/historico_devolução",methods=['POST'])
 @user_required
 def historico_devolucao():
     
@@ -669,7 +671,7 @@ def historico_devolucao():
     
     return render_template("historico_devolução.html",devolucoes=devolucoes)
 
-@app.route("/funcionario/historico_locacao",methods=['POST','GET'])
+@app.route("/funcionarios/historico_locacao",methods=['POST','GET'])
 @user_required
 def historico_locacao():
 
@@ -706,7 +708,7 @@ def historico_locacao():
 
     return render_template("historico_locação.html",locacoes=locacoes)
 
-@app.route("/funcionario/editar_devolucao",methods=['POST'])
+@app.route("/funcionarios/editar_devolucao",methods=['POST'])
 @user_required
 def editar_devolucao():
 
@@ -715,7 +717,7 @@ def editar_devolucao():
 
     return render_template("historico_locação.html")
 
-@app.route("/funcionario/editar_locacao",methods=['POST'])
+@app.route("/funcionarios/editar_locacao",methods=['POST'])
 @user_required
 def editar_locacao():
 

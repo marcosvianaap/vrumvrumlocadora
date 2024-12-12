@@ -19,6 +19,9 @@
     flex-direction: row !important;
 }
 
+a.nav-link:hover{
+    color: var(--color1);
+}
 #divBusca{
     display: flex;
     align-items: center;

@@ -7,6 +7,7 @@ Cadastrar
 {% block links %}
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/administrador.css') }}">
 <link rel="stylesheet" href="/static/styles/pesquisa_veiculo.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/locacoes.css') }}">
 
 {% endblock %}
 
@@ -57,16 +58,18 @@ Cadastrar
                     <div>
                         <input name="id" type="hidden" value="{{i.id}}"></input>
                     </div>
-                    <p><b>Modelo:</b> {{ i.Modelo }}</p>
-                    <p><b>Cor:</b> {{ i.Cor }}</p>
-                    <p><b>Marca:</b> {{ i.Marca }}</p>
-                    <p><b>Placa do veículo:</b> {{ i.Placa }}</p>
-                    <p><b>RENAVAM:</b> {{ i.RENAVAM }}</p>
-                    <p><b>Ano de fabricação:</b> {{ i.Ano_Fabricacao }}</p>
-                    <p><b>Ano de aquisição:</b> {{ i.Ano_Aquisicao }}</p>
-                    <p><b>Valor da alocação:</b> {{ i.Valor_Locacao_Dia }}</p>
-                    <p><b>Tipo de combustível:</b> {{ i.Tipo_Combustivel }}</p>
-                    <p><b>Status:</b> {{ i.Status }}</p>
+                    <div class="linha">
+                        <p><strong>Modelo:</strong> {{ i.Modelo }}</p>
+                        <p><strong>Cor:</strong> {{ i.Cor }}</p>
+                        <p><strong>Marca:</strong> {{ i.Marca }}</p>
+                    </div>           
+                    <p><strong>Placa do veículo:</strong> {{ i.Placa }}</p>
+                    <p><strong>RENAVAM:</strong> {{ i.RENAVAM }}</p>
+                    <p><strong>Ano de fabricação:</strong> {{ i.Ano_Fabricacao }}</p>
+                    <p><strong>Ano de aquisição:</strong> {{ i.Ano_Aquisicao }}</p>
+                    <p><strong>Valor da alocação:</strong> {{ i.Valor_Locacao_Dia }}</p>
+                    <p><strong>Tipo de combustível:</strong> {{ i.Tipo_Combustivel }}</p>
+                    <p><strong>Status:</strong> {{ i.Status }}</p>
                     <div class="buttons">
                         <button type="submit" name="historico">Histórico</button>
                         <button type="submit" name="alugar">Alugar</button>

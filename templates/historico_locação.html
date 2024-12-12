@@ -22,9 +22,9 @@ Locações
 
                 <div class="blocoFuncionario">
                     {% if 'devolucao' in locacao %}
-                    <div class="dadosFuncionario" style="background: rgb(191, 191, 191); !important;border-radius:36px 36px 0px 0px;margin:36px 0px 0px 0px!important">
+                    <div class="dadosFuncionario" style="background: rgb(191, 191, 191); border-radius:36px 36px 0px 0px; margin:36px 0px 0px 0px;">
                     {% else %}
-                    <div class="dadosFuncionario" style="margin:36px 0px 0px 0px!important">
+                    <div class="dadosFuncionario" style="margin:36px 0px 0px 0px">
                     {% endif %}
                         <div class="linha">
                             <p><strong>Cliente:</strong> {{ locacao.Nome }}</p>

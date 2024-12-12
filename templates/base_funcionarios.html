@@ -7,12 +7,13 @@
         {% block titulo %}
         {%endblock%}
     </title>
-
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.3-dist/css/bootstrap.min.css') }}">
     <link rel="icon" type="logotipo" href="../static/img/Logotipo-SemFundo.png"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/funcionario.css') }}">
 
     {% block links %}
     {%endblock%}

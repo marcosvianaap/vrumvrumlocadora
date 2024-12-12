@@ -25,14 +25,7 @@
     gap: 15px; /* Espaço entre as linhas de campos */
 }
 
-/* Estilo para as linhas de label e input */
-.alocação .linha {
-    display: flex;
-    flex-direction: row; /* Alinha os campos na horizontal */
-    align-items: center; /* Alinha verticalmente os elementos */
-    margin-bottom: 15px; /* Espaço entre as linhas */
-    width: 100%; /* Garante que as linhas ocupem toda a largura disponível */
-}
+
 
 /* Estilo das labels */
 .alocação label {
