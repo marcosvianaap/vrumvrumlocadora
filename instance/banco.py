@@ -597,6 +597,32 @@ def atualizaDevolucao(id_devolucao,dataHoraDevolucao,multa,localDevolucao,valorT
     finally:
         conn.close()
 
+def verificaDisponibilidadeVeiculo(id_veiculo, DataHoraLocacao, DataHoraPrevDevolucao):
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    query = '''
+    SELECT COUNT(*) 
+    FROM Locacao 
+    WHERE id_veiculo = ? 
+    AND Status = 'Ativo'
+    AND (
+        (? BETWEEN Data_Hora_Locacao AND Data_Hora_Prevista_Devolucao) OR
+        (? BETWEEN Data_Hora_Locacao AND Data_Hora_Prevista_Devolucao) OR
+        (Data_Hora_Locacao BETWEEN ? AND ?) OR
+        (Data_Hora_Prevista_Devolucao BETWEEN ? AND ?)
+    )
+    '''
+
+    cursor.execute(query, (id_veiculo, DataHoraLocacao, DataHoraPrevDevolucao,
+                           DataHoraLocacao, DataHoraPrevDevolucao,
+                           DataHoraLocacao, DataHoraPrevDevolucao))
+
+    resultado = cursor.fetchone()[0]
+    conn.close()
+
+    return resultado == 0
+
 if __name__ == "__main__":
     # Cria o banco de dados e as tabelas
     connect_to_db()
