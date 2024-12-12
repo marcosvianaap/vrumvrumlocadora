@@ -705,14 +705,35 @@ def historico_locacao():
 
     return render_template("historico_locação.html",locacoes=locacoes)
 
-@app.route("/funcionarios/editar_devolucao",methods=['POST'])
+@app.route("/funcionarios/editar_devolucao",methods=['POST', 'GET'])
 @user_required
 def editar_devolucao():
 
-    id = request.form['id_devolucao']
-    print('DEVOLUCAO SENDO EDITADA:',id)
-
-    return render_template("historico_locação.html")
+    if request.method == 'POST':
+        if "editar1" in request.form:
+            id = request.form['id_devolucao']
+            print('DEVOLUCAO SENDO EDITADA:',id)
+            devolucoes = bd.obterDevolucao(id)
+            locacoes = bd.buscaLocacao()
+            locacao = locacoes[0]
+            return render_template("editar_devolucao.html", devolucoes=devolucoes, locacao=locacao)
+        
+        if "editar2" in request.form:
+            id_locacao = request.form['id2']
+            id_devolucao = request.form['id1']
+            dataDevolucao = request.form['dataDevolucao']
+            horaDevolucao = request.form['horaDevolucao']
+            dataHoraDevolucao = dataDevolucao + " " + horaDevolucao
+            multa = float(request.form['multa'].replace('R$ ','').replace(',','.'))
+            valorTotal = float(request.form['valorRealTotal'].replace('R$','').replace(',','.'))
+            localDevolucao = request.form['localDevolucao']
+            condicoes = request.form['condicoesDevolucao']
+            bd.atualizaDevolucao(id_devolucao,dataHoraDevolucao,multa,localDevolucao,valorTotal,condicoes)
+            flash('Devolução atualizada com sucesso!', 'success')
+            return redirect(url_for('historico_locacao'))
+        
+    return render_template("url_for('historico_locacao')")
+    
 
 @app.route("/funcionarios/editar_locacao",methods=['POST'])
 @user_required
