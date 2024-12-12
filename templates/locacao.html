@@ -14,6 +14,15 @@ Locações
 
 {% block conteudo %}
 
+<style>
+    .row  {
+      padding: 0 20px;
+    }
+    .row label{
+      padding-left: 0;
+    }
+  </style>
+
 <main class="main-pesquisar">
 
     {% if locacoes %}
@@ -48,124 +57,100 @@ Locações
                         </div>
                     
                         <!-- Botão Editar (Redirecionando para o formulário de edição) -->
-                        <a href="#" class="botaoEditarFuncionario botao">
+                        <div class="botaoEditarFuncionario botao">
                             <button>Editar</button>
-                        </a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="blocoEditarDados">
-                    <form action="{{ url_for('editar_locacao') }}" method="POST" class="editarFuncionario" novalidate>
+                    <form action="{{ url_for('locacoes') }}" method="POST" class="editarFuncionario" novalidate>
                         <div class="blocoEdicao">
 
-                            <input type='hidden' name="destino" value="locacoes">
                             <input name="id" type="hidden" value="{{ locacao.id }}">
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="cliente" class="col-sm-2 col-form-label">Cliente</label>
-                                    <input type="text" class="form-control" id="cliente" name="cliente" value="{{ locacao.id_cliente }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira um cliente válido.
-                                    </div>
+                                <label for="data_aluguel" class="form-label">Data do Aluguel</label>
+                                <input type="date" class="form-control w-100" id="data_aluguel" name="data_aluguel" value="{{ locacao.data_locacao }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira uma data válida.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="veiculo" class="col-sm-2 col-form-label">Veículo</label>
-                                    <input type="text" class="form-control" id="veiculo" name="veiculo" value="{{ locacao.id_veiculo }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira um veículo válido.
-                                    </div>
+                                <label for="hora_aluguel" class="form-label">Hora do Aluguel</label>
+                                <input type="time" class="form-control w-100" id="hora_aluguel" name="hora_aluguel" value="{{ locacao.hora_locacao }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira um horário válido.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="data_aluguel" class="col-sm-2 col-form-label">Data do Aluguel</label>
-                                    <input type="date" class="form-control" id="data_aluguel" name="data_aluguel" value="{{ locacao.data_locacao }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira uma data válida.
-                                    </div>
+                                <label for="data_devolucao" class="form-label">Data Prevista da Devolução</label>
+                                <input type="date" class="form-control w-100" id="data_devolucao" name="data_devolucao" value="{{ locacao.data_devolucao }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira uma data válida.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="hora_aluguel" class="col-sm-2 col-form-label">Hora do Aluguel</label>
-                                    <input type="time" class="form-control" id="hora_aluguel" name="hora_aluguel" value="{{ locacao.hora_locacao }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira um horário válido.
-                                    </div>
+                                <label for="hora_devolucao" class="form-label">Hora Prevista da Devolução</label>
+                                <input type="time" class="form-control w-100" id="hora_devolucao" name="hora_devolucao" value="{{ locacao.hora_devolucao }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira um horário válido.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="data_devolucao" class="col-sm-2 col-form-label">Data Prevista da Devolução</label>
-                                    <input type="date" class="form-control" id="data_devolucao" name="data_devolucao" value="{{ locacao.data_devolucao }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira uma data válida.
-                                    </div>
+                                <label for="desconto" class="form-label">Desconto (%)</label>
+                                <input type="number" class="form-control w-100" id="desconto" name="desconto" value="{{ locacao.Desconto }}" min="0" max="100" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira um desconto válido.
+                                </div>
+                            </div>
+
+                            <input id="diara" name="diaria" value="{{locacao.Diaria}}" type="hidden" readonly>
+
+                            <div class="row mb-3">
+                                <label for="valor" class="form-label">Valor da locação</label>
+                                <input type="text" class="form-control w-100" id="valor" name="valor" placeholder="00.00" value="{{locacao.Valor}}" readonly>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="localDevolucao" class="form-label">Local de devolução</label>
+                                <input type="text" class="form-control w-100" id="localDevolucao" name="localDevolucao" value="{{locacao.LocalDevolucao}}" placeholder="Ex.: Avenida Paulista, 358, São Paulo, SP, 01310-000" required>
+                                <div class="invalid-feedback">Por favor, insira uma data válida.</div>
+                              </div>
+
+
+                            <div class="row mb-3">
+                                <label for="multa" class="form-label">Multa (%)</label>
+                                <input type="number" class="form-control w-100" id="multa" name="multa" value="{{ locacao.Multa }}" min="0" max="100" required>
+                                <div class="invalid-feedback">
+                                    Por favor, insira uma multa válida.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="hora_devolucao" class="col-sm-2 col-form-label">Hora Prevista da Devolução</label>
-                                    <input type="time" class="form-control" id="hora_devolucao" name="hora_devolucao" value="{{ locacao.hora_devolucao }}" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira um horário válido.
-                                    </div>
+                                <label for="condicoes_saida" class="form-label">Condições de Saída</label>
+                                <textarea class="form-control w-100" id="condicoes_saida" name="condicoes_saida" required>{{ locacao.Condicoes_Veiculo }}</textarea>
+                                <div class="invalid-feedback">
+                                    Por favor, insira condições de saída válidas.
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="desconto" class="col-sm-2 col-form-label">Desconto (%)</label>
-                                    <input type="number" class="form-control" id="desconto" name="desconto" value="{{ locacao.Desconto }}" min="0" max="100" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira um desconto válido.
-                                    </div>
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-control w-100" id="status" name="status" required>
+                                    <option value="Em andamento" {% if locacao.Status == "Ativo" %}selected{% endif %}>Ativo</option>
+                                    <option value="Cancelado" {% if locacao.Status == "Cancelado" %}selected{% endif %}>Cancelado</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione um status válido.
                                 </div>
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="multa" class="col-sm-2 col-form-label">Multa (%)</label>
-                                    <input type="number" class="form-control" id="multa" name="multa" value="{{ locacao.Multa }}" min="0" max="100" required>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira uma multa válida.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="condicoes_saida" class="col-sm-2 col-form-label">Condições de Saída</label>
-                                    <textarea class="form-control" id="condicoes_saida" name="condicoes_saida" required>{{ locacao.Condicoes_Veiculo }}</textarea>
-                                    <div class="invalid-feedback">
-                                        Por favor, insira condições de saída válidas.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="input-group col-sm-10">
-                                    <label for="status" class="col-sm-2 col-form-label">Status</label>
-                                    <select class="form-control" id="status" name="status" required>
-                                        <option value="Em andamento" {% if locacao.Status == "Ativo" %}selected{% endif %}>Ativo</option>
-                                        <option value="Concluído" {% if locacao.Status == "Concluído" %}selected{% endif %}>Concluído</option>
-                                        <option value="Cancelado" {% if locacao.Status == "Cancelado" %}selected{% endif %}>Cancelado</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Por favor, selecione um status válido.
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
+
                         <div class="botaoConfirmarEdicao botao">
                             <button type="submit">Confirmar</button>
                         </div>
@@ -174,7 +159,6 @@ Locações
                         </div>
                     </form>
                 </div>
-
             </div>
         {% endfor %}
     {% else %}
@@ -182,6 +166,49 @@ Locações
             Nenhuma locação disponível no momento.
         </div>
     {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const forms = document.querySelectorAll('.editarFuncionario');
+    
+            forms.forEach((form) => {
+                const dataDevolucao = form.querySelector('#data_devolucao');
+                const horaDevolucao = form.querySelector('#hora_devolucao');
+                const dataAluguel = form.querySelector('#data_aluguel');
+                const horaAluguel = form.querySelector('#hora_aluguel');
+                const desconto = form.querySelector('#desconto');
+                const valor = form.querySelector('#valor');
+                const diaria = form.querySelector('#diaria');
+    
+                function calcularValores() {
+                    const dataDev = new Date(dataDevolucao.value + 'T' + horaDevolucao.value);
+                    const dataLoc = new Date(dataAluguel.value + 'T' + horaAluguel.value);
+    
+                    if (!(dataDev && dataLoc && valorDiaria && desconto.value)) {
+                        valor.value = 0;
+                        return;
+                    }
+    
+                    const diffTime = dataDev - dataLoc;
+    
+                    if (diffTime >= 1) {
+                        const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+                        let totalDesconto = Math.round(((valorDiaria * diffDays) * (1 - (desconto.value / 100))) * 100) / 100;
+                        valor.value = totalDesconto;
+                    } else {
+                        valor.value = 0;
+                    }
+                }
+    
+                dataDevolucao.addEventListener('input', calcularValores);
+                horaDevolucao.addEventListener('input', calcularValores);
+                dataAluguel.addEventListener('input', calcularValores);
+                horaAluguel.addEventListener('input', calcularValores);
+                desconto.addEventListener('input', calcularValores);
+            });
+        });
+    </script>
+    
 
 </main>
 
