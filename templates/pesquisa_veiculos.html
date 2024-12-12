@@ -49,8 +49,8 @@ Cadastrar
     </div>
 
     <div class="bloco-carros">
-        {% if carros %}
-        {% for i in carros%}
+        {% if veiculos %}
+        {% for i in veiculos%}
 
         <form method="POST">
             <div class="results-section">
@@ -72,7 +72,10 @@ Cadastrar
                     <p><strong>Status:</strong> {{ i.Status }}</p>
                     <div class="buttons">
                         <button type="submit" name="historico">Histórico</button>
-                        <button type="submit" name="alugar">Alugar</button>
+
+                        {% if i.Status != "Desativado" %}
+                            <button type="submit" name="alugar">Alugar</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>

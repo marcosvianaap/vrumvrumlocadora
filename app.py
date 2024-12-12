@@ -503,7 +503,6 @@ def pesquisar_clientes():
                 bd.atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, cnh, tipo_cnh, cpf_cnpj_original)
                 flash('Cliente atualizado com sucesso!', 'success')
                 clientes = bd.filtro_clientes(cpf_cnpj_novo)
-                print(clientes)
                 return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
             
             except Exception as e:
@@ -552,37 +551,36 @@ def criar_cliente():
 # Rota criada para edição (Deve ser removida no merge)
 @app.route("/funcionarios/clientes/loc", methods=['GET', 'POST'])
 def loc():
-    query = request.args.get('query', '').strip()
-
-    if query:  # Se "query" está presente, retorna JSON
-        nomes = bd.buscaCliente(query)
-        return jsonify(nomes)
-    
     if request.method == 'POST':             
-        Local_Devolucao = "Matriz"
+        Local_Devolucao = request.form['localDevolucao']
         DataLocacao = request.form['dataAluguel']
         HoraLocacao = request.form['horaAluguel']
         DataHoraLocacao = DataLocacao + " " + HoraLocacao
         DataPrevistaDevolucao = request.form['dataDevolucao']
         HoraPrevistaDevolucao = request.form['horaDevolucao']
         DataHoraPrevDevolucao = DataPrevistaDevolucao + " " + HoraPrevistaDevolucao
-        Valor = 3 #request.form['']
-        id_cliente = bd.filtro_clientes(request.form['nomeCliente'])
-        id_cliente = [d['id'] for d in id_cliente]
-        id_cliente = id_cliente[0]
-        id_veiculo = request.form['idveiculo']
-        Condicoes_Veiculo = request.form['condicoesSaida']
-        Desconto = 0
-        Multa = 0
-        Status = "ativo, concluído e cancelado"
 
+        id_veiculo = request.form['idveiculo']
+        id_cliente = bd.buscarClientePorCPFouCNPJ(request.form['cpf'])
+        
+        if id_cliente==None:
+            flash('Não há cliente com esse CPF ou CNPJ!', 'warning')
+            return render_template("criar_locacao.html", veiculo=id_veiculo)
+
+        id_cliente = id_cliente['id']
+        
+        Condicoes_Veiculo = request.form['condicoesSaida']
+        Desconto = request.form['percentualDesconto']
+        Multa = request.form['percentualMulta']
+        Status = "Ativo"
+
+        Valor = request.form['valor']
 
         bd.adicionarLocacao(Local_Devolucao,DataHoraLocacao,DataHoraPrevDevolucao,Valor,
                             id_cliente,id_veiculo,Condicoes_Veiculo,Desconto,Multa,Status)
         flash('Locação criada com sucesso!', 'success')
 
         return render_template("pesquisa_veiculos.html")
-
 
     # Caso contrário, renderiza a página HTML
     return render_template("criar_locacao.html")
@@ -591,9 +589,8 @@ def loc():
 @app.route("/funcionarios/locacoes", methods=['GET', 'POST'])
 def locacoes():
 
-
-  
     locacoes = bd.buscaLocacao()
+    print(locacoes)
 
     return render_template('locacao.html', locacoes=locacoes)
 

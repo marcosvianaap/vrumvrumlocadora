@@ -155,8 +155,6 @@ def buscarClientePorCPFouCNPJ(cpf_ou_cnpj):
                 JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
                 WHERE Cliente.CNPJ = ?
             ''', (cpf_ou_cnpj,))
-            print(usuario)
-            usuario = cursor.fetchone()
 
     except Exception as e:
         print(f"Erro: {e}")
@@ -454,18 +452,17 @@ def buscaLocacao():
     conn = connect_to_db()
     cursor = conn.cursor()
 
-
-
     cursor.execute("""SELECT Locacao.id, Locacao.Local_Devolucao, Locacao.Data_Hora_Locacao, Locacao.Data_Hora_Prevista_Devolucao, Locacao.Valor, Locacao.id_cliente, Locacao.id_veiculo, Locacao.Condicoes_Veiculo, Locacao.Desconto, Locacao.Multa, Locacao.Status, 
-                   Pessoa.Nome, Veiculo.Modelo
+                   Pessoa.Nome, Veiculo.Modelo, Veiculo.Valor_Locacao_Dia, Locacao.Local_devolucao
                    FROM Locacao
                    JOIN Pessoa ON Locacao.id_cliente = Pessoa.id 
                    JOIN Cliente ON Locacao.id_cliente = Cliente.pessoa_id
-                   JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id""")
+                   JOIN Veiculo ON Locacao.id_veiculo = Veiculo.id
+                   WHERE Locacao.Status='Ativo'""")
     locacaoRaw = cursor.fetchall()
 
     locacoes = []
-    colunas = ["id","Local_Devolucao","Data_Hora_Locacao","Data_Hora_Prevista_Devolucao","Valor","id_cliente","id_veiculo","Condicoes_Veiculo","Desconto","Multa","Status","Nome","Modelo"]
+    colunas = ["id","Local_Devolucao","Data_Hora_Locacao","Data_Hora_Prevista_Devolucao","Valor","id_cliente","id_veiculo","Condicoes_Veiculo","Desconto","Multa","Status","Nome","Modelo", "Diaria", "LocalDevolucao"]
 
     for i in locacaoRaw:
         locacao = {}
