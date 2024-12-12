@@ -606,7 +606,36 @@ def loc():
 def locacoes():
 
     locacoes = bd.buscaLocacao()
-    print(locacoes)
+    
+    if request.method == 'POST':
+
+        try:
+            id = request.form['id']
+            data_aluguel = request.form["data_aluguel"]
+            hora_aluguel = request.form["hora_aluguel"]
+            data_devolucao = request.form["data_devolucao"]
+            hora_devolucao = request.form["hora_devolucao"]
+            desconto = request.form["desconto"]
+            multa = request.form["multa"]
+            valor = request.form["valor"]
+            localDevolucao = request.form["localDevolucao"]
+            condicoes_saida = request.form["condicoes_saida"]
+            status = request.form["status"]
+
+            data_hora_devolucao = data_devolucao + " " + hora_devolucao
+            data_hora_aluguel = data_aluguel + " " + hora_aluguel
+                    
+            conn = bd.connect_to_db()
+            cursor = conn.cursor()
+            cursor.execute('UPDATE Locacao SET Data_Hora_Locacao = ?, Data_Hora_Prevista_Devolucao = ?, Condicoes_Veiculo = ?, Desconto = ?, Multa = ?, Status = ?, Local_Devolucao = ?, Valor = ? WHERE id = ?',(data_hora_aluguel,data_hora_devolucao,condicoes_saida,desconto,multa,status,localDevolucao, valor, id))
+            conn.commit()
+            flash('Locação editada com sucesso!', 'success')
+        except Exception as e:
+            flash(f'Ocorreu um erro: {str(e)}', 'danger')
+        finally:
+            conn.close()
+            return redirect(url_for("locacoes"))
+
 
     return render_template('locacao.html', locacoes=locacoes)
 
@@ -646,19 +675,9 @@ def criar_devolucao():
             bd.criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoes, id_locacao)
             flash('Devolução criada com sucesso!', 'success')
 
-            #alterar a locacao para status concluído
-
             return redirect(url_for('locacoes'))
             
     return redirect(url_for('locacoes'))
-
-# criar ver editar devolução
-# editar data e hora da devolução, valor da multa e valor total, local e condições
-
-#questão do R$ do banco de dados
-#botoes de criar locação, ver locação e editar locacao
-#locacao nao pode editar se estiver concluída
-#o valor total é com o desconto?
 
 
 # ROTAS PARA HISTÓRICO DE VEICULOS ----------------------------
@@ -692,7 +711,10 @@ def historico_locacao():
 
     conn = bd.connect_to_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, Local_Devolucao, Multa, Data_Hora_Locacao, Data_Hora_Prevista_Devolucao, Valor, id_cliente, id_veiculo, Condicoes_Veiculo,Desconto,Status FROM Locacao WHERE id_veiculo = ?",(veiculo))
+    cursor.execute(
+        "SELECT id, Local_Devolucao, Multa, Data_Hora_Locacao, Data_Hora_Prevista_Devolucao, Valor, id_cliente, id_veiculo, Condicoes_Veiculo, Desconto, Status FROM Locacao WHERE id_veiculo = ? AND Status != 'Ativo'",
+        (veiculo,)
+    )
     locacoesRaw = cursor.fetchall()
     locacoes = []
     colunas = ['id', 'Local_Devolucao', 'Multa', 'Data_Hora_Locacao', 'Data_Hora_Prevista_Devolucao', 'Valor', 'id_cliente', 'id_veiculo', 'Condicoes_Veiculo', 'Desconto', 'Status']

@@ -40,7 +40,7 @@ Locações
                         <p><strong>Status:</strong> {{ locacao.Status }}</p>
                     </div>
 
-                    {% if 'devolucao' not in locacao %}
+                    <!-- {% if 'devolucao' not in locacao %}
                     <div class="botoesLoc">
                         <div>
                             <form class="formDevolucao" action="{{ url_for('criar_devolucao') }}" method="POST">
@@ -51,12 +51,11 @@ Locações
                             </form>
                         </div>
                     
-                        <!-- Botão Editar (Redirecionando para o formulário de edição) -->
                         <a href="#" class="botaoEditarFuncionario botao">
                             <button>Editar</button>
                         </a>
                     </div>
-                    {% endif %}
+                    {% endif %} -->
 
                     {% if 'devolucao' in locacao %}
                     <div class="dadosFuncionario" style="border-radius: 0px 0px 36px 36px;margin:0px">
@@ -184,7 +183,7 @@ Locações
                                 <div class="input-group col-sm-10">
                                     <label for="status" class="col-sm-2 col-form-label">Status</label>
                                     <select class="form-control" id="status" name="status" required>
-                                        <option value="Em andamento" {% if locacao.status == "Ativo" %}selected{% endif %}>Ativo</option>
+                                        <option value="Ativo" {% if locacao.status == "Ativo" %}selected{% endif %}>Ativo</option>
                                         <option value="Concluído" {% if locacao.status == "Concluído" %}selected{% endif %}>Concluído</option>
                                         <option value="Cancelado" {% if locacao.status == "Cancelado" %}selected{% endif %}>Cancelado</option>
                                     </select>

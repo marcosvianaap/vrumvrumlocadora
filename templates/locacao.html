@@ -37,6 +37,7 @@ Locações
                         </div>
                         <p><strong>Data/Hora do aluguel:</strong> {{ locacao.Data_Hora_Locacao }}</p>
                         <p><strong>Data/Hora prevista da devolução:</strong> {{ locacao.Data_Hora_Prevista_Devolucao }}</p>
+                        <p><strong>Valor do aluguel: R$</strong> {{ locacao.Valor }}</p>
                         <div class="linha">
                             <p><strong>Desconto:</strong> {{ locacao.Desconto }}%</p>
                             <p><strong>Multa:</strong> {{ locacao.Multa }}%</p>
@@ -109,7 +110,7 @@ Locações
                                 </div>
                             </div>
 
-                            <input id="diara" name="diaria" value="{{locacao.Diaria}}" type="hidden" readonly>
+                            <input id="diaria" name="diaria" value="{{locacao.Diaria}}" type="hidden" readonly>
 
                             <div class="row mb-3">
                                 <label for="valor" class="form-label">Valor da locação</label>
@@ -142,7 +143,7 @@ Locações
                             <div class="row mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-control w-100" id="status" name="status" required>
-                                    <option value="Em andamento" {% if locacao.Status == "Ativo" %}selected{% endif %}>Ativo</option>
+                                    <option value="Ativo" {% if locacao.Status == "Ativo" %}selected{% endif %}>Ativo</option>
                                     <option value="Cancelado" {% if locacao.Status == "Cancelado" %}selected{% endif %}>Cancelado</option>
                                 </select>
                                 <div class="invalid-feedback">
@@ -178,19 +179,21 @@ Locações
                 const horaAluguel = form.querySelector('#hora_aluguel');
                 const desconto = form.querySelector('#desconto');
                 const valor = form.querySelector('#valor');
-                const diaria = form.querySelector('#diaria');
+                const diaria = form.querySelector('#diaria').value;
+                const valorDiaria =  parseFloat(diaria.replace(',','.'))
     
                 function calcularValores() {
                     const dataDev = new Date(dataDevolucao.value + 'T' + horaDevolucao.value);
                     const dataLoc = new Date(dataAluguel.value + 'T' + horaAluguel.value);
-    
-                    if (!(dataDev && dataLoc && valorDiaria && desconto.value)) {
+            
+
+                    if (!(dataDev && dataLoc && desconto.value)) {
                         valor.value = 0;
                         return;
                     }
     
                     const diffTime = dataDev - dataLoc;
-    
+                    console.log(diffTime)
                     if (diffTime >= 1) {
                         const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
                         let totalDesconto = Math.round(((valorDiaria * diffDays) * (1 - (desconto.value / 100))) * 100) / 100;
@@ -208,8 +211,6 @@ Locações
             });
         });
     </script>
-    
-
 </main>
 
 {% endblock %}

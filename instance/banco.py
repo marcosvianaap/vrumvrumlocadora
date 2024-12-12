@@ -547,7 +547,10 @@ def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoe
 
     try:
         cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
-        cursor.execute('UPDATE Locacao SET Status = "desativado" WHERE id = ?',(id_locacao,))
+        cursor.execute(
+            'UPDATE Locacao SET Status = ? WHERE id = ?',
+            ('Concluído', id_locacao)
+        )
         conn.commit()
 
 
