@@ -415,7 +415,7 @@ def funcionarios():
 @app.route('/funcionarios/pesquisar', methods=['GET', 'POST'])
 @user_required
 def pesquisa_veiculo():
-    carros = bd.buscaCarros('', '', '', '', '', '')
+
     if request.method == 'POST':
         if "pesquisar" in request.form:
             placa = request.form['placa']
@@ -441,9 +441,11 @@ def pesquisa_veiculo():
         elif "historico" in request.form:
             session['historico_veiculo'] = request.form['id']
             return redirect(url_for("historico_locacao"))
+        
     
-    # Exibe os veículos por padrão ao carregar a página
-    return render_template('pesquisa_veiculos.html', carros=carros)
+    veiculos = bd.buscaCarros('', '', '', '', '', '')
+    return render_template('pesquisa_veiculos.html', veiculos=veiculos)
+
 
 
 #rota principal para a página de gerenciamento de clientes
@@ -568,6 +570,12 @@ def loc():
             return render_template("criar_locacao.html", veiculo=id_veiculo)
 
         id_cliente = id_cliente['id']
+
+        # Verifica se o veículo está disponível
+        disponibilidade = bd.verificaDisponibilidadeVeiculo(id_veiculo, DataHoraLocacao, DataHoraPrevDevolucao)
+        if not disponibilidade:
+            flash('Veículo não está disponível nas datas selecionadas!', 'warning')
+            return render_template("criar_locacao.html", veiculo=id_veiculo)
         
         Condicoes_Veiculo = request.form['condicoesSaida']
         Desconto = request.form['percentualDesconto']
