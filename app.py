@@ -101,6 +101,7 @@ def administrador():
 
 # Rota para ALTERAR senha
 @app.route("/administrador/alterar_senha", methods=['GET'])
+@admin_required
 def alterar_senha():
     if 'usuario' not in session or session['usuario'] != 'admin':
         session["statusLogin"] = {"acessoNegado": True, "mensagemErro": "Acesso não autorizado!"}
@@ -109,6 +110,7 @@ def alterar_senha():
 
 #Validacao de senha
 @app.route("/administrador/alterar_senha", methods=['POST'])
+@admin_required
 def processar_alterar_senha():
     if 'usuario' not in session or session['usuario'] != 'admin':
         session["statusLogin"] = {"acessoNegado": True, "mensagemErro": "Acesso não autorizado!"}
@@ -468,6 +470,8 @@ def pesquisar_clientes():
                 flash('Cliente não encontrado', 'warning')
                 return render_template('pesquisar_clientes.html')
             
+            print('CLIENTES:',clientes)
+            
             return render_template('pesquisar_clientes.html',clientes= clientes, informacao=informacao)
 
         elif "form2" in request.form: #Formulário para alteração de informações do funcionário
@@ -505,6 +509,7 @@ def pesquisar_clientes():
                 bd.atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone, nome, cnh, tipo_cnh, cpf_cnpj_original)
                 flash('Cliente atualizado com sucesso!', 'success')
                 clientes = bd.filtro_clientes(cpf_cnpj_novo)
+                #print('CLIENTES:',clientes)
                 return render_template('pesquisar_clientes.html', clientes=clientes, informacao=informacao)
             
             except Exception as e:
@@ -552,6 +557,7 @@ def criar_cliente():
 
 # Rota criada para edição (Deve ser removida no merge)
 @app.route("/funcionarios/clientes/loc", methods=['GET', 'POST'])
+@user_required
 def loc():
     if request.method == 'POST':             
         Local_Devolucao = request.form['localDevolucao']
@@ -564,6 +570,7 @@ def loc():
 
         id_veiculo = request.form['idveiculo']
         id_cliente = bd.buscarClientePorCPFouCNPJ(request.form['cpf'])
+        print
         
         if id_cliente==None:
             flash('Não há cliente com esse CPF ou CNPJ!', 'warning')
@@ -595,6 +602,7 @@ def loc():
 
 #rota principal para a página de locações
 @app.route("/funcionarios/locacoes", methods=['GET', 'POST'])
+@user_required
 def locacoes():
 
     locacoes = bd.buscaLocacao()
@@ -630,8 +638,8 @@ def criar_devolucao():
             horaDevolucao = request.form['horaDevolucao']
             dataHoraDevolucao = dataDevolucao + " " + horaDevolucao
 
-            multa = float(request.form['multa'].replace('R$ ','').replace(',','.'))
-            valorTotal = float(request.form['valorRealTotal'].replace('R$','').replace(',','.'))
+            multa = float(request.form['multa'].replace('R$ ','').replace(',','.').replace('R$',''))
+            valorTotal = float(request.form['valorRealTotal'].replace('R$ ','').replace(',','.').replace('R$',''))
             localDevolucao = request.form['localDevolucao']
             condicoes = request.form['condicoesDevolucao']
 
@@ -722,8 +730,8 @@ def editar_devolucao():
             id = request.form['id_devolucao']
             print('DEVOLUCAO SENDO EDITADA:',id)
             devolucoes = bd.obterDevolucao(id)
-            locacoes = bd.buscaLocacao()
-            locacao = locacoes[0]
+            id_locacao = devolucoes[0]["id_locacao"]
+            locacao = bd.obterLocacao(id_locacao)
             return render_template("editar_devolucao.html", devolucoes=devolucoes, locacao=locacao)
         
         if "editar2" in request.form:
