@@ -148,13 +148,13 @@ def buscarClientePorCPFouCNPJ(cpf_ou_cnpj):
         usuario = cursor.fetchone()
         # Se não encontrar pelo CPF, buscar pelo CNPJ
         if usuario==None:
-            print(cpf_ou_cnpj)
             cursor.execute('''
                 SELECT Pessoa.id, Pessoa.Nome, Cliente.CNPJ, Pessoa.Telefone, Pessoa.Email, Pessoa.Data_Nascimento, Pessoa.Endereco
                 FROM Pessoa
                 JOIN Cliente ON Pessoa.id = Cliente.pessoa_id
                 WHERE Cliente.CNPJ = ?
             ''', (cpf_ou_cnpj,))
+            usuario = cursor.fetchone()
 
     except Exception as e:
         print(f"Erro: {e}")
@@ -237,6 +237,7 @@ def atualizaFuncionario(cpf1, endereco, Data_Nascimento, email, telefone, nome, 
         conn.close()
 
 def atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone,nome, numero_cnh, tipo_cnh, cpf_cnpj_original):
+
     conn = connect_to_db()
     cursor = conn.cursor()
 
@@ -246,18 +247,21 @@ def atualizaCliente(cpf, cnpj, endereco, Data_Nascimento, email, telefone,nome, 
         row = cursor.fetchone()
         if row:
             row_id = row[0]
-        cnpj=''
     else:
         cursor.execute("SELECT pessoa_id FROM Cliente WHERE CNPJ = ?", (cpf_cnpj_original,))
         row = cursor.fetchone()
         if row:
             row_id = row[0]
-        cpf=''
-
     try:
-        cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE id = ?', (cpf, endereco, Data_Nascimento, email, telefone, nome, row_id))
-        cursor.execute('UPDATE Cliente SET CNPJ = ?, Tipo_CNH = ?, Numero_CNH = ? WHERE pessoa_id = ?', (cnpj,tipo_cnh, numero_cnh, row_id))
-        conn.commit()
+
+        if cpf=='':
+            cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE id = ?', ('', endereco, Data_Nascimento, email, telefone, nome, row_id))
+            cursor.execute('UPDATE Cliente SET CNPJ = ?, Tipo_CNH = ?, Numero_CNH = ? WHERE pessoa_id = ?', (cnpj,tipo_cnh, numero_cnh, row_id))
+            conn.commit()
+        else:
+            cursor.execute('UPDATE Pessoa SET cpf = ?, endereco = ?, data_nascimento = ?, email = ?, telefone = ?, nome = ? WHERE id = ?', (cpf, endereco, Data_Nascimento, email, telefone, nome, row_id))
+            cursor.execute('UPDATE Cliente SET CNPJ = ?, Tipo_CNH = ?, Numero_CNH = ? WHERE pessoa_id = ?', ('',tipo_cnh, numero_cnh, row_id))
+            conn.commit()
 
     except Exception as e:
         conn.rollback()
@@ -543,7 +547,10 @@ def criaDevolucao(dataHoraDevolucao, multa, valorTotal, localDevolucao, condicoe
 
     try:
         cursor.execute('INSERT INTO Devolucao (Data_Hora_Devolucao, Multa, Local_devolucao, Valor_Total, Condicoes_Veiculo, id_locacao) VALUES (?, ?, ?, ?, ?, ?)', (dataHoraDevolucao, multa,localDevolucao, valorTotal, condicoes, id_locacao))
+        cursor.execute('UPDATE Locacao SET Status = "desativado" WHERE id = ?',(id_locacao,))
         conn.commit()
+
+
     except Exception as e:
         conn.rollback()
         print(f"Erro: {e}")
